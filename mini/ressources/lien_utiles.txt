@@ -1,0 +1,18 @@
+How to use git : 
+- https://learngitbranching.js.org/?locale=fr_FR
+To check :
+- https://www.gnu.org/savannah-checkouts/gnu/bash/manual/
+- https://docs.google.com/spreadsheets/d/1uJHQu0VPsjjBkR4hxOeCMEt3AOM1Hp_SmUzPFhAH-nA/edit?gid=0#gid=0
+Article :
+- https://medium.com/@mostafa.omrane/mes-conseils-si-je-devais-recommencer-minishell-a9783c51ba1b
+- https://www.codequoi.com/pipe-une-methode-de-communication-inter-processus/ | pipes
+Guide :
+- https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+- Syntaxe shell : https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
+
+Git :
+- https://github.com/Swoorup/mysh - 42docs
+- https://github.com/Hqndler/42-minishell (celui qui accompagne le [tableau ](https://docs.google.com/spreadsheets/d/1uJHQu0VPsjjBkR4hxOeCMEt3AOM1Hp_SmUzPFhAH-nA/edit?gid=0#gid=0))
+
+Videos :
+- https://youtu.be/Vax97MIL_uI?si=Hvs0WNPU2OOSx0F4 - pipes
