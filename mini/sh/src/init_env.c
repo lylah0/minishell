@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/31 13:45:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/03/31 18:08:48 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// typedef struct s_env
+// typedef struct s
 // {
 // 	char			*name;
 // 	char			*value;
-// 	struct s_env	*next;
+// 	struct s	*next;
 // }					t_env;
 
 void	free_env_linked_list(t_data *data)
@@ -201,18 +201,21 @@ int get_array_length(char **array)
     return len;
 }
 
-bool is_valid_env_var_syntax(char *s_env)
+/// @brief check if env var name syntax is valid
+/// @param s env var name 
+/// @return 
+bool is_valid_env_var_syntax(char *s)
 {
 	int		i;
 	char	c;
 
 	i = 0;
-	if (s_env[i] == '_' || ft_isalpha(s_env[i]) == TRUE)
+	if (s[i] == '_' || ft_isalpha(s[i]) == TRUE)
 	{
 		i++;
-		while (s_env[i])
+		while (s[i])
 		{
-			c = s_env[i];
+			c = s[i];
 			if (c == '_' || ft_isalnum(c) == TRUE)
 				i++;
 			else
@@ -220,34 +223,109 @@ bool is_valid_env_var_syntax(char *s_env)
 		}
 		return (TRUE);
 	}
-	// ft_putendl_fd("bash: export: '		[ ] a completer
-	// 	X
-	// 	': not a valid identifier", 1);
+	ft_putendl_fd("bash: export: '", 1);//		[ ] a completer
+	ft_printf("%s", s);
+	ft_putendl_fd("': not a valid identifier", 1);
 	return (FALSE);
 }
 
+// /// @brief add or maj
+// /// @param input 
+// /// @return 
+// t_env	*add_env_var(char *input)
+// {
+// 	int		i = 0;
+// 	t_env	*current = NULL;
+// 	t_env	*head = NULL;
+// 	t_env	*temp = NULL;
+// 	char	*separator;	
+	
+// 	if (!current)
+// 	{
+// 		current = malloc(sizeof(t_env));
+// 		if (!current)
+// 		{
+// 			free(current);
+// 			return (NULL);
+// 		}
+// 	}
+// 	separator = ft_strchr(input, '=');
+// 	if (separator)
+// 	{
+// 		current->name = ft_substr(input, 0, separator - input);
+// 		current->value = ft_strdup(separator + 1);
+// 	}
+// 	else
+// 	{
+// 		current->name = ft_strdup(input);
+// 		current->value = NULL;
+// 	}
+// 	current->next = NULL;
+// 	if (!current->name || (separator && !current->value))
+// 	{
+// 		free(current->name);
+// 		return (NULL);
+// 	}
+// }
+
+
+// t_env *exist_already_in_env(t_env *env, t_env *name_var)
+// {
+// 	if (!name_var || !env)
+// 		return (NULL);
+// 	while (env)
+// 	{
+// 		if (ft_strncmp(env->name, name_var, ft_strlen(name_var) == TRUE))
+// 			return (t_env);
+// 		else
+// 			env = env->next;
+// 	}
+// 	return (NULL);
+// }
+
+// void	maj_var_env(t_env *name)
+// {
+// 	add_env_var(name);
+// }
+
+/// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
+/// @param data 
+void	b_export(t_data *data)
+{
+	(void)data;
+	// t_env	*current;
+	if (data->input->type == T_CMD)
+	{
+		// create_env_copy_array(data);
+		// sort_words(data->copy_env, get_array_length(data->copy_env));
+		// print_copy_env(data);
+		printf("\n\t\t\t\t\tT_CMD\n");
+		// free_env_linked_list(data);
+	}
+	if (data->input->type == T_CMD_ARG)
+	{	
+		// if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
+		// {
+		// 	if (current = exist_already_in_env(data->env, data->input->next->token))
+		// 		maj_var_env(current);
+		// 	else
+		// 		data->env = add_env_var(data->input->next->token);
+		// }
+		printf("\n\t\t\t\t\tT_CMD_ARG\n");
+	}
+	return;
+}
+
+/// @brief 
+/// @param data 
+/// @param envp 
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_env_linked_list(envp);
 	//print_env_linked_list(data);
-	create_env_copy_array(data);
-	sort_words(data->copy_env, get_array_length(data->copy_env));
+	// create_env_copy_array(data);
+	// sort_words(data->copy_env, get_array_length(data->copy_env));
 	//print_copy_env(data);
+	b_export(data);
 	free_env_linked_list(data);
-//	b_export(data, (t_input *)data->input);
-}
-
-void	b_export(t_data *data, t_input *input)
-{
-	if (input->type == T_CMD)
-	{
-		printf("hello");
-		// create_env_copy_array(data);
-		// sort_words(data->copy_env, get_array_length(data->copy_env));
-		// print_copy_env(data);
-		// free_env_linked_list(data);
-	}
-	else
-		return;
-	(void)data;
 }
