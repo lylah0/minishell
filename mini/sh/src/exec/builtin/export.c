@@ -1,16 +1,16 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   export.c                                           :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-// /*   Updated: 2025/03/30 20:50:36 by monoguei         ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
+/*   Updated: 2025/04/01 18:49:58 by monoguei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "../../../minishell.h"
+#include "../../../minishell.h"
 
 
 
@@ -33,18 +33,26 @@
 // // 			exit_status(1)
 // //
 
-// /// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
-// /// @param data 
-// void	b_export(t_data *data)
-// {
-// 	if (data->input == T_CMD)
-// 	{
-// 		copy_env_list(data);
-// 		// sort_words(data->copy_env, data->size_env_list);
-// 		// print_copy_env(data);
-// 	}
-// 	return ;
-// }
+/// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
+/// @param data 
+void    b_export(t_data *data)
+{
+	t_input    *curr;
+
+	curr = data->input;
+	while (curr)
+	{
+		if (curr->type == T_CMD)
+		{
+			create_env_copy_array(data);
+			sort_words(data->copy_env, get_array_length(data->copy_env));
+			print_copy_env(data);
+		}
+		else if (curr->type == T_CMD_ARG || curr->type == T_ARG)
+			printf("\n\t\t\tT_CMD_ARG ou T_ARG (export avec argument)\n");
+		curr = curr->next;
+	}
+}
 
 // void	b_export(t_data *data)
 // {

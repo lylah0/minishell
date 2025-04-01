@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/27 17:43:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:46:05 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	first_word(char **input, char **env)
 {
+	(void)env;
 	if (ft_strncmp(input[0], "<", 1) == 0 || ft_strncmp(input[0], ">", 1) == 0
 		|| ft_strncmp(input[0], ">>", 2) == 0 || ft_strncmp(input[0], "<<",
 			2) == 0)
@@ -22,11 +23,11 @@ void	first_word(char **input, char **env)
 		printf("operateur\n");
 	else if (ft_strncmp(input[0], "$?", 3) == 0)
 		printf("exit code\n");
-	else if (!is_cmd(input[0], env))
-	{
-		printf("minishell: command not found: %s\n", input[0]);
-//		exit(127);
-	}
+	// else if (!is_cmd(input[0], env))
+// 	{
+// 		printf("minishell: command not found: %s\n", input[0]);
+// //		exit(127);
+// 	}
 	else
 	{
 		//		word_token(input[0]);

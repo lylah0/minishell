@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 16:45:51 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:50:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	swap_words(char **a, char **b)
 
 	temp = *a;
 	*a = *b;
-    *b = temp;
+	*b = temp;
 }
 
 // ret 1 = swap nec
@@ -113,7 +113,7 @@ int	compare_words(char *w1, char *w2)
 		if  (w1[i] == w2[i])
 			i++;
 	}
-    if (w1[i])
+	if (w1[i])
 		return 1;
 	else
 		return 0;
@@ -195,10 +195,10 @@ void	create_env_copy_array(t_data *data)
 }
 int get_array_length(char **array)
 {
-    int len = 0;
-    while (array[len])
-        len++;
-    return len;
+	int len = 0;
+	while (array[len])
+		len++;
+	return len;
 }
 
 /// @brief check if env var name syntax is valid
@@ -317,22 +317,7 @@ bool is_valid_env_var_syntax(char *s)
 // 	return;
 // }
 
-void    b_export(t_data *data)
-{
-    t_input    *curr;
 
-    curr = data->input;
-    while (curr)
-    {
-        if (curr->type == T_CMD)
-            printf("\n\t\t\tT_CMD (export sans argument)\n");
-        else if (curr->type == T_CMD_ARG || curr->type == T_ARG)
-            printf("\n\t\t\tT_CMD_ARG ou T_ARG (export avec argument)\n");
-        // printf("\t\t\t\ttest_moni token : %s\n", data->input->token);
-        // printf("\t\t\t\ttest_moni type : %i\n", data->input->type);
-			curr = curr->next;
-    }
-}
 
 /// @brief 
 /// @param data 
@@ -344,6 +329,5 @@ void	init_env(t_data *data, char **envp)
 	// create_env_copy_array(data);
 	// sort_words(data->copy_env, get_array_length(data->copy_env));
 	//print_copy_env(data);
-	b_export(data);
-	free_env_linked_list(data);
+	// free_env_linked_list(data);
 }

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 16:51:38 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:48:15 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ char	*ft_strdup_equal(const char *src);
 size_t	ft_strcat(char *dest, const char *src);
 int		ft_strncmp(const char *first, const char *second, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		ft_strncmp_end(const char *s1, const char *s2, size_t n);
+int		ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_strcpy(char *dest, const char *src);
 t_input	*cat_token(t_input *token, char *value, int len);
