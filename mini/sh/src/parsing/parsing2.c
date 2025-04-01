@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:19:08 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 16:33:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:49:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ char	**parse_input(char *input)
 {
 	char	**first_parse;
 	char	**final_parse;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	if (is_open_quotes(input))
 	{
 		printf("missing one quote\n");

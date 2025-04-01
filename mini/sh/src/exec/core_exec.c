@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 16:30:21 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:53:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ int	kind_of_token(t_data *data, t_input *input)
 		return (0);
 	}
 	else // pas forcement arg, peut etre path/bin
-		printf("%s = arg\n\n", input);
+		printf("\n\t***VERY USEFULL INFORMATION*** : is a cmd/path :)\n\n");
 	return (1);
 }

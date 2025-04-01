@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 16:37:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:51:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,16 @@ void	print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 ///built-in
-void	b_cd(t_data *data, char *arg);
+void	b_cd(t_data *data, t_input *arg);
 void	b_echo(t_input *input);
 void	b_env(t_data *data);
 void	b_exit(t_data *data);
 void	b_export(t_data *data);
 void	b_pwd(void);
 void	b_unset(t_data *data);
+
+int	kind_of_token(t_data *data, t_input *input);
+
 
 // init_environment // b_export
 void    free_env_linked_list(t_data *data);
