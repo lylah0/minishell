@@ -6,32 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 21:11:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 22:00:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-
-
-
-// // [ok] fonction de comparaison s1, s2
-// // [ok] cree une copie de la liste juste char *name=value donc liste chainee de char *
-// // [ok] fonction syntaxe env var
-// // [ ] fonction tri list_copie 
-// // [ok] imprimer char *
-// // [ ]	imprimer syntaxe execptions
-// // // //	syntaxe
-// // // //		`declare -x VAR="value"`
-// // // //		si pas de value,	`declare -x VAR`
-// // // //		si value vide,		`declare -x VAR=""`
-// // [ ] free lst
-// // 	// Nom de variable (name) : MY_VAR_1 (lettres, chiffres, underscore, ne commence pas par un chiffre)
-// // 	// Valeur (value) : Hello_World123 (lettres, chiffres, underscores, espaces possibles)
-// // 		if syntaxe invalide
-// // 			~`bash: export: 'X': not a valid identifier`
-// // 			exit_status(1)
-// //
 
 /// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
 /// @param data 
@@ -63,44 +42,14 @@ void    c_export(t_input *head)
 		print_copy_env(data);
 	}
 	else
+	{
 		printf("hello");
+		// if (is_valid_env_var_syntax(```T_ARG```) == TRUE)
+		// {
+		// 	add_env_var(```T_ARG```);// add ou maj NAME=value
+		// }
+	}
 }
-
-// void	b_export(t_data *data)
-// {
-// 	t_env	*current;
-// 	data->env = current;
-// 	if (data->input->T_CMD)
-// 	{
-// 		copy_env_list(data->env);
-// 		print_copy_env(data->copy_env);
-// 	}
-// 		//parcourir env, afficher dans ordre alphabetique dans le terminal
-// //		syntaxe 
-// //			`declare -x VAR="value"` 
-// //			si pas de value,	`declare -x VAR`
-// //			si value vide,		`declare -x VAR=""`
-// 	}
-// 	else
-// 	control syntaxe
-// {
-// 		if ('=' present)
-// 		{`````
-// 			si existe deja 
-// 				maj value
-// 			else 
-// 				ajoute VAR=value a env
-// 		}
-// 		else
-// 		{
-// 			si existe deja
-// 				rien
-// 			else
-// 				creation valeur 
-// 	}
-// 	si succes exit_status 0
-// }
-
 // int main(int ac, char **av, char **envp)
 // {
 // 	t_data	*data = malloc(sizeof(t_data));

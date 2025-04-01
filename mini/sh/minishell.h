@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 21:05:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:59:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,9 @@ int     get_array_length(char **array);
 bool    is_valid_env_var_syntax(char *s);
 void    b_export(t_data *data);
 void    init_env(t_data *data, char **envp);
-
 void    c_export(t_input *head);
+void	add_env_var(char *input);
+t_env	*exist_already_in_env(t_env *env, t_env *name_var);
 
 
 // // init_arg
