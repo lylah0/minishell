@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/31 18:08:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:22:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,32 +288,50 @@ bool is_valid_env_var_syntax(char *s)
 // 	add_env_var(name);
 // }
 
-/// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
-/// @param data 
-void	b_export(t_data *data)
+// /// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
+// /// @param data 
+// void	b_export(t_data *data)
+// {
+// 	(void)data;
+// 	// t_env	*current;
+// 	// if (data->input->type == T_CMD)
+// 	if ((*data->input).type == T_CMD)
+// 	{
+// 		// create_env_copy_array(data);
+// 		// sort_words(data->copy_env, get_array_length(data->copy_env));
+// 		// print_copy_env(data);
+// 		printf("\n\t\t\t\t\tT_CMD\n");
+// 		// free_env_linked_list(data);
+// 	}
+// 	if ((*data->input).type == T_CMD_ARG)
+// 	{	
+// 		// if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
+// 		// {
+// 		// 	if (current = exist_already_in_env(data->env, data->input->next->token))
+// 		// 		maj_var_env(current);
+// 		// 	else
+// 		// 		data->env = add_env_var(data->input->next->token);
+// 		// }
+// 		printf("\n\t\t\t\t\tT_CMD_ARG\n");
+// 	}
+// 	return;
+// }
+
+void    b_export(t_data *data)
 {
-	(void)data;
-	// t_env	*current;
-	if (data->input->type == T_CMD)
-	{
-		// create_env_copy_array(data);
-		// sort_words(data->copy_env, get_array_length(data->copy_env));
-		// print_copy_env(data);
-		printf("\n\t\t\t\t\tT_CMD\n");
-		// free_env_linked_list(data);
-	}
-	if (data->input->type == T_CMD_ARG)
-	{	
-		// if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
-		// {
-		// 	if (current = exist_already_in_env(data->env, data->input->next->token))
-		// 		maj_var_env(current);
-		// 	else
-		// 		data->env = add_env_var(data->input->next->token);
-		// }
-		printf("\n\t\t\t\t\tT_CMD_ARG\n");
-	}
-	return;
+    t_input    *curr;
+
+    curr = data->input;
+    while (curr)
+    {
+        if (curr->type == T_CMD)
+            printf("\n\t\t\tT_CMD (export sans argument)\n");
+        else if (curr->type == T_CMD_ARG || curr->type == T_ARG)
+            printf("\n\t\t\tT_CMD_ARG ou T_ARG (export avec argument)\n");
+        // printf("\t\t\t\ttest_moni token : %s\n", data->input->token);
+        // printf("\t\t\t\ttest_moni type : %i\n", data->input->type);
+			curr = curr->next;
+    }
 }
 
 /// @brief 

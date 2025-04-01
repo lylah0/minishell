@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   second_parsing.c                                   :+:      :+:    :+:   */
+/*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:19:08 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/19 17:29:34 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:33:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,11 @@ char	**parse_input(char *input)
 	final_parse = second_parsing(first_parse);
 	if (!final_parse)
 		return (NULL);
-	while (first_parse[i])
-	{
-		free(first_parse[i]);
-		i++;
-	}
-	free(first_parse);
+	// while (first_parse[i])
+	// {
+	// 	free(first_parse[i]);
+	// 	i++;
+	// }
+	// free(first_parse);
 	return (final_parse);
 }
