@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/31 15:19:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:37:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,15 @@ typedef enum s_token_type
 	T_WORD
 }			t_token_type;
 
+
+
 typedef struct s_input
 {
 	char			*token;
 	t_token_type	type;
 	struct s_input	*next;
 	struct s_input	*prev;
+	struct s_data	*data;
 }					t_input;
 
 typedef struct s_env
@@ -126,36 +129,43 @@ void	print_all_token_types(t_input *head);
 void	print_tokens(char **tokens);
 
 // FONCTIONS EXEC + MONI
-// signals.c
-__sighandler_t handler_sigint(void);
-void	init_signals(void);
-void	restore_terminal(void);
+
+///built-in
+void	b_cd(t_data *data, char *arg);
+void	b_echo(t_input *input);
+void	b_env(t_data *data);
+void	b_exit(t_data *data);
+void	b_export(t_data *data);
+void	b_pwd(void);
+void	b_unset(t_data *data);
+
+// init_environment // b_export
+void    free_env_linked_list(t_data *data);
+void    print_env_linked_list(t_data *data);
+t_env   *create_env_linked_list(char **envp);
+void    swap_words(char **a, char **b);
+int     compare_words(char *w1, char *w2);
+void    sort_words(char **words, int len);
+void    print_copy_env(t_data *data);
+void    create_env_copy_array(t_data *data);
+int     get_array_length(char **array);
+bool    is_valid_env_var_syntax(char *s);
+void    b_export(t_data *data);
+void    init_env(t_data *data, char **envp);
+
+// // init_arg
+// void init_input(t_input *input);
 
 // utils.c
 void	cleanup_memory(char *line, char **splited_line);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-
-// /builtin
-void	b_echo(char **input);
-void	b_pwd(void);
-void	b_env(t_data *data);
-void	b_cd(t_data *data, char *arg);
-
-// init_environment
-void	init_env(t_data *data, char **envp);
-
-// init_arg
-void init_input(t_input *input);
-
-// utils.c
-int		ft_strncmp(const char *first, const char *second, size_t len);
 char	*ft_strdup_equal(const char *src);
 size_t	ft_strcat(char *dest, const char *src);
+int		ft_strncmp(const char *first, const char *second, size_t len);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strncmp_end(const char *s1, const char *s2, size_t n);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_strcpy(char *dest, const char *src);
 t_input	*cat_token(t_input *token, char *value, int len);
-
 
 // signals.c
 __sighandler_t	handler_sigint(void);
