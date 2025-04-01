@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 18:49:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:11:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,33 @@
 /// @param data 
 void    b_export(t_data *data)
 {
-	t_input    *curr;
+	// t_input    *curr;
 
-	curr = data->input;
-	while (curr)
-	{
-		if (curr->type == T_CMD)
-		{
+	// curr = data->input;
+	// 	if (!curr->next)// `export`
+	// 	{
 			create_env_copy_array(data);
 			sort_words(data->copy_env, get_array_length(data->copy_env));
 			print_copy_env(data);
-		}
-		else if (curr->type == T_CMD_ARG || curr->type == T_ARG)
-			printf("\n\t\t\tT_CMD_ARG ou T_ARG (export avec argument)\n");
-		curr = curr->next;
+		// }
+		// else
+		// 	printf("hello");
+}
+
+/// @brief version head -|- built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
+/// @param data 
+void    c_export(t_input *head)
+{
+	t_data *data = head->data;
+
+	if (!head->next)// `export`
+	{
+		create_env_copy_array(data);
+		sort_words(data->copy_env, get_array_length(data->copy_env));
+		print_copy_env(data);
 	}
+	else
+		printf("hello");
 }
 
 // void	b_export(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 20:52:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:08:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	main(int ac, char **av, char **envp)
 		first_word(splited_input, envp);
 		// data->input = head;
 		kind_of_token(data, (t_input *)input);
-		// print_all_token_types(head);
+		// c_export(head);
+		print_all_token_types(head);
 		is_env_var(head);
 		// print_token_list(head);
 		restore_terminal();
