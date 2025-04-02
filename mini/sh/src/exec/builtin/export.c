@@ -6,49 +6,32 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 22:00:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:31:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
+/// @brief version head -|- built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
 /// @param data 
 void    b_export(t_data *data)
 {
-	// t_input    *curr;
-
-	// curr = data->input;
-	// 	if (!curr->next)// `export`
-	// 	{
-			create_env_copy_array(data);
-			sort_words(data->copy_env, get_array_length(data->copy_env));
-			print_copy_env(data);
-		// }
-		// else
-		// 	printf("hello");
-}
-
-/// @brief version head -|- built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
-/// @param data 
-void    c_export(t_input *head)
-{
-	t_data *data = head->data;
-
-	if (!head->next)// `export`
+	if (data->input->type == 0)// `export`[ ] et la suite est .. ?
 	{
 		create_env_copy_array(data);
 		sort_words(data->copy_env, get_array_length(data->copy_env));
 		print_copy_env(data);
+		free_env_linked_list(data);
 	}
-	else
+	else if (data->input->type == 1)
 	{
-		printf("hello");
-		// if (is_valid_env_var_syntax(```T_ARG```) == TRUE)
-		// {
-		// 	add_env_var(```T_ARG```);// add ou maj NAME=value
-		// }
+		if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
+		{
+			add_env_var(data->input->next->token);// add ou maj NAME=value
+		}
 	}
+	else 
+		return ;
 }
 // int main(int ac, char **av, char **envp)
 // {

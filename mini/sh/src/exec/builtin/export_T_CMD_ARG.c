@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 21:59:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:30:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool is_valid_env_var_syntax(char *s)
 		}
 		return (TRUE);
 	}
-	ft_putendl_fd("bash: export: '", 1);//		[ ] a completer
+	ft_putstr_fd("bash: export: '", 1);
 	ft_printf("%s", s);
 	ft_putendl_fd("': not a valid identifier", 1);
 	return (FALSE);
@@ -48,7 +48,7 @@ void	add_env_var(char *input)
 	t_env	*current = NULL;
 	t_env	*head = NULL;
 	t_env	*temp = NULL;
-	char	*separator;	
+	// char	*separator;	
 	(void)temp;
 	(void)head;
 	
@@ -57,24 +57,27 @@ void	add_env_var(char *input)
 		current = malloc(sizeof(t_env));
 		if (!current)
 		{
+			printf("error : current malloc\n");
 			free(current);
 			return ;
 		}
 	}
-	separator = ft_strchr(input, '=');
-	if (separator)
-	{
-		current->name = ft_substr(input, 0, separator - input);
-		current->value = ft_strdup(separator + 1);
-	}
-	else
-	{
+	// separator = ft_strchr(input, '=');
+	// if (separator)
+	// {
+	// 	current->name = ft_substr(input, 0, separator - input);
+	// 	current->value = ft_strdup(separator + 1);
+	// }
+	// else
+	// {
 		current->name = ft_strdup(input);
 		current->value = NULL;
-	}
+	// }
 	current->next = NULL;
-	if (!current->name || (separator && !current->value))
+	// if (!current->name || (separator && !current->value))
+	if (!current->name || (!current->value))
 	{
+		printf("error : current name or vlaue not found\n");
 		free(current->name);
 		return ;
 	}
