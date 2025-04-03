@@ -6,11 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/03 10:00:29 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:49:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "../../../../minishell.h"
 
 /// @brief check if env var name syntax is valid
 /// @param s env var name 
@@ -27,13 +27,21 @@ bool is_valid_env_var_syntax(char *s)
 		while (s[i])
 		{
 			c = s[i];
-			if (c == '_' || ft_isalnum(c) == TRUE)
+			if (c == '_' || ft_isalnum(c) || c == '=')
 				i++;
 			else
+			{
+				printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe1\t");
+				ft_putstr_fd("bash: export: '", 1);
+				ft_printf("%s", s);
+				ft_putendl_fd("': not a valid identifier", 1);
 				return (FALSE);
+			}
 		}
+		printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe2\tSUCCESS is a valid SYNTAX env_var(%s) :)\n", s);
 		return (TRUE);
 	}
+	printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe3\t");
 	ft_putstr_fd("bash: export: '", 1);
 	ft_printf("%s", s);
 	ft_putendl_fd("': not a valid identifier", 1);
@@ -53,19 +61,22 @@ void	add_env_var(t_data *data, char *input)
 		current = malloc(sizeof(t_env));
 		if (!current)
 		{
-			printf("export_T_CMD_ARG.c > add_env_var :\terror : current malloc\n");
+			printf("export_T_CMD_ARG.c > add_env_var \tERROR current malloc\n");
 			free(current);
 			return ;
 		}
-		printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS new_env_var(%s) created :)", input);
+		printf("export_T_CMD_ARG.c > add_env_var \tSUCCESS current malloc\n");
 		current->next = NULL;
 	}
-	// separator = ft_strchr(input, '=');
-	// if (separator)// maj value
-	// {
-	// 	current->name = ft_substr(input, separator, separator - input);
-	// 	current->value = ft_strdup(separator + 1);
-	// }
+	separator = ft_strchr(input, '=');
+	if (separator)// maj value
+	{
+		char *extracted_name = ft_substr(input, 0, separator - input);
+		current->name = extracted_name;
+		printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
+		printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
+	}
+	
 	else// rien du tout...
 	{
 		printf("export_T_CMD_ARG.c > add_env_var\t current->name(%s) devient input(%s)\n", current->name, input);
@@ -136,11 +147,11 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
  		|				 ->	with value ->> add NAME=value
 		|				 -> empty valu ->> add NAME=""
 	
-	[ ] si diff/new name -> new env_var
+	[x] si diff/new name -> new env_var
 	  	[x] malloc t_env (new node)
-		[ ] creer name
-		  	[ ] si '=' --> extraire name
-			[ ] env-name = name (extrait ou pas)
+		[x] creer name
+		  	[x] si '=' --> extraire name
+			[x] env->name = name (extrait ou pas)
 	[ ] si value existe ('=' dans input), remplacer value par new_value	
 		[ ] condition : if '=' present dans input	
 		[ ] extraire value de input
@@ -148,4 +159,32 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 		[ ] break ; ?
 
 		[ ] fonction extraction name et value ?
-*/
+			[ ] if strchr '=' found
+			  		extract_name
+					extract_value
+		
+		Pour l-instant, si je fais export USER=moni -> il se passe rien. Ca rentre meme pas dans b_export (pas de printf de syntaxe ok)
+		jai ajouter des printf dans b_export. probleme resolu avec la condition is valid syntax qui laissait pas passer le '='
+		[x] extraire name de NAME=user, actuellement
+		  		export_T_CMD_ARG.c > add_env_var : SUCCESS name(USER=moni) extracted from imput(USER=moni) :)
+				  ok j'ai demande a copilot... le dernier param etait input - separator. je devait faire l'inverse
+				  char *extracted_name = ft_substr(input, 0, separator - input); 105 . 110 . 112 --> 110 - 112 = -2... jai pas compris
+
+		[ ] la new_var s'ajoute a env
+		  pour l'instant : (si pas de = dans arg, segv [ ])
+					minishell> export ens=dd
+					cmd
+					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(ens=dd) :)
+					export_T_CMD_ARG.c > exist_already_in_env :     no match env_name_linked_list / env_name_input_token 
+					export_T_CMD_ARG.c > add_env_var        SUCCESS current malloc
+					export_T_CMD_ARG.c > add_env_var :      SUCCESS name(ens) extracted from imput(ens=dd) :)
+					export_T_CMD_ARG.c > add_env_var :      current->name(ens)
+					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
+					Token type: T_CMD_ARG
+					Token type: T_ARG
+
+
+
+[ ] finaliser condition is_valid_syntax 
+  	(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)
+		*/

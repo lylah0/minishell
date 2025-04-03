@@ -6,11 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/02 19:58:52 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:12:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "../../../../minishell.h"
 
 /// @brief swap words for sort NAME of environnement `export`
 /// @param a

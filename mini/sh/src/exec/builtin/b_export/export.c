@@ -6,11 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/02 20:05:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:23:26 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "../../../../minishell.h"
 
 /// @brief version head -|- built-in `export` `export VAR=value` `export VAR` `export VAR+=value`
 /// @param data 
@@ -21,14 +21,15 @@ void    b_export(t_data *data)
 		create_env_copy_array(data);
 		sort_words(data->copy_env, get_array_length(data->copy_env));
 		print_copy_env(data);
+		printf("export.c > b_export : \t export tout nu, input = T_CMD\n");
 	}
 	else if (data->input->type == 1)
 	{
 		if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
 		{
-			printf("export.c > b_export : \t %s is a valid env var SYNTAXE :)\n", data->input->next->token);
 			add_env_var(data, data->input->next->token);// add ou maj NAME=value
 		}
+		printf("export.c > b_export : \t export avec arg, input = T_CMD_ARG + T_ARG\n");
 	}
 	else 
 		return ;
