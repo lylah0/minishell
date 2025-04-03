@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/02 16:03:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:47:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,9 +155,8 @@ int     get_array_length(char **array);
 bool    is_valid_env_var_syntax(char *s);
 void    b_export(t_data *data);
 void    init_env(t_data *data, char **envp);
-void    c_export(t_data *data);
-void	add_env_var(char *input);
-t_env	*exist_already_in_env(t_env *env, t_env *name_var);
+void	add_env_var(t_data *data, char *input);
+t_env	*exist_already_in_env(t_env *env, char *name_var);
 
 
 // // init_arg
@@ -167,8 +166,6 @@ t_env	*exist_already_in_env(t_env *env, t_env *name_var);
 void	cleanup_memory(char *line, char **splited_line);
 char	*ft_strdup_equal(const char *src);
 size_t	ft_strcat(char *dest, const char *src);
-int		ft_strncmp(const char *first, const char *second, size_t len);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_strcpy(char *dest, const char *src);

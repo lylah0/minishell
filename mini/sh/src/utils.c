@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 20:48:21 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:59:45 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*ft_strdup_equal(const char *src)
 		i++;
 	}
 	dest[i] = '=';
-	dest[i] = 0;
+	dest[++i] = 0;
 	return (dest);
 }
 

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/02 18:31:43 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:05:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void    b_export(t_data *data)
 		create_env_copy_array(data);
 		sort_words(data->copy_env, get_array_length(data->copy_env));
 		print_copy_env(data);
-		free_env_linked_list(data);
 	}
 	else if (data->input->type == 1)
 	{
 		if (is_valid_env_var_syntax(data->input->next->token) == TRUE)
 		{
-			add_env_var(data->input->next->token);// add ou maj NAME=value
+			printf("export.c > b_export : \t %s is a valid env var SYNTAXE :)\n", data->input->next->token);
+			add_env_var(data, data->input->next->token);// add ou maj NAME=value
 		}
 	}
 	else 
