@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 13:26:31 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 16:11:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,16 @@ char	*extract_name(char *input)
 	char	*separator;
 	char	*extracted_name;
 
-	separator = ft_strchr(input, '=');
-	if (separator)// maj value
+	if (input)
 	{
-		extracted_name = ft_substr(input, 0, separator - input);
-		return (extracted_name);
+		separator = ft_strchr(input, '=');
+		if (separator)// maj value
+		{
+			extracted_name = ft_substr(input, 0, separator - input);
+			return (extracted_name);
+		}
+		else
+			return (input);
 	}
 	return (NULL);
 }
@@ -79,11 +84,14 @@ char	*extract_value(char *input)
 	char	*separator;
 	char 	*extracted_value;
 
-	separator = ft_strchr(input, '=');
-	if (separator)// maj value
+	if(input)
 	{
-		extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
-		return (extracted_value);
+		separator = ft_strchr(input, '=');
+		if (separator)// maj value
+		{
+			extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
+			return (extracted_value);
+		}
 	}
 	return (NULL);
 }
@@ -98,9 +106,12 @@ void	add_env_var(t_data *data, char *input)
 	(void)input;
 	
 	extracted_name = extract_name(input);
+	printf("export_T_CMD_ARG.c > add_env_var :\t BEFORE extract value(%s)\n", extracted_value);
 	extracted_value = extract_value(input);
-
+	printf("export_T_CMD_ARG.c > add_env_var :\t AFTER extract value(%s)\n", extracted_value);
+	
 	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
+	printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to BEFORE value(%s)\n", extracted_name, extracted_value);
 	if (current == NULL) // variable does not exist
 	{
 		t_env *new_node = malloc(sizeof(t_env));
@@ -115,11 +126,17 @@ void	add_env_var(t_data *data, char *input)
 		lle_add_back(&data->env, new_node);
 		printf("export_T_CMD_ARG.c > add_env_var :\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
 	}
-	else //mettre variable a jour
+	else
 	{
-		free(current->value);
-		current->value = extracted_value;
-		printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
+		if (ft_strchr(input, '=') != NULL)
+		{
+			free(current->value);
+
+			current->value = extracted_value;
+			printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
+		}
+		else
+			return ;
 		free(extracted_name);
 	}
 }

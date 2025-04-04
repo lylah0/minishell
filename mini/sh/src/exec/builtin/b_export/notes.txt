@@ -116,6 +116,8 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 		jai utilise copilot par megarde et ca marche alors je vias continuer ainsi
 
 	[ ] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
+		
+
 
 [ ] finaliser condition is_valid_syntax 
   	(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)

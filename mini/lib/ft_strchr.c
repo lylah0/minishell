@@ -6,13 +6,19 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 16:57:53 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/14 16:51:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 16:05:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 // Recherche la première occurrence de searchedChar dans la str passée en param.
+
+/// @brief Searches for the first occurrence of a character in a string.
+/// @param str The string to be searched.
+/// @param searchedChar The character to search for.
+/// @return A pointer to the first occurrence of the character in the string, 
+/// or NULL if the character is not found.
 char	*ft_strchr(const char *str, int searchedChar)
 {
 	size_t	i;
