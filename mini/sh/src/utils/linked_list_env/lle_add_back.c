@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   lle_add_back.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 15:57:29 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 11:03:24 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:32:45 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new1)
+/// @brief Adds a new node to the end of the linked list.
+/// @param env Pointer to the head of the linked list.
+/// @param new1 The new node to be added to the linked list.
+void	lle_add_back(t_env **env, t_env *new1)
 {
-	t_list	*lst_last;
+	t_env	*env_last;
 
 	if (!new1)
 		return ;
-	lst_last = ft_lstlast(*lst);
-	if (!lst_last)
-		*lst = new1;
+	env_last = lle_last(*env);
+	if (!env_last)
+		*env = new1;
 	else
-		lst_last->next = new1;
+		env_last->next = new1;
 }

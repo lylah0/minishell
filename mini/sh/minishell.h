@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/02 19:47:10 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:06:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,9 @@ int	kind_of_token(t_data *data, t_input *input);
 
 
 // init_environment // b_export
-void    free_env_linked_list(t_data *data);
-void    print_env_linked_list(t_data *data);
-t_env   *create_env_linked_list(char **envp);
+void    free_lle(t_data *data);
+void    print_lle(t_data *data);
+t_env   *create_lle(char **envp);
 void    swap_words(char **a, char **b);
 int     compare_words(char *w1, char *w2);
 void    sort_words(char **words, int len);
@@ -175,5 +175,26 @@ t_input	*cat_token(t_input *token, char *value, int len);
 __sighandler_t	handler_sigint(void);
 void	init_signals(void);
 void	restore_terminal(void);
+
+//UTILS/lle
+void	lle_add_back(t_env **env, t_env *new1);
+void	lle_add_front(t_env **env, t_env *new1);
+void	lle_clear(t_env **env, void (*del)(void *));
+void	lle_del_one(t_env *env, void (*del)(void *));
+void	lle_iter(t_env *env, void (*f)(void *));
+t_env	*lle_last(t_env *env);
+t_env	*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *));
+t_env	*lle_new(void *content);
+int		lle_size(t_env *env);
+// content devient name par defaut, a adapter si beosin
+
+
+
+
+
+
+
+
+
 
 #endif

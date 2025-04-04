@@ -6,13 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 21:50:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	free_env_linked_list(t_data *data)
+void	free_lle(t_data *data)
 {
 	t_env *temp = NULL;
 
@@ -26,7 +26,7 @@ void	free_env_linked_list(t_data *data)
 	}
 }
 
-void	print_env_linked_list(t_data *data)
+void	print_lle(t_data *data)
 {
 	while (data->env)
 	{
@@ -36,7 +36,7 @@ void	print_env_linked_list(t_data *data)
 	}
 }
 
-t_env	*create_env_linked_list(char **envp)
+t_env	*create_lle(char **envp)
 {
 	int		i = 0;
 	t_env	*current = NULL;
@@ -84,10 +84,10 @@ t_env	*create_env_linked_list(char **envp)
 /// @param envp 
 void	init_env(t_data *data, char **envp)
 {
-	data->env = create_env_linked_list(envp);
-	//print_env_linked_list(data);
+	data->env = create_lle(envp);
+	//print_lle(data);
 	// create_env_copy_array(data);
 	// sort_words(data->copy_env, get_array_length(data->copy_env));
 	//print_copy_env(data);
-	// free_env_linked_list(data);
+	// free_lle(data);
 }

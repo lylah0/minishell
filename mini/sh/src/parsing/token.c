@@ -6,12 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 20:46:05 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 11:08:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 void	first_word(char **input, char **env)
 {

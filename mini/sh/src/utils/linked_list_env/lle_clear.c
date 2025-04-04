@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   lle_clear.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:29 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 11:03:24 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:57:46 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/04 12:33:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new1)
+/// @brief Clears the entire linked list of environment variables.
+/// @param env Pointer to the head of the linked list.
+/// @param del Function pointer to delete the content of a node.
+void	lle_clear(t_env **env, void (*del)(void *))
 {
-	t_list	*lst_last;
+	t_env	*env_temp;
 
-	if (!new1)
+	if (!*env)
 		return ;
-	lst_last = ft_lstlast(*lst);
-	if (!lst_last)
-		*lst = new1;
-	else
-		lst_last->next = new1;
+	while (*env)
+	{
+		env_temp = (*env)->next;
+		lle_del_one(*env, del);
+		*env = env_temp;
+	}
 }

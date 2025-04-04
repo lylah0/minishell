@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/03 11:48:22 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/04 13:26:31 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,54 +47,88 @@ bool is_valid_env_var_syntax(char *s)
 	ft_putendl_fd("': not a valid identifier", 1);
 	return (FALSE);
 }
+t_env	*go_end_of_linked_list(t_env *env)
+{
+	if (!env)
+		return (NULL);
+	while (env->next)
+	{
+		env = env->next;
+	}
+	return (env);
+}
+
+char	*extract_name(char *input)
+{
+	char	*separator;
+	char	*extracted_name;
+
+	separator = ft_strchr(input, '=');
+	if (separator)// maj value
+	{
+		extracted_name = ft_substr(input, 0, separator - input);
+		return (extracted_name);
+	}
+	return (NULL);
+}
+// printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
+// printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
+
+char	*extract_value(char *input)
+{
+	char	*separator;
+	char 	*extracted_value;
+
+	separator = ft_strchr(input, '=');
+	if (separator)// maj value
+	{
+		extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
+		return (extracted_value);
+	}
+	return (NULL);
+}
 
 /// @brief add or maj
 /// @param input 
 void	add_env_var(t_data *data, char *input)
 {
 	t_env	*current = data->env;
-	char	*separator;	
+	char 	*extracted_value;
+	char 	*extracted_name;
+	(void)input;
 	
-	// current = exist_already_in_env(data->env, data->input->next->token);// current == NULL si input na pas ete trouve dans env
-	if (!current)
+	extracted_name = extract_name(input);
+	extracted_value = extract_value(input);
+
+	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
+	if (current == NULL) // variable does not exist
 	{
-		current = malloc(sizeof(t_env));
-		if (!current)
+		t_env *new_node = malloc(sizeof(t_env));
+		if (!new_node)
 		{
-			printf("export_T_CMD_ARG.c > add_env_var \tERROR current malloc\n");
-			free(current);
-			return ;
+			perror("malloc");
+			return;
 		}
-		printf("export_T_CMD_ARG.c > add_env_var \tSUCCESS current malloc\n");
-		current->next = NULL;
+		new_node->name = extracted_name;
+		new_node->value = extracted_value;
+		new_node->next = NULL;
+		lle_add_back(&data->env, new_node);
+		printf("export_T_CMD_ARG.c > add_env_var :\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
 	}
-	separator = ft_strchr(input, '=');
-	if (separator)// maj value
+	else //mettre variable a jour
 	{
-		char *extracted_name = ft_substr(input, 0, separator - input);
-		current->name = extracted_name;
-		printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
-		printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
-		current->next = NULL;
-		print_env_linked_list(data);
+		free(current->value);
+		current->value = extracted_value;
+		printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
+		free(extracted_name);
 	}
-	
-	else// rien du tout...
-	{
-		printf("export_T_CMD_ARG.c > add_env_var\t current->name(%s) devient input(%s)\n", current->name, input);
-		current->name = ft_strdup(input);// [ ] maj donc double malloc non ?
-		current->value = NULL;
-	}
-	// if (!current->name || (!current->value))
-	// if (!current->name || (separator && !current->value))
-	// 	{
-	// 		printf("export_T_CMD_ARG.c > add_env_var :\terror : current name/value not found\n");
-	// 		free(current->name);
-	// 		return ;
-	// 	}
-	// current->next = NULL;
 }
 
+
+/// @brief Check if an environment variable with the given name already exists in the linked list
+/// @param env Pointer to the head of the environment variable linked list
+/// @param name_var Name of the environment variable to search for
+/// @return Pointer to the t_env node if the variable exists, NULL otherwise
 t_env *exist_already_in_env(t_env *env, char *name_var)
 {
 	if (!name_var || !env)
@@ -113,96 +147,3 @@ t_env *exist_already_in_env(t_env *env, char *name_var)
 	
 	return (NULL);
 }
-
-/*
-___La ou jen suis le 02.04.2025, 20:20 :___
-
-[ ] Reparer la fonction permettant de creer une variable qui sajoute a lenv, soit add_env_var.
-	[x] Reparer exist_already_in_env : identifier correctement les matchs input/name_env
-	{
-		_ex_: export_T_CMD_ARG.c > exist_already_in_env :     env->name : -USER-      name_var : -USER-
-			* ft_strcmp
-				jai remplace par ft_strcmp_end 						-> 0 diff
-				jai remplace le dernier parametre par 2			 	-> 0 diff
-				jai remplace par la vraie fonction (strncmp) 		-> 0 diff
-			* la boucle
-				elle tourne, cest ok, je voit avec le print pour chaque ligne
-			* condition if
-				remplacer par == FALSE								-> 0 diff
-					note : interessant... la condition nest jamais ni vrai ni fausse
-					print result condition							-> diff nombre, neg, pos, et 0 une seule fois !
-					remplacer FALSE par == 0						-> 0 diff
-						even if == 0, entre pas dans la boucle
-						copilot : if (ft_strncmp(env->name, name_var, ft_strlen(name_var)) == 0)
-		la reponse : probleme de parenthese... 
-	}
-	reflexion : si match -> return (env) -> devient current (add_env_var)
-		NAME=value
-		|				
-		|--> same NAME -->	  no value --- nothing
-		| 				->	same value --- nothing
-		|				->	diff value ->> maj value
-		|									
-		|
-		|								
-		|-->  new NAME	-->   no value ->> add NAME
- 		|				 ->	with value ->> add NAME=value
-		|				 -> empty valu ->> add NAME=""
-	
-	[x] si diff/new name -> new env_var
-	  	[x] malloc t_env (new node)
-		[x] creer name
-		  	[x] si '=' --> extraire name
-			[x] env->name = name (extrait ou pas)
-	[ ] si value existe ('=' dans input), remplacer value par new_value	
-		[ ] condition : if '=' present dans input	
-		[ ] extraire value de input
-		[ ] remplacer value par new_value
-		[ ] break ; ?
-
-		[ ] fonction extraction name et value ?
-			[ ] if strchr '=' found
-			  		extract_name
-					extract_value
-		
-		Pour l-instant, si je fais export USER=moni -> il se passe rien. Ca rentre meme pas dans b_export (pas de printf de syntaxe ok)
-		jai ajouter des printf dans b_export. probleme resolu avec la condition is valid syntax qui laissait pas passer le '='
-		[x] extraire name de NAME=user, actuellement
-		  		export_T_CMD_ARG.c > add_env_var : SUCCESS name(USER=moni) extracted from imput(USER=moni) :)
-				  ok j'ai demande a copilot... le dernier param etait input - separator. je devait faire l'inverse
-				  char *extracted_name = ft_substr(input, 0, separator - input); 105 . 110 . 112 --> 110 - 112 = -2... jai pas compris
-
-		[ ] la new_var s'ajoute a env
-[ ]			pour l'instant : (si pas de = dans arg, segv [ ])
-					minishell> export ens=dd
-					cmd
-					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(ens=dd) :)
-					export_T_CMD_ARG.c > exist_already_in_env :     no match env_name_linked_list / env_name_input_token 
-					export_T_CMD_ARG.c > add_env_var        SUCCESS current malloc
-					export_T_CMD_ARG.c > add_env_var :      SUCCESS name(ens) extracted from imput(ens=dd) :)
-					export_T_CMD_ARG.c > add_env_var :      current->name(ens)
-					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
-					Token type: T_CMD_ARG
-					Token type: T_ARG
-			le probleme : ne s'affiche pas dans l'env.
-			Reflexion : se copie dans un env temporaire ? pour tester je print envlinkedlist directement dans la fonction apres current.name =  extractedname
-				t_env *current = NULL; -> = data->env				--> 0 diff
-			On dirait que current.name s'enregistre ailleurs... est ce que j'ai lie le new_node a la linkedlist_env ?
-				je commente is already in env car ca mod le current
-					minishell> export _______ewfew
-					cmd
-					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(_______ewfew) :)
-					export_T_CMD_ARG.c > add_env_var         current->name(GJS_DEBUG_TOPICS) devient input(_______ewfew)
-					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
-					Token type: T_CMD_ARG
-					Token type: T_ARG
-
-					minishell> export
-					cmd
-					[21]    19943 segmentation fault (core dumped)  ./minishell
-					➜  sh git:(moni) ✗ 
-
-
-[ ] finaliser condition is_valid_syntax 
-  	(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)
-		*/

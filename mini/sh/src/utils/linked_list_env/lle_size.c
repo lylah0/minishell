@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   lle_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:29 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 11:03:24 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:59:28 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/04 12:35:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new1)
+/// @brief Calculates the size of a linked list of environment variables.
+/// @param env Pointer to the head of the linked list.
+/// @return The size of the linked list.
+int	lle_size(t_env *env)
 {
-	t_list	*lst_last;
+	int		size;
+	t_env	*env_temp;
 
-	if (!new1)
-		return ;
-	lst_last = ft_lstlast(*lst);
-	if (!lst_last)
-		*lst = new1;
-	else
-		lst_last->next = new1;
+	if (!env)
+		return (0);
+	env_temp = env;
+	size = 0;
+	while (env_temp)
+	{
+		env_temp = env_temp->next;
+		size++;
+	}
+	return (size);
 }

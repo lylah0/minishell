@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   lle_last.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:29 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 11:03:24 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:58:54 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/04 12:32:27 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new1)
+/// @brief Returns the last node of the linked list.
+/// @param env The head of the linked list.
+/// @return The last node of the linked list, or NULL if the list is empty.
+t_env	*lle_last(t_env *env)
 {
-	t_list	*lst_last;
+	t_env	*env_last;
 
-	if (!new1)
-		return ;
-	lst_last = ft_lstlast(*lst);
-	if (!lst_last)
-		*lst = new1;
-	else
-		lst_last->next = new1;
+	if (!env)
+		return (0);
+	env_last = env;
+	while (env_last->next)
+		env_last = env_last->next;
+	return (env_last);
 }
