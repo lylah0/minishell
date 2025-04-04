@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/03 10:49:00 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/03 11:48:22 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ bool is_valid_env_var_syntax(char *s)
 /// @param input 
 void	add_env_var(t_data *data, char *input)
 {
-	t_env	*current = NULL;
+	t_env	*current = data->env;
 	char	*separator;	
 	
-	current = exist_already_in_env(data->env, data->input->next->token);// current == NULL si input na pas ete trouve dans env
+	// current = exist_already_in_env(data->env, data->input->next->token);// current == NULL si input na pas ete trouve dans env
 	if (!current)
 	{
 		current = malloc(sizeof(t_env));
@@ -75,6 +75,8 @@ void	add_env_var(t_data *data, char *input)
 		current->name = extracted_name;
 		printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
 		printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
+		current->next = NULL;
+		print_env_linked_list(data);
 	}
 	
 	else// rien du tout...
@@ -171,7 +173,7 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 				  char *extracted_name = ft_substr(input, 0, separator - input); 105 . 110 . 112 --> 110 - 112 = -2... jai pas compris
 
 		[ ] la new_var s'ajoute a env
-		  pour l'instant : (si pas de = dans arg, segv [ ])
+[ ]			pour l'instant : (si pas de = dans arg, segv [ ])
 					minishell> export ens=dd
 					cmd
 					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(ens=dd) :)
@@ -182,7 +184,23 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
 					Token type: T_CMD_ARG
 					Token type: T_ARG
+			le probleme : ne s'affiche pas dans l'env.
+			Reflexion : se copie dans un env temporaire ? pour tester je print envlinkedlist directement dans la fonction apres current.name =  extractedname
+				t_env *current = NULL; -> = data->env				--> 0 diff
+			On dirait que current.name s'enregistre ailleurs... est ce que j'ai lie le new_node a la linkedlist_env ?
+				je commente is already in env car ca mod le current
+					minishell> export _______ewfew
+					cmd
+					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(_______ewfew) :)
+					export_T_CMD_ARG.c > add_env_var         current->name(GJS_DEBUG_TOPICS) devient input(_______ewfew)
+					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
+					Token type: T_CMD_ARG
+					Token type: T_ARG
 
+					minishell> export
+					cmd
+					[21]    19943 segmentation fault (core dumped)  ./minishell
+					➜  sh git:(moni) ✗ 
 
 
 [ ] finaliser condition is_valid_syntax 
