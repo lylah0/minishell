@@ -1,6 +1,4 @@
-/*
 ___La ou jen suis le 02.04.2025, 20:20 :___
-
 [ ] Reparer la fonction permettant de creer une variable qui sajoute a lenv, soit add_env_var.
 	[x] Reparer exist_already_in_env : identifier correctement les matchs input/name_env
 	{
@@ -38,14 +36,10 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 		[x] creer name
 		  	[x] si '=' --> extraire name
 			[x] env->name = name (extrait ou pas)
-	[ ] si value existe ('=' dans input), remplacer value par new_value	
-		[ ] condition : if '=' present dans input	
-		[ ] extraire value de input
-		[ ] remplacer value par new_value
-		[ ] break ; ?
+	[x] si value existe ('=' dans input), remplacer value par new_value	
 
-		[ ] fonction extraction name et value ?
-			[ ] if strchr '=' found
+		[x] fonction extraction name et value ?
+			[x] if strchr '=' found
 			  		extract_name
 					extract_value
 		
@@ -56,9 +50,9 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 				  ok j'ai demande a copilot... le dernier param etait input - separator. je devait faire l'inverse
 				  char *extracted_name = ft_substr(input, 0, separator - input); 105 . 110 . 112 --> 110 - 112 = -2... jai pas compris
 
-		[ ] la new_var s'ajoute a env
-[ ]			pour l'instant : (si pas de = dans arg, segv [ ])
-					minishell> export ens=dd
+				[oui mais...] la new_var s'ajoute a env
+						pour l'instant : (si pas de = dans arg, segv [ ])
+							minishell> export ens=dd
 					cmd
 					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(ens=dd) :)
 					export_T_CMD_ARG.c > exist_already_in_env :     no match env_name_linked_list / env_name_input_token 
@@ -103,7 +97,7 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 		jai cree deux fonctions : extracted_name et extracted_value
 		
 		ca segv de partout...
-		bon situation : la variable nexiste pas.
+		bon, situation : la variable nexiste pas.
 			add_back;
 			initialiser name;
 			initialiser value;
@@ -115,26 +109,73 @@ ___La ou jen suis le 02.04.2025, 20:20 :___
 
 		jai utilise copilot par megarde et ca marche alors je vias continuer ainsi
 
-	[ ] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
-		
+	[x] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
+		la value ne devrait pas etre ecrasee par le vide
+5.5.25, 13:45
+	EV = env_var, lle = linked_list_env
+	Je reprends mon code. Je pensais que l'ajout dune variable etait ok mais en fait pas.
+	faisons un peit bilan complet :
+	[ok]	export 											--> Affiche la liste complète des variables déjà exportées.
+	[SEGV]	export VAR 										--> Crée/“exporte” la variable VAR vide ; un nouvel export la liste.
+	[ok]	export VAR=				resultat export "VAR="	--> VAR=""
+		ok -> je me rends compte, que l'affiche de `export, ne place pas les " " au bon endroit
+			TD	[ ] export T_CMD : les guillemets doivent etre autour de la value. 
+			[ ] copy_env
+				[ ] modifier le tableau afin que les guillements puissent se placer autour de la value.
+	[ok] 	export FOO=bar 									--> Définit/exporte FOO=bar; un nouvel export la liste.
+	[ok] 	export FOO=baz 									--> Met à jour FOO (de bar à baz); un nouvel export la liste.
+	[ok] 	export 1ABC=truc 								--> Erreur: nom de variable invalide; ne crée pas 1ABC.
+	[ok] 	export PATH=/tmp 	EV preexistante				--> Met à jour PATH; un nouvel export affiche PATH=/tmp.
+
+	donc il semblerait, que ca _SEGV_ lorsque je demande laffichage dans les cas ou 
+		* Creation var (sans =, sans value,)
+		* MAJ value de my_var
+
+		je me demande si la cause serait commune ou pas.
+		pour le 1er cas, creation var, l'absence de = semble troubler l'affichage. 
+		pourquoi ca segv pas lorsque je fias la ligne `export ____`, ca segv quand je verifie avec `export`
+		je vias tenter de print le nouveau noeud uniquement pour voir si cest laffichage du new node ou de lensemble qui segv
+			Added new env var with name((null)) and value((null))
+		ok, donc il semble que je cree un noeud mais que NAME ne soit pas correctement assigne
+
+		export var=nem 		--> ok
+		export ____=		--> ok
+		export ___			--> ___ introuvable, par contre, 
+								ET ajout d'une nouvelle var au debut export "="
+		je sais pas quoi comprendre de ca...
+			donc il voit que ca nexiste pas
+			il ny a pas de =.
+
+			les etapes :
+			1.	decoupage input
+			2.	existe ?
+				oui :
+					MAJ : libere value, assigne extracted_value a curr.val
+				non : 
+					malloc new_node, assignation name et value depuis extract... , lle_add_back
+
+				je comprends pas ce quil se passe.
+				quand j'export sans =, ca ajoute des var bizare au debut de la lle	
+					export Е���^="", export ="" qui se modifient a chaque passage de export
+					et celle la aussi elle est pas mal : `export export=""`
 
 
-[ ] finaliser condition is_valid_syntax 
-  	(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)
-		*/
+				je vias tenter decrire ma propre version de lle_add_back soit, my_lle_add_back
+____pour plus tard...
+	[x] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
+		la value ne devrait pas etre ecrasee par le vide
+	[ok] finaliser condition is_valid_syntax 
+		(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)
+	[BRAVO Moni ! hihi] export T_CMD : les guillemets doivent etre autour de la value. 
+			quelle est la facon la plus simple de placer les guillemets au bon endroit ? 
+				une fonciton qui place les guillement ?
+				les placer avant de transformer en tableau ?
+		[x] copy_env : modifier le tableau afin que les guillements puissent se placer autour de la value.
 
-in case of :
-		// if (!current)
-		// {
-		// 	printf("export_T_CMD_ARG.c > add_env_var \tSUCCESS current malloc\n");
-		// 	go_end_of_linked_list(data->env);
-		// 	current = malloc(sizeof(t_env));
-		// 	if (!current)
-		// 	{
-		// 		printf("export_T_CMD_ARG.c > add_env_var \tERROR current malloc\n");
-		// 		free(current);
-		// 		return ;
-		// 	}
-		// 	current->next = current;
-		// 	printf("export_T_CMD_ARG.c > add_env_var \tcurrent->name(%s) after go_end_of_linked_list\n", current->name);
-		// }
+
+
+Il me reste du courage et de l'humour :
+	[ ] si pas de =, la creation de la variable est chaotique et erronee
+
+	[ ] TEST	export VAR1=val1 VAR2=val2 						--> Définit/exporte simultanément VAR1=val1 et VAR2=val2.
+	[ ] TEST	export TEST=123 ; env | grep TEST 				--> Dans un sous-processus, TEST=123 doit apparaître.

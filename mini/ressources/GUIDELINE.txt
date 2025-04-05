@@ -29,11 +29,11 @@ OK	[Moni] Have a working history (you can navigate through commands with up/down
 	[ ] Implement the following built-ins:
 		[...] — echo (option -n only)
 		[...] — exit
-		[...] — env (with no options or arguments)
-		[.  ] — export (with no options)
-		[   ] — unset (with no options)
-		[ x ] — cd
-		[...] — pwd (a mod apres env)
+		[ x ] — env (with no options or arguments)
+FUCK	[.  ] — export (with no options)
+		[   ] — unset (with no options)  	--> lle_del_one
+		[ x ] — cd							--> [ ]	maj OLDPWD
+		[...] — pwd (a mod apres env)		--> me semble ok
 
 
 _________MONI___________

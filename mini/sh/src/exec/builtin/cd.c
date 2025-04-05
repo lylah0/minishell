@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 16:51:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:58:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void b_cd(t_data *data, t_input *arg)
 	}
 
 	current = head;
-	
 	while (current && ft_strncmp(current->name, "OLDPWD", 6) != 0)
 		current = current->next;
+		
 	if (ft_strncmp(current->name, "OLDPWD", 6) == 0)
 		current->value = (char *)temp_pwd;
 }

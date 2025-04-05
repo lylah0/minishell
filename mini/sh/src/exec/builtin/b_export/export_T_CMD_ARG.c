@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 16:11:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:40:36 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,18 @@ bool is_valid_env_var_syntax(char *s)
 				i++;
 			else
 			{
-				printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe1\t");
 				ft_putstr_fd("bash: export: '", 1);
 				ft_printf("%s", s);
 				ft_putendl_fd("': not a valid identifier", 1);
 				return (FALSE);
 			}
 		}
-		printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe2\tSUCCESS is a valid SYNTAX env_var(%s) :)\n", s);
 		return (TRUE);
 	}
-	printf("export_T_CMD_ARG.c > is_valid_env_var_syntaxe3\t");
 	ft_putstr_fd("bash: export: '", 1);
 	ft_printf("%s", s);
 	ft_putendl_fd("': not a valid identifier", 1);
 	return (FALSE);
-}
-t_env	*go_end_of_linked_list(t_env *env)
-{
-	if (!env)
-		return (NULL);
-	while (env->next)
-	{
-		env = env->next;
-	}
-	return (env);
 }
 
 char	*extract_name(char *input)
@@ -63,18 +50,11 @@ char	*extract_name(char *input)
 	char	*separator;
 	char	*extracted_name;
 
-	if (input)
-	{
-		separator = ft_strchr(input, '=');
-		if (separator)// maj value
-		{
-			extracted_name = ft_substr(input, 0, separator - input);
-			return (extracted_name);
-		}
-		else
-			return (input);
-	}
-	return (NULL);
+	separator = ft_strchr(input, '=');
+	if (!separator)
+		return (input);
+	extracted_name = ft_substr(input, 0, separator - input);
+	return (extracted_name);
 }
 // printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
 // printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
@@ -82,18 +62,26 @@ char	*extract_name(char *input)
 char	*extract_value(char *input)
 {
 	char	*separator;
-	char 	*extracted_value;
+	char	*extracted_value;
 
-	if(input)
+	separator = ft_strchr(input, '=');
+	if (!separator)
 	{
-		separator = ft_strchr(input, '=');
-		if (separator)// maj value
-		{
-			extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
-			return (extracted_value);
-		}
+		// Si on ne trouve pas de '=', on renvoie une chaîne vide (cas "export VAR").
+		extracted_value = ft_strdup("");
 	}
-	return (NULL);
+	else
+	{
+		// On extrait la sous-chaîne après le '='
+		extracted_value = ft_substr(
+			input,
+			separator - input + 1,
+			ft_strlen(input) - (separator - input + 1)
+		);
+	}
+
+	printf("\textracted_value(%s) from input(%s)\n", extracted_value, input);
+	return (extracted_value);
 }
 
 /// @brief add or maj
@@ -104,14 +92,11 @@ void	add_env_var(t_data *data, char *input)
 	char 	*extracted_value;
 	char 	*extracted_name;
 	(void)input;
-	
+	printf("\tinput(%s)\n", input);
 	extracted_name = extract_name(input);
-	printf("export_T_CMD_ARG.c > add_env_var :\t BEFORE extract value(%s)\n", extracted_value);
 	extracted_value = extract_value(input);
-	printf("export_T_CMD_ARG.c > add_env_var :\t AFTER extract value(%s)\n", extracted_value);
 	
 	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
-	printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to BEFORE value(%s)\n", extracted_name, extracted_value);
 	if (current == NULL) // variable does not exist
 	{
 		t_env *new_node = malloc(sizeof(t_env));
@@ -123,21 +108,28 @@ void	add_env_var(t_data *data, char *input)
 		new_node->name = extracted_name;
 		new_node->value = extracted_value;
 		new_node->next = NULL;
-		lle_add_back(&data->env, new_node);
-		printf("export_T_CMD_ARG.c > add_env_var :\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
-	}
-	else
-	{
-		if (ft_strchr(input, '=') != NULL)
-		{
-			free(current->value);
 
-			current->value = extracted_value;
-			printf("export_T_CMD_ARG.c > add_env_var :\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
-		}
+		t_env *env_last = lle_last(data->env);
+		if (env_last)
+			env_last->next = new_node;
 		else
-			return ;
-		free(extracted_name);
+			data->env = new_node;
+
+		printf("\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
+		// lle_add_back(&data->env, new_node);
+		// printf("\tAdded new env var with name(%s) and value(%s)\n", current->name, current->value);
+	}
+	else //mettre variable a jour
+	{
+		if (!extracted_value || extracted_value[0] == '\0')
+		{
+			extracted_value = current->value;
+		}
+		current->value = extracted_value;
+		printf("\n_______current_value(%s)\textracted_value(%s)\n\n", current->value, extracted_value);
+			// free(current->value);// pourquoi ? on pourrait simplement ecraser value ?
+		printf("\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
+		// free(extracted_name);//pourquoi ?
 	}
 }
 
@@ -154,7 +146,10 @@ t_env *exist_already_in_env(t_env *env, char *name_var)
 	{
 		if (ft_strncmp(env->name, name_var, ft_strlen(name_var)) == 0)
 		{
-			printf("export_T_CMD_ARG.c > exist_already_in_env :\tenv_var with name %s found befor %s\n", env->name, env->next->name);
+			if (env->next)
+				printf("export_T_CMD_ARG.c > exist_already_in_env :\tenv_var with name %s found before %s\n", env->name, env->next->name);
+			else
+				printf("export_T_CMD_ARG.c > exist_already_in_env :\tenv_var with name %s found, no next variable\n", env->name);
 			return (env);
 		}
 		else

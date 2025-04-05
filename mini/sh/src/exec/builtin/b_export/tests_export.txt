@@ -1,0 +1,35 @@
++---------------------------------------------------------------------------------------+
+|     TEST #   | COMMANDE                             | RESULTAT ATTENDU                |
++---------------------------------------------------------------------------------------+
+|     1.       | export                               | Affiche la liste complète       |
+|    [x]       |                                      | des variables déjà exportées.   |
++---------------------------------------------------------------------------------------+
+|     2.       | export VAR                           | Crée ou exporte la variable     |
+|    [ ]       |                                      | VAR (vide). Un nouvel appel à   |
+|              |                                      | "export" doit lister VAR.       |
++---------------------------------------------------------------------------------------+
+|     3.       | export FOO=bar                       | Définit et exporte FOO=bar. Un  |
+|    [ ]       |                                      | nouvel appel à "export" doit    |
+|              |                                      | lister FOO=bar.                 |
++---------------------------------------------------------------------------------------+
+|     4.       | export FOO=baz                       | Met à jour la valeur de FOO     |
+|    [ ]       |                                      | (de bar à baz). "export" doit   |
+|              |                                      | lister FOO=baz.                 |
++---------------------------------------------------------------------------------------+
+|     5.       | export VAR1=val1 VAR2=val2           | Définit et exporte en même      |
+|    [ ]       |                                      | temps VAR1=val1 et VAR2=val2.   |
+|              |                                      | "export" doit les afficher.     |
++---------------------------------------------------------------------------------------+
+|     6.       | export 1ABC=truc                     | Doit générer une erreur         |
+|    [ ]       |                                      | (nom de variable invalide).     |
+|              |                                      | "export" ne crée pas 1ABC.      |
++---------------------------------------------------------------------------------------+
+|     7.       | export PATH=/tmp                     | Met à jour PATH. "export" doit  |
+|    [ ]       |                                      | afficher la nouvelle valeur de  |
+|              |                                      | PATH=/tmp.                      |
++---------------------------------------------------------------------------------------+
+|     8.       | export TEST=123 ; env | grep TEST    | En lançant un sous-processus    |
+|    [ ]       | (si la commande env est disponible)  | (env), on doit voir TEST=123.   |
+|              |                                      | Sinon, observer "export" dans   |
+|              |                                      | la minishell si c'est permis.   |
++---------------------------------------------------------------------------------------+
