@@ -179,3 +179,17 @@ Il me reste du courage et de l'humour :
 
 	[ ] TEST	export VAR1=val1 VAR2=val2 						--> Définit/exporte simultanément VAR1=val1 et VAR2=val2.
 	[ ] TEST	export TEST=123 ; env | grep TEST 				--> Dans un sous-processus, TEST=123 doit apparaître.
+
+
+
+
+
+
+
+
+
+
+affichage des variable avec export
+	- triees/triables
+	- name/value distinct
+	

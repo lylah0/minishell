@@ -6,24 +6,50 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 16:31:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:04:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in `echo` `echo -n`
-/// @param input
-void	b_echo(t_input *input)
+#define OFF 0
+#define ON 1
+
+int is_n_option(const char *token)
 {
-	while(input->next->type == T_ARG)
+	if (ft_strncmp(token, "-n", 2) == 0)
 	{
-		ft_putstr_fd(input->next->token, 1);
-		if (!input->next->next)
-			write(1, "\n", 1);
-		input->next = input->next->next;
+		int i = 2;
+		while (token[i] && token[i] == 'n')
+			i++;
+		if (token[i] == '\0')
+			return ON;
 	}
+	return OFF;
 }
 
-// [ ] gestion plusieurs n
-// [ ] adapter avec token CMD_ARG et CMD
+void    b_echo(t_input *input)
+{
+	int flag_newline = OFF;
+
+	input = input->next;
+	while (input && input->token)
+	{
+		if (is_n_option(input->token) == ON)
+		{
+			flag_newline = ON;
+			input = input->next; 
+			continue;
+		}
+		printf("%s", input->token);
+		if (input->next)
+		{
+			printf(" ");
+			input = input->next;
+		}
+		else
+			break ;
+	}
+	if (flag_newline == OFF)
+		printf("\n");
+}

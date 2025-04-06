@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/04 11:08:10 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/06 12:56:03 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	first_word(char **input, char **env)
 	else
 	{
 		//		word_token(input[0]);
-		printf("cmd\n");
+		// printf("cmd\n");
 	}
 }
 

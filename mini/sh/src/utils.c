@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/02 19:59:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/06 12:23:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void	cleanup_memory(char *line, char **splited_line)
 	free(splited_line);
 }
 
+/// @brief 
+/// @param s1 
+/// @param s2 
+/// @param n 
+/// @return 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;

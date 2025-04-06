@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/04 12:06:35 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/05 18:18:56 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@
 
 #  define TRUE 1
 #  define FALSE 0
-
-typedef struct s_envp
-{
-	char	**envp;
-}			t_envp;
-
 
 // signals.c
 __sighandler_t handler_sigint(void);
