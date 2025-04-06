@@ -51,6 +51,6 @@ _________MONI___________
 		[ ] supprimer variable
 	[ ]	cd
 		[ ] verifier path
-	[ ] echo
+	[x] echo
 	[ ]	exit
 

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/02 19:49:03 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/06 14:03:48 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@ int	kind_of_token(t_data *data, t_input *input)
 	char	*input_str;
 	input_str = input->token;
 	if (ft_strncmp_end(input_str, "echo", 4) == 0)
-	{
+	{ 
 		b_echo(input);
+		return (0);
+	}	
+	if (ft_strncmp_end(input_str, "exit", 4) == 0)
+	{ 
+		b_exit(data);
 		return (0);
 	}	
 	else if (ft_strncmp_end(input_str, "cd", 2) == 0)
