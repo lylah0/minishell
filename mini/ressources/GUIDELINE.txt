@@ -42,15 +42,14 @@ _________MONI___________
 [x] commenter mes fonctions
 [keep_on_trying] etre gentille avec Moni du futur
 [ ] avancer dans les builtins
-	[ ] export
-		[x] tri alphabetique
-		[ ] structure
-		[ ] ajout variable
-		[ ] modifier variable
-	[ ] unset
-		[ ] supprimer variable
-	[ ]	cd
-		[ ] verifier path
 	[x] echo
-	[ ]	exit
+	[x]	exit
 
+-->	[ ]	cd
+
+	[ ] export
+		[ ]	gestion affichage export (T_CMD)
+			--> revoir structure/copy |?|
+		[ ] ajout variable sans value ...
+	[ ] unset
+		[ ] supprimer variable	--> a voir une fois que export fini
