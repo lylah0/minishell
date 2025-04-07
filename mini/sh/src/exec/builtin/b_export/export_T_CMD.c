@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 15:43:55 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:47:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void 	print_copy_env(t_data *data)
 	i = 0;
 	while (data->copy_env[i])
 	{
-		ft_putstr_fd("export ", 1);
+		ft_putstr_fd("export =\"", 1);
 		ft_putstr_fd(data->copy_env[i], 1);
-		ft_putendl_fd("",1);
+		ft_putendl_fd("\"",1);
 		i++;
 	}
 }
@@ -105,9 +105,9 @@ void	create_env_copy_array(t_data *data)
 
 	while (current)
 	{
-		name = ft_strdup_equal(current->name);
+		name = ft_strdup(current->name);
 		// name = ft_strdup(current->name);
-		value = ft_strdup(current->value);
+		value = ft_strdup_equal(current->value);
 		if (!name || !value)
 		{
 			free(name);

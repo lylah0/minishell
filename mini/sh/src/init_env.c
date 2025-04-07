@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:44:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ void	free_lle(t_data *data)
 
 void	print_lle(t_data *data)
 {
-	while (data->env)
+	t_env	*current;
+
+	current = data->env;
+	while (current)
 	{
-		printf("%s=", data->env->name);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
-		printf("%s\n", data->env->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
-		data->env = data->env->next;
+		printf("%s", current->name);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+		printf("=%s\n", current->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+		current = current->next;
 	}
 }
 

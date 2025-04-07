@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 18:31:34 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 20:24:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,9 @@ void	add_env_var(t_data *data, char *input)
 		else
 			data->env = new_node;
 
-		printf("\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
+		printf("\tAdded new env var with name(%s) and value(%s)\n", new_node->name, new_node->value);
+		
 		// lle_add_back(&data->env, new_node);
-		// printf("\tAdded new env var with name(%s) and value(%s)\n", current->name, current->value);
 	}
 	else //mettre variable a jour
 	{
@@ -133,6 +133,7 @@ void	add_env_var(t_data *data, char *input)
 		printf("\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
 		// free(extracted_name);//pourquoi ?
 	}
+
 }
 
 
