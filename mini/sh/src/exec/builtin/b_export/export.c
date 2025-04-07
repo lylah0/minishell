@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/03 10:23:26 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:55:51 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,3 +45,6 @@ void    b_export(t_data *data)
 // 	// b_env(data);
 // 	// b_export(data);
 // }
+
+
+// MAYBE ! quand je tape export fjfboewf, ndepqndq st considere comme T_CMD_ARG et nest PAS differencier de sil y a un =

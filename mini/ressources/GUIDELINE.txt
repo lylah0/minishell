@@ -25,7 +25,7 @@ OK	[Moni] Have a working history (you can navigate through commands with up/down
 	[ ] Implement the here-doc (<<)
 	[Moni] environ, env, name=variable
 	[Lylah] Handle double quotes ("") and single quotes (''), which should escape special characters, beside $ for double quotes.
-	[Moni] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
+Mon	[ ] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
 	[ ] Implement the following built-ins:
 		[...] — echo (option -n only)
 		[...] — exit

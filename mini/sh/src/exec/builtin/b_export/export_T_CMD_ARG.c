@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/05 15:40:36 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:31:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	add_env_var(t_data *data, char *input)
 	extracted_name = extract_name(input);
 	extracted_value = extract_value(input);
 	
+	// print extractedname et value pour export blupblup et voir ce que ca donne
+
 	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
 	if (current == NULL) // variable does not exist
 	{
