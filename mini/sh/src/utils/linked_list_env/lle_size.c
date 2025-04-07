@@ -1,20 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   lle_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:59:28 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/04 12:35:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in env `env`
-/// @param data 
-void	b_env(t_data *data)
+/// @brief Calculates the size of a linked list of environment variables.
+/// @param env Pointer to the head of the linked list.
+/// @return The size of the linked list.
+int	lle_size(t_env *env)
 {
-	print_lle(data);
+	int		size;
+	t_env	*env_temp;
+
+	if (!env)
+		return (0);
+	env_temp = env;
+	size = 0;
+	while (env_temp)
+	{
+		env_temp = env_temp->next;
+		size++;
+	}
+	return (size);
 }

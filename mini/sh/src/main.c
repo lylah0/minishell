@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 15:47:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:10:16 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ t_data	*init_data(t_data *data)
 		return (NULL);
 	}
 	data->input = NULL;
-	data->input = malloc(sizeof(char) * 1024);
+	data->input = malloc(sizeof(t_input));
 	if (!data->input)
 	{
 		fprintf(stderr, "Error: Memory allocation failed for input\n");
 		free(data);
 		return (NULL);
 	}
+	data->input->data = NULL;
 	data->env = NULL;
 	data->env = malloc(sizeof(t_env));
 	if (!data->env)
@@ -75,6 +76,7 @@ int	main(int ac, char **av, char **envp)
 	init_signals();
 	data = NULL;
 	data = init_data(data);
+	init_env(data, envp);
 	while (1)
 	{
 		input = get_user_input("minishell> ");

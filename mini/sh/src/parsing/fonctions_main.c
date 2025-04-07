@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fonctions_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 21:09:38 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/27 17:52:13 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:25:33 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

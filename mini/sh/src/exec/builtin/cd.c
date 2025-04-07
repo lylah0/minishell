@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/21 20:20:50 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:58:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..` 
 /// @param data 
 /// @param arg <path>
-void b_cd(t_data *data, char *arg)
+void b_cd(t_data *data, t_input *arg)
 {
     t_env	*current;
 	t_env	*head;
@@ -31,7 +31,7 @@ void b_cd(t_data *data, char *arg)
 	if (ft_strncmp(current->name, "PWD", 3) == 0)
 	{
 		temp_pwd = ft_strdup(current->value);
-		if (chdir(arg) == 0)
+		if (chdir((char *)arg) == 0)
 		{
 			free(current->value);
 			current->value = getcwd(NULL, 0);
@@ -41,9 +41,9 @@ void b_cd(t_data *data, char *arg)
 	}
 
 	current = head;
-	
 	while (current && ft_strncmp(current->name, "OLDPWD", 6) != 0)
 		current = current->next;
+		
 	if (ft_strncmp(current->name, "OLDPWD", 6) == 0)
 		current->value = (char *)temp_pwd;
 }

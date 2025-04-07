@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/19 18:32:00 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/06 12:23:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void	cleanup_memory(char *line, char **splited_line)
 	free(splited_line);
 }
 
+/// @brief 
+/// @param s1 
+/// @param s2 
+/// @param n 
+/// @return 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -62,7 +67,7 @@ char	*ft_strdup_equal(const char *src)
 		i++;
 	}
 	dest[i] = '=';
-	dest[i] = 0;
+	dest[++i] = 0;
 	return (dest);
 }
 
@@ -91,7 +96,7 @@ size_t	ft_strcat(char *dest, const char *src)
 	return (dest_len + src_len);
 }
 
-int	ft_strncmp_end(const char *s1, const char *s2, size_t n)
+int	ft_strncmp_end(char *s1, char *s2, size_t n)
 {
 	size_t	i;
 
@@ -103,7 +108,7 @@ int	ft_strncmp_end(const char *s1, const char *s2, size_t n)
 		while (s1[i] && s2[i] && n > 1)
 		{
 			if (s1[i] != s2[i])
-				return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+				return ((char)s1[i] - (char)s2[i]);
 			i++;
 			n--;
 		}

@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   lle_add_back.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:57:29 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/05 15:28:33 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in env `env`
-/// @param data 
-void	b_env(t_data *data)
+/// @brief Adds a new node to the end of the linked list.
+/// @param env Pointer to the head of the linked list.
+/// @param new1 The new node to be added to the linked list.
+void	lle_add_back(t_env **env, t_env *new1)
 {
-	print_lle(data);
+	t_env	*env_last;
+
+	if (!new1)
+		return ;
+	env_last = lle_last(*env);
+	if (!env_last)
+		*env = new1;
+	else
+		env_last->next = new1;
 }

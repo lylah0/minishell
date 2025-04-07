@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   lle_new.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:59:17 by afloras           #+#    #+#             */
+/*   Updated: 2025/04/04 12:35:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in env `env`
-/// @param data 
-void	b_env(t_data *data)
+/// @brief Creates a new environment variable node with the given name.
+/// @param name The name to be assigned to the new environment variable node.
+/// @return A pointer to the newly created t_env node, or NULL if allocation fails.
+t_env	*lle_new(void *name)
 {
-	print_lle(data);
+	t_env	*new_list;
+
+	new_list = (t_env *) malloc(sizeof(t_env));
+	if (!new_list)
+		return (0);
+	new_list->name = name;
+	new_list->next = 0;
+	return (new_list);
 }

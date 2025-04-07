@@ -1,0 +1,195 @@
+___La ou jen suis le 02.04.2025, 20:20 :___
+[ ] Reparer la fonction permettant de creer une variable qui sajoute a lenv, soit add_env_var.
+	[x] Reparer exist_already_in_env : identifier correctement les matchs input/name_env
+	{
+		_ex_: export_T_CMD_ARG.c > exist_already_in_env :     env->name : -USER-      name_var : -USER-
+			* ft_strcmp
+				jai remplace par ft_strcmp_end 						-> 0 diff
+				jai remplace le dernier parametre par 2			 	-> 0 diff
+				jai remplace par la vraie fonction (strncmp) 		-> 0 diff
+			* la boucle
+				elle tourne, cest ok, je voit avec le print pour chaque ligne
+			* condition if
+				remplacer par == FALSE								-> 0 diff
+					note : interessant... la condition nest jamais ni vrai ni fausse
+					print result condition							-> diff nombre, neg, pos, et 0 une seule fois !
+					remplacer FALSE par == 0						-> 0 diff
+						even if == 0, entre pas dans la boucle
+						copilot : if (ft_strncmp(env->name, name_var, ft_strlen(name_var)) == 0)
+		la reponse : probleme de parenthese... 
+	}
+	reflexion : si match -> return (env) -> devient current (add_env_var)
+		NAME=value
+		|				
+		|--> same NAME -->	  no value --- nothing
+		| 				->	same value --- nothing
+		|				->	diff value ->> maj value
+		|									
+		|
+		|								
+		|-->  new NAME	-->   no value ->> add NAME
+ 		|				 ->	with value ->> add NAME=value
+		|				 -> empty valu ->> add NAME=""
+	
+	[x] si diff/new name -> new env_var
+	  	[x] malloc t_env (new node)
+		[x] creer name
+		  	[x] si '=' --> extraire name
+			[x] env->name = name (extrait ou pas)
+	[x] si value existe ('=' dans input), remplacer value par new_value	
+
+		[x] fonction extraction name et value ?
+			[x] if strchr '=' found
+			  		extract_name
+					extract_value
+		
+		Pour l-instant, si je fais export USER=moni -> il se passe rien. Ca rentre meme pas dans b_export (pas de printf de syntaxe ok)
+		jai ajouter des printf dans b_export. probleme resolu avec la condition is valid syntax qui laissait pas passer le '='
+		[x] extraire name de NAME=user, actuellement
+		  		export_T_CMD_ARG.c > add_env_var : SUCCESS name(USER=moni) extracted from imput(USER=moni) :)
+				  ok j'ai demande a copilot... le dernier param etait input - separator. je devait faire l'inverse
+				  char *extracted_name = ft_substr(input, 0, separator - input); 105 . 110 . 112 --> 110 - 112 = -2... jai pas compris
+
+				[oui mais...] la new_var s'ajoute a env
+						pour l'instant : (si pas de = dans arg, segv [ ])
+							minishell> export ens=dd
+					cmd
+					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(ens=dd) :)
+					export_T_CMD_ARG.c > exist_already_in_env :     no match env_name_linked_list / env_name_input_token 
+					export_T_CMD_ARG.c > add_env_var        SUCCESS current malloc
+					export_T_CMD_ARG.c > add_env_var :      SUCCESS name(ens) extracted from imput(ens=dd) :)
+					export_T_CMD_ARG.c > add_env_var :      current->name(ens)
+					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
+					Token type: T_CMD_ARG
+					Token type: T_ARG
+			le probleme : ne s'affiche pas dans l'env.
+			Reflexion : se copie dans un env temporaire ? pour tester je print envlinkedlist directement dans la fonction apres current.name =  extractedname
+				t_env *current = NULL; -> = data->env				--> 0 diff
+			On dirait que current.name s'enregistre ailleurs... est ce que j'ai lie le new_node a la linkedlist_env ?
+				je commente is already_in_env car ca mod le current
+					minishell> export _______ewfew
+					cmd
+					export_T_CMD_ARG.c > is_valid_env_var_syntaxe2  SUCCESS is a valid SYNTAX env_var(_______ewfew) :)
+					export_T_CMD_ARG.c > add_env_var         current->name(GJS_DEBUG_TOPICS) devient input(_______ewfew)
+					export.c > b_export :    export avec arg, input = T_CMD_ARG + T_ARG
+					Token type: T_CMD_ARG
+					Token type: T_ARG
+
+					minishell> export
+					cmd
+					[21]    19943 segmentation fault (core dumped)  ./minishell
+				en print liked list dans la boucle, je remarque que le probleme persiste. je commente donc current->next = NULL;
+				le probleme vient du fait que... avant, ca imprimait que le premier de la linked_list car je perdais le reste a cause de mon c.next = null
+				donc mtn, la mission est d'enregistrer la variable a la fin de la linkedlist afin de ne pas ecraser une var_env
+	___ lle___
+			[x] add fonctions linked list de la libft dans src et adapter a env afin de pouvoir utiliser les fonctions qui existent deja
+				[x]	adapter prototypes + fonction lst -> lle, content -> name + content -> value
+				[x] ajouter au .h
+				[x]	rename files
+		donc je reviens a ma mission et je dois ajouter ma variable a lle. 
+			par contre, si elle existe deja, je dois la mettre a jour -> t_env *precis trouve par existe_already
+						si elle n'existe PAS, je dois l'ajouter a la fin -> lle_add_back
+		je refactorise avec les fonction lle
+		ca segv
+		cest etrange car USER est identifier
+		mais USER=... ne l'est pas
+		il faut dabord decouper avec le =.
+		jai cree deux fonctions : extracted_name et extracted_value
+		
+		ca segv de partout...
+		bon, situation : la variable nexiste pas.
+			add_back;
+			initialiser name;
+			initialiser value;
+		jai commenter le max, ca segv ou boucle infinie... je comprends plus PAUSE
+
+		bon... 
+		[x]	extracted... ok ! fonctionnent !
+			->	printf("export_T_CMD_ARG.c > add_env_var :\n\textracted_name(%s)\textracted_value(%s)\n", extracted_name, extracted_value);
+
+		jai utilise copilot par megarde et ca marche alors je vias continuer ainsi
+
+	[x] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
+		la value ne devrait pas etre ecrasee par le vide
+5.5.25, 13:45
+	EV = env_var, lle = linked_list_env
+	Je reprends mon code. Je pensais que l'ajout dune variable etait ok mais en fait pas.
+	faisons un peit bilan complet :
+	[ok]	export 											--> Affiche la liste complète des variables déjà exportées.
+	[SEGV]	export VAR 										--> Crée/“exporte” la variable VAR vide ; un nouvel export la liste.
+	[ok]	export VAR=				resultat export "VAR="	--> VAR=""
+		ok -> je me rends compte, que l'affiche de `export, ne place pas les " " au bon endroit
+			TD	[ ] export T_CMD : les guillemets doivent etre autour de la value. 
+			[ ] copy_env
+				[ ] modifier le tableau afin que les guillements puissent se placer autour de la value.
+	[ok] 	export FOO=bar 									--> Définit/exporte FOO=bar; un nouvel export la liste.
+	[ok] 	export FOO=baz 									--> Met à jour FOO (de bar à baz); un nouvel export la liste.
+	[ok] 	export 1ABC=truc 								--> Erreur: nom de variable invalide; ne crée pas 1ABC.
+	[ok] 	export PATH=/tmp 	EV preexistante				--> Met à jour PATH; un nouvel export affiche PATH=/tmp.
+
+	donc il semblerait, que ca _SEGV_ lorsque je demande laffichage dans les cas ou 
+		* Creation var (sans =, sans value,)
+		* MAJ value de my_var
+
+		je me demande si la cause serait commune ou pas.
+		pour le 1er cas, creation var, l'absence de = semble troubler l'affichage. 
+		pourquoi ca segv pas lorsque je fias la ligne `export ____`, ca segv quand je verifie avec `export`
+		je vias tenter de print le nouveau noeud uniquement pour voir si cest laffichage du new node ou de lensemble qui segv
+			Added new env var with name((null)) and value((null))
+		ok, donc il semble que je cree un noeud mais que NAME ne soit pas correctement assigne
+
+		export var=nem 		--> ok
+		export ____=		--> ok
+		export ___			--> ___ introuvable, par contre, 
+								ET ajout d'une nouvelle var au debut export "="
+		je sais pas quoi comprendre de ca...
+			donc il voit que ca nexiste pas
+			il ny a pas de =.
+
+			les etapes :
+			1.	decoupage input
+			2.	existe ?
+				oui :
+					MAJ : libere value, assigne extracted_value a curr.val
+				non : 
+					malloc new_node, assignation name et value depuis extract... , lle_add_back
+
+				je comprends pas ce quil se passe.
+				quand j'export sans =, ca ajoute des var bizare au debut de la lle	
+					export Е���^="", export ="" qui se modifient a chaque passage de export
+					et celle la aussi elle est pas mal : `export export=""`
+
+
+				je vias tenter decrire ma propre version de lle_add_back soit, my_lle_add_back
+____pour plus tard...
+	[x] si env_var existe, si je fais export NAME (sans value), il ne se passe rien (actuellement ca segv)
+		la value ne devrait pas etre ecrasee par le vide
+	[ok] finaliser condition is_valid_syntax 
+		(accepte '=' (nec pour valider un NAME=value) MAIS si plusieurs '=' ???)
+	[BRAVO Moni ! hihi] export T_CMD : les guillemets doivent etre autour de la value. 
+			quelle est la facon la plus simple de placer les guillemets au bon endroit ? 
+				une fonciton qui place les guillement ?
+				les placer avant de transformer en tableau ?
+		[x] copy_env : modifier le tableau afin que les guillements puissent se placer autour de la value.
+
+
+
+Il me reste du courage et de l'humour :
+	[ ] si pas de =, la creation de la variable est chaotique et erronee
+
+	[ ] TEST	export VAR1=val1 VAR2=val2 						--> Définit/exporte simultanément VAR1=val1 et VAR2=val2.
+	[ ] TEST	export TEST=123 ; env | grep TEST 				--> Dans un sous-processus, TEST=123 doit apparaître.
+
+
+
+
+
+
+
+
+
+
+affichage des variable avec export
+	- triees/triables
+	- name/value distinct
+	
