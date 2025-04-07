@@ -6,33 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/27 17:43:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:33:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-
-void	first_word(char **input, char **env)
-{
-	if (ft_strncmp(input[0], "<", 1) == 0 || ft_strncmp(input[0], ">", 1) == 0
-		|| ft_strncmp(input[0], ">>", 2) == 0 || ft_strncmp(input[0], "<<",
-			2) == 0)
-		//		operator_token(input[0]);
-		printf("operateur\n");
-	else if (ft_strncmp(input[0], "$?", 3) == 0)
-		printf("exit code\n");
-	else if (!is_cmd(input[0], env))
-	{
-		printf("minishell: command not found: %s\n", input[0]);
-//		exit(127);
-	}
-	else
-	{
-		//		word_token(input[0]);
-		printf("cmd\n");
-	}
-}
 
 t_input	*tokenize(char **input)
 {
@@ -74,7 +52,8 @@ t_input	*tokenize(char **input)
 
 t_token_type	get_token_type(t_input *token, char *input)
 {
-	if (ft_strchr(input, '\'') || ft_strchr(input, '"') || ft_strchr(input, '$'))
+	if (ft_strchr(input, '\'') || ft_strchr(input, '"') || ft_strchr(input,
+			'$'))
 	{
 		parse_and_expand_token(token);
 		return (T_WORD);
@@ -83,11 +62,11 @@ t_token_type	get_token_type(t_input *token, char *input)
 		return (T_PIPE);
 	else if (ft_strncmp(input, "<", 1) == 0 || ft_strncmp(input, ">", 1) == 0
 		|| ft_strncmp(input, ">>", 2) == 0 || ft_strncmp(input, "<<", 2) == 0)
-		return(T_OP);
+		return (T_OP);
 	else if (token->prev != NULL && token->prev->type == T_OP)
 		return (T_FILE);
-	else if (token->prev != NULL && (token->prev->type == T_CMD || token->prev->type == T_ARG
-			|| token->prev->type == T_WORD))
+	else if (token->prev != NULL && (token->prev->type == T_CMD
+			|| token->prev->type == T_ARG || token->prev->type == T_WORD))
 		return (T_ARG);
 	return (T_CMD);
 }

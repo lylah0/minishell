@@ -1,0 +1,114 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/04/07 15:38:15 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../minishell.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/02 16:37:28 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/04/07 15:12:45 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../minishell.h"
+
+void	wait_all(void)
+{
+	int	status;
+
+	while (wait(&status) > 0)
+		;
+}
+
+int	has_next_cmd(t_input *node)
+{
+	while (node)
+	{
+		if (node->type == T_PIPE)
+			return (1);
+		node = node->next;
+	}
+	return (0);
+}
+
+t_input	*get_next_command(t_input *node)
+{
+	while (node && node->type != T_PIPE)
+		node = node->next;
+	if (node && node->type == T_PIPE)
+		return (node->next);
+	return (NULL);
+}
+
+void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path)
+{
+	char	**cmd;
+	char	*cmd_path;
+
+	if (prev_pipe != 0)
+	{
+		dup2(prev_pipe, 0);
+		close(prev_pipe);
+	}
+	if (has_next_cmd(current))
+	{
+		dup2(fd[1], 1);
+		close(fd[0]);
+		close(fd[1]);
+	}
+	cmd = build_cmd_arg(current);
+	cmd_path = get_path(env_path, cmd[0]);
+	execve(cmd_path, cmd, NULL);
+	printf("minishell: command not found: %s\n", cmd[0]);
+	exit(127);
+}
+
+void	exec_parent(int *prev_pipe, t_input **current, int fd[2])
+{
+	if (*prev_pipe != 0)
+		close(*prev_pipe);
+	if (has_next_cmd(*current))
+	{
+		close(fd[1]);
+		*prev_pipe = fd[0];
+	}
+	else if (fd[0])
+		close(fd[0]);
+	*current = get_next_command(*current);
+}
+
+void	exec_pipe(t_input *head, char *env_path)
+{
+	int		fd[2];
+	int		prev_pipe;
+	pid_t	pid;
+	t_input	*current;
+
+	prev_pipe = 0;
+	current = head;
+	while (current)
+	{
+		if (has_next_cmd(current))
+			pipe(fd);
+		pid = fork();
+		if (pid == 0)
+			exec_child(prev_pipe, current, fd, env_path);
+		else
+			exec_parent(&prev_pipe, &current, fd);
+	}
+	wait_all();
+}
