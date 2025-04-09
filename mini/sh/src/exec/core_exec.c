@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/06 14:03:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:47:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ int	kind_of_token(t_data *data, t_input *input)
 {
 	char	*input_str;
 	input_str = input->token;
+
 	if (ft_strncmp_end(input_str, "echo", 4) == 0)
-	{ 
+	{
 		b_echo(input);
 		return (0);
-	}	
+	}
 	if (ft_strncmp_end(input_str, "exit", 4) == 0)
-	{ 
+	{
 		b_exit(data);
 		return (0);
-	}	
+	}
 	else if (ft_strncmp_end(input_str, "cd", 2) == 0)
 	{
 		b_cd(data, input);
@@ -51,7 +52,7 @@ int	kind_of_token(t_data *data, t_input *input)
 		b_export(data);
 		return (0);
 	}
-	else // pas forcement arg, peut etre path/bin
-		printf("core_exec.c > kind_of_token :\t***VERY USEFULL INFORMATION*** : is a cmd/path :)\n\n");
+//	else // pas forcement arg, peut etre path/bin
+//		printf("core_exec.c > kind_of_token :\t***VERY USEFULL INFORMATION*** : is a cmd/path :)\n\n");
 	return (1);
 }

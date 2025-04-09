@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2025/04/07 16:10:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:28:18 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ char	**parse_input(char *input)
 	char	**first_parse;
 	char	**final_parse;
 
+	if (!input)
+		return (NULL);
 	if (is_open_quotes(input))
 	{
 		printf("missing one quote\n");

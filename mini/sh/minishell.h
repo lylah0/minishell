@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 16:11:52 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:48:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 
 # define TRUE 1
 # define FALSE 0
+
+extern int	exit_code;
 
 // signals.c
 __sighandler_t		handler_sigint(void);
@@ -62,8 +64,8 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	t_input *input; // ligne de commande
-	t_env *env;     // tableau envp
+	t_input			*input; // ligne de commande
+	t_env			*env;     // tableau envp
 	char			**copy_env;
 	int				exit_status;
 }					t_data;
@@ -101,10 +103,9 @@ int					is_builtin(char *cmd);
 void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
-void				exec_pipe(t_input *head, char *env_path);
+void				exec_pipe(t_input *head, char *env_path, t_data *data);
 void				exec_parent(int *prev_pipe, t_input **current, int fd[2]);
-void				exec_child(int prev_pipe, t_input *current, int fd[2],
-						char *env_path);
+void				exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
 

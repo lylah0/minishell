@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 15:31:31 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:21:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,22 @@ int	is_cmd(char *token, char **env)
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 5) == 0)
+	if (ft_strncmp(cmd, "echo", 4) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "cd", 3) == 0)
+	else if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "exit", 5) == 0)
+	else if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "export", 7) == 0)
+	else if (ft_strncmp(cmd, "export", 6) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "env", 4) == 0)
+	else if (ft_strncmp(cmd, "env", 3) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "pwd", 4))
+	else if (ft_strncmp(cmd, "pwd", 3) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "unset", 6))
+	else if (ft_strncmp(cmd, "unset", 5) == 0)
 		return (1);
-	return (0);
+	else
+		return (0);
 }
 
 void	first_word(char **input, char **env)

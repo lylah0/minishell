@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 15:38:15 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:49:07 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ t_input	*get_next_command(t_input *node)
 	return (NULL);
 }
 
-void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path)
+void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
 	char	**cmd;
 	char	*cmd_path;
 
+	(void)data;
 	if (prev_pipe != 0)
 	{
 		dup2(prev_pipe, 0);
@@ -69,6 +70,11 @@ void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path)
 		dup2(fd[1], 1);
 		close(fd[0]);
 		close(fd[1]);
+	}
+	if (is_builtin(current->token))
+	{
+		kind_of_token(data, current);
+		exit(0);
 	}
 	cmd = build_cmd_arg(current);
 	cmd_path = get_path(env_path, cmd[0]);
@@ -91,7 +97,7 @@ void	exec_parent(int *prev_pipe, t_input **current, int fd[2])
 	*current = get_next_command(*current);
 }
 
-void	exec_pipe(t_input *head, char *env_path)
+void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {
 	int		fd[2];
 	int		prev_pipe;
@@ -100,13 +106,15 @@ void	exec_pipe(t_input *head, char *env_path)
 
 	prev_pipe = 0;
 	current = head;
+	fd[0] = 0;
+	fd[1] = 0;
 	while (current)
 	{
 		if (has_next_cmd(current))
 			pipe(fd);
 		pid = fork();
 		if (pid == 0)
-			exec_child(prev_pipe, current, fd, env_path);
+			exec_child(prev_pipe, current, fd, env_path, data);
 		else
 			exec_parent(&prev_pipe, &current, fd);
 	}

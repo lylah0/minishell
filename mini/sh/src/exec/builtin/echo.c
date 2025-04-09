@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/06 13:04:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:39:21 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
 
 #define OFF 0
 #define ON 1
@@ -38,7 +39,7 @@ void    b_echo(t_input *input)
 		if (is_n_option(input->token) == ON)
 		{
 			flag_newline = ON;
-			input = input->next; 
+			input = input->next;
 			continue;
 		}
 		printf("%s", input->token);
