@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 19:23:12 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 20:37:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char	*ft_strdup_equal(const char *src)
 	int		len;
 	char	*dest;
 
+	// if(!src)
+		// return();
 	i = 0;
 	j = 0;
 	len = ft_strlen(src);
@@ -73,6 +75,9 @@ char	*ft_strdup_equal(const char *src)
 	dest[++j] = 0;
 	return (dest);
 }
+// export NAME=
+// export NAME
+
 
 // Concatène str dest+src mod moni
 // return taille tot
