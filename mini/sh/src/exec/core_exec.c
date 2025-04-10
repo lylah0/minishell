@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/09 14:47:35 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:31:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,23 +6,31 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/05 15:58:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/06 14:14:46 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..` 
-/// @param data 
-/// @param arg <path>
+/// @param data Pointer to the shell data structure containing environment variables
+/// @param arg Path to change the current working directory to
 void b_cd(t_data *data, t_input *arg)
 {
     t_env	*current;
 	t_env	*head;
 	char	*temp_pwd;
 
+	arg = data->input->next;
+	
+	if (!arg)
+	{
+		if (chdir(getenv("HOME")) != 0)
+			perror("cd");
+	}
+	else
+		chdir(arg->token);
 	temp_pwd = NULL;
-		
+
 	current = data->env;
 	head = data->env;
 

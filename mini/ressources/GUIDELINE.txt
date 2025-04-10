@@ -29,7 +29,7 @@ OK	[Moni] Have a working history (you can navigate through commands with up/down
 	[ ] Implement the here-doc (<<)
 	[Moni] environ , env, name=variable
 	[Lylah] Handle double quotes ("") and single quotes (''), which should escape special characters, beside $ for double quotes.
-	[Moni] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
+Mon	[ ] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
 	[ ] Implement the following built-ins:
 		[...] — echo (option -n only)
 		[...] — exit
@@ -47,3 +47,27 @@ __moni__
  - mettre a jour pwd pour que ca corresponde a pwd (maj) donc selon environ
  - export
  - unset
+		[ x ] — env (with no options or arguments)
+FUCK	[.  ] — export (with no options)
+		[   ] — unset (with no options)  	--> lle_del_one
+		[ x ] — cd							--> [ ]	maj OLDPWD
+		[...] — pwd (a mod apres env)		--> me semble ok
+
+
+_________MONI___________
+
+[x] faire de l'ordre
+[x] commenter mes fonctions
+[keep_on_trying] etre gentille avec Moni du futur
+[ ] avancer dans les builtins
+	[x] echo
+	[x]	exit
+
+-->	[ ]	cd
+
+	[ ] export
+		[ ]	gestion affichage export (T_CMD)
+			--> revoir structure/copy |?|
+		[ ] ajout variable sans value ...
+	[ ] unset
+		[ ] supprimer variable	--> a voir une fois que export fini

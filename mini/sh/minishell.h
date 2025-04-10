@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/09 15:48:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:29:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,23 @@ void				b_unset(t_data *data);
 int					kind_of_token(t_data *data, t_input *input);
 
 // init_environment // b_export
+void    free_lle(t_data *data);
+void    print_lle(t_data *data);
+t_env   *create_lle(char **envp);
+void    swap_words(char **a, char **b);
+int     compare_words(char *w1, char *w2);
+void    sort_words(char **words, int len);
+void    print_copy_env(t_data *data);
+void    create_env_copy_array(t_data *data);
+int     get_array_length(char **array);
+bool    is_valid_env_var_syntax(char *s);
+void    b_export(t_data *data);
+void    init_env(t_data *data, char **envp);
+void	add_env_var(t_data *data, char *input);
+// t_env	*add_env_var(t_data *data, char *input);
+
+t_env	*exist_already_in_env(t_env *env, char *name_var);
+
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
 t_env				*create_lle(char **envp);

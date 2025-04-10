@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/06 09:38:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:18:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	create_env_copy_array(t_data *data)
 	int		i;
 	int		env_count;
 	char	*quote = "\"";
+	char	*equal = "=";
 
 	i = 0;
 	env_count = 0;
@@ -105,16 +106,18 @@ void	create_env_copy_array(t_data *data)
 
 	while (current)
 	{
-		name = ft_strdup_equal(current->name);
+		name = ft_strdup(current->name);
 		// name = ft_strdup(current->name);
-		value = ft_strdup(current->value);
+		if (current->value)
+			value = ft_strdup(current->value);
 		if (!name || !value)
 		{
 			free(name);
 			free(value);
 			return ;
 		}		
-		char *temp = ft_strjoin(quote, value);
+		char *temp = ft_strjoin(equal, quote);
+		temp = ft_strjoin(temp, value);
 		temp = ft_strjoin(temp, quote);
 		data->copy_env[i] = ft_strjoin(name, temp);
 		free(name);
@@ -123,7 +126,7 @@ void	create_env_copy_array(t_data *data)
 		current = current->next;
 	}
 	data->copy_env[i] = NULL;
-}
+}// reprendre cette fonction pour affichage de export
 int get_array_length(char **array)
 {
 	int len = 0;

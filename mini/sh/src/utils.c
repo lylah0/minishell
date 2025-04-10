@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/06 12:23:34 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/07 20:37:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,31 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 char	*ft_strdup_equal(const char *src)
 {
 	int		i;
+	int		j;
 	int		len;
 	char	*dest;
 
+	// if(!src)
+		// return();
 	i = 0;
+	j = 0;
 	len = ft_strlen(src);
 	dest = (char *)malloc((len + 2) * sizeof(char));
 	if (!dest)
 		return (NULL);
+	dest[j] = '=';
 	while (src[i] != 0)
 	{
-		dest[i] = src[i];
+		dest[j] = src[i];
 		i++;
+		j++;
 	}
-	dest[i] = '=';
-	dest[++i] = 0;
+	dest[++j] = 0;
 	return (dest);
 }
+// export NAME=
+// export NAME
+
 
 // Concatène str dest+src mod moni
 // return taille tot

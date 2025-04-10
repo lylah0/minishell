@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/09 15:36:26 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:30:58 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,21 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = get_user_input("minishell> ");
+		splited_input = parse_input(input);
+		// print_tokens(splited_input);
+		head = tokenize(splited_input);
+//		remove_quotes(head);
+		first_word(splited_input, envp);
+		data->input = head;
+		
+		// b_export(data);
+		print_all_token_types(head);
+		is_env_var(head);
+		print_token_list(head);
+		kind_of_token(data, head);
+		//exit
+		restore_terminal();
+		init_signals();
 		if (!ft_strlen(input))
 		{
 			restore_terminal();
@@ -110,5 +125,6 @@ int	main(int ac, char **av, char **envp)
 			init_signals();
 		}
 	}
+	// cleanup_memory(input, splited_input);// [ ] builtin exit
 	return (0);
 }
