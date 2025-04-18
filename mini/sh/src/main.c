@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:30:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:57:04 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 char	*get_user_input(const char *prompt)
 {
@@ -47,7 +46,7 @@ t_data	*init_data(t_data *data)
 	data->env = NULL;
 	data->env = malloc(sizeof(t_env));
 	if (!data->env)
-		return NULL;
+		return (NULL);
 	data->copy_env = NULL;
 	data->exit_status = 0;
 	return (data);
@@ -55,11 +54,11 @@ t_data	*init_data(t_data *data)
 
 t_input	*do_parsing(t_input *head, char **splited_input)
 {
-//	print_tokens(splited_input);
+	//    print_tokens(splited_input);
 	head = tokenize(splited_input);
-//	print_all_token_types(head);
+	//    print_all_token_types(head);
 	is_env_var(head);
-//	print_token_list(head);
+	//    print_token_list(head);
 	return (head);
 }
 
@@ -69,7 +68,7 @@ void	exec_cmd(t_input *head, t_data *data, char *env_path)
 
 	curr = head;
 	if (!curr)
-		return;
+		return ;
 	if (is_builtin(head->token))
 		kind_of_token(data, head);
 	else
@@ -83,6 +82,7 @@ int	main(int ac, char **av, char **envp)
 	char	*env_path;
 	t_input	*head;
 	t_data	*data;
+
 	(void)ac;
 	(void)av;
 	init_signals();
@@ -92,21 +92,6 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = get_user_input("minishell> ");
-		splited_input = parse_input(input);
-		// print_tokens(splited_input);
-		head = tokenize(splited_input);
-//		remove_quotes(head);
-		first_word(splited_input, envp);
-		data->input = head;
-		
-		// b_export(data);
-		print_all_token_types(head);
-		is_env_var(head);
-		print_token_list(head);
-		kind_of_token(data, head);
-		//exit
-		restore_terminal();
-		init_signals();
 		if (!ft_strlen(input))
 		{
 			restore_terminal();
@@ -125,6 +110,5 @@ int	main(int ac, char **av, char **envp)
 			init_signals();
 		}
 	}
-	// cleanup_memory(input, splited_input);// [ ] builtin exit
 	return (0);
 }

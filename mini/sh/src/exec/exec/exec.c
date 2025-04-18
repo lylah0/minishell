@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 15:38:17 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:27:08 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,22 @@ char	**build_cmd_arg(t_input *token)
 	return (cmd);
 }
 
+void	exec(t_input *current, t_data *data, char *env_path)
+{
+	char	**cmd;
+	char	*cmd_path;
+
+	if (is_builtin(current->token))
+	{
+		kind_of_token(data, current);
+		exit(0);
+	}
+	cmd = build_cmd_arg(current);
+	cmd_path = get_path(env_path, cmd[0]);
+	execve(cmd_path, cmd, NULL);
+	printf("minishell: command not found: %s\n", cmd[0]);
+	exit(127);
+}
 
 int	count_cmd(t_input *head)
 {

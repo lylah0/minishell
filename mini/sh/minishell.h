@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/10 11:29:43 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:27:05 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,11 @@ void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
-void				exec_parent(int *prev_pipe, t_input **current, int fd[2]);
-void				exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
+void				parent(int *prev_pipe, t_input **current, int fd[2]);
+void				child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
+void				exec(t_input *current, t_data *data, char *env_path);
 
 // fonctions token
 

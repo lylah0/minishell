@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/09 15:49:07 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:41:40 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,8 @@ t_input	*get_next_command(t_input *node)
 	return (NULL);
 }
 
-void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
+void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
-	char	**cmd;
-	char	*cmd_path;
-
-	(void)data;
 	if (prev_pipe != 0)
 	{
 		dup2(prev_pipe, 0);
@@ -71,19 +67,12 @@ void	exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_da
 		close(fd[0]);
 		close(fd[1]);
 	}
-	if (is_builtin(current->token))
-	{
-		kind_of_token(data, current);
-		exit(0);
-	}
-	cmd = build_cmd_arg(current);
-	cmd_path = get_path(env_path, cmd[0]);
-	execve(cmd_path, cmd, NULL);
-	printf("minishell: command not found: %s\n", cmd[0]);
-	exit(127);
+	if (current->type == T_OP)
+		redir(data, current);
+	exec(current, data, env_path);
 }
 
-void	exec_parent(int *prev_pipe, t_input **current, int fd[2])
+void	parent(int *prev_pipe, t_input **current, int fd[2])
 {
 	if (*prev_pipe != 0)
 		close(*prev_pipe);
@@ -114,9 +103,9 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 			pipe(fd);
 		pid = fork();
 		if (pid == 0)
-			exec_child(prev_pipe, current, fd, env_path, data);
+			child(prev_pipe, current, fd, env_path, data);
 		else
-			exec_parent(&prev_pipe, &current, fd);
+			parent(&prev_pipe, &current, fd);
 	}
 	wait_all();
 }

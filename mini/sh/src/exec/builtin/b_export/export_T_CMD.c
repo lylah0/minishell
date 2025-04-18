@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:18:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:01:49 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void 	print_copy_env(t_data *data)
 void	create_env_copy_array(t_data *data)
 {
 	t_env	*current;
-	char	*name;
-	char	*value;
+	char	*name = NULL;
+	char	*value = NULL;
 	int		i;
 	int		env_count;
 	char	*quote = "\"";
@@ -107,21 +107,32 @@ void	create_env_copy_array(t_data *data)
 	while (current)
 	{
 		name = ft_strdup(current->name);
-		// name = ft_strdup(current->name);
 		if (current->value)
+		{
+			// printf("caca %s\n", current->value);
 			value = ft_strdup(current->value);
+		}
 		if (!name || !value)
 		{
 			free(name);
 			free(value);
 			return ;
-		}		
-		char *temp = ft_strjoin(equal, quote);
-		temp = ft_strjoin(temp, value);
-		temp = ft_strjoin(temp, quote);
-		data->copy_env[i] = ft_strjoin(name, temp);
-		free(name);
-		free(value);
+		}
+		if (value[0] != '\0')
+		{
+			// printf("&&&&&& value = %s\n", value); // a effacer
+			char *temp = ft_strjoin(equal, quote);
+			temp = ft_strjoin(temp, value);
+			temp = ft_strjoin(temp, quote);
+			data->copy_env[i] = ft_strjoin(name, temp);
+		}
+		else
+		{
+			data->copy_env[i] = ft_strdup(name);
+			// printf("name = %s\n", name);
+			free(name);
+			free(value);
+		}
 		i++;
 		current = current->next;
 	}

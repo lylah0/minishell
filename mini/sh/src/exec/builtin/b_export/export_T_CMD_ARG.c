@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 20:24:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:01:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
 /// @brief check if env var name syntax is valid
-/// @param s env var name 
-/// @return 
+/// @param s env var name
+/// @return
 bool is_valid_env_var_syntax(char *s)
 {
 	int		i;
@@ -68,7 +68,8 @@ char	*extract_value(char *input)
 	if (!separator)
 	{
 		// Si on ne trouve pas de '=', on renvoie une chaîne vide (cas "export VAR").
-		extracted_value = ft_strdup("");
+		//return (NULL);
+		return (ft_strdup(""));
 	}
 	else
 	{
@@ -85,7 +86,7 @@ char	*extract_value(char *input)
 }
 
 /// @brief add or maj
-/// @param input 
+/// @param input
 void	add_env_var(t_data *data, char *input)
 {
 	t_env	*current = data->env;
@@ -95,7 +96,7 @@ void	add_env_var(t_data *data, char *input)
 	printf("\tinput(%s)\n", input);
 	extracted_name = extract_name(input);
 	extracted_value = extract_value(input);
-	
+
 	// print extractedname et value pour export blupblup et voir ce que ca donne
 
 	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
@@ -108,7 +109,8 @@ void	add_env_var(t_data *data, char *input)
 			return;
 		}
 		new_node->name = extracted_name;
-		new_node->value = extracted_value;
+		if (extracted_value[1])
+			new_node->value = extracted_value;
 		new_node->next = NULL;
 
 		t_env *env_last = lle_last(data->env);
@@ -118,7 +120,7 @@ void	add_env_var(t_data *data, char *input)
 			data->env = new_node;
 
 		printf("\tAdded new env var with name(%s) and value(%s)\n", new_node->name, new_node->value);
-		
+
 		// lle_add_back(&data->env, new_node);
 	}
 	else //mettre variable a jour
@@ -159,6 +161,6 @@ t_env *exist_already_in_env(t_env *env, char *name_var)
 			env = env->next;
 	}
 	printf("export_T_CMD_ARG.c > exist_already_in_env :\tno match env_name_linked_list / env_name_input_token \n");
-	
+
 	return (NULL);
 }

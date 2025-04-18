@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:02:21 by lylrandr         ###   ########.fr       */
+/*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/04/18 16:55:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in `unset` `unset VAR1` `unset VAR1 VAR2`
-/// @param data
-void	b_unset(t_data *data)
+void	redir(t_data *data, t_input *current)
 {
 	(void)data;
-	t_env *env_to_del = NULL;
+	(void)current;
+//	if (current->token == '<' || current->token == '>')
+//		simple_redir(data, current);
+//	else
+//		heredoc_append(data, current);
+}
 
-	while (data->env)
-	{
-		if (data->input->next->token && ft_strncmp(data->input->next->token, data->env->name, (ft_strlen(data->env->name))))
-			env_to_del = data->env;
-		data->env = data->env->next;
-	}
+void	simple_redir(t_data *data, t_input *current)
+{
+		(void)data;
+	(void)current;
 
-	if (env_to_del)
-		lle_del_one(env_to_del, &lle_clear);
+	//if (current->token == '>')
+	//{
+//
+	//}
+	//else
+	//{
+//
+	//}
+}
+
+void	heredoc_append(t_data *data, t_input *current)
+{
+	(void)data;
+	(void)current;
+
 }
