@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lle_iter.c                                         :+:      :+:    :+:   */
+/*   lle_search_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:58:08 by monoguei           #+#    #+#             */
-/*   Updated: 2025/04/04 12:37:57 by monoguei         ###   ########.fr       */
+/*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
+/*   Updated: 2025/04/18 20:03:58 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief Iterates through a linked list of environment variables and applies a function to each element.
+/// @brief Searches for an environment variable by name in a linked list.
 /// @param env Pointer to the head of the linked list of environment variables.
-/// @param f Function pointer to apply to each element's name and value.
-/// @example lle_iter(env_list, print_env_var);
-void	lle_iter(t_env *env, void (*f)(void *))
+/// @param name The name of the environment variable to search for.
+/// @return A pointer to the t_env node containing the variable, or NULL if not found.
+t_env	**search_env_name(t_env *env, char *name)
 {
-	t_env	*env_temp;
+	t_env	*current;
+	t_env	**return_env;
 
-	if (!env || !f)
-		return ;
-	env_temp = env;
-	while (env_temp)
-	{
-		(*f)(env_temp->name);
-		(*f)(env_temp->value);
-		env_temp = env_temp->next;
-	}
+	current = env;
+	while (current != NULL && ft_strcmp(current->name, name) != 0)
+		current = current->next;
+
+	return_env = &current;
+	return (return_env);
 }

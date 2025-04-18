@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:31:17 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:27:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	kind_of_token(t_data *data, t_input *input)
 	}
 	else if (ft_strncmp_end(input_str, "cd", 2) == 0)
 	{
-		b_cd(data, input);
+		b_cd(&data, input);
 		return (0);
 	}
 	else if (ft_strncmp_end(input_str, "pwd", 3) == 0)

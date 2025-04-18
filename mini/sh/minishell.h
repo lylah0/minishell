@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 17:22:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:01:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_cd(t_data *data, t_input *arg);
+void				b_cd(t_data **data, t_input *arg);
 void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
@@ -200,16 +200,15 @@ void				init_signals(void);
 void				restore_terminal(void);
 
 // UTILS/lle
-void				lle_add_back(t_env **env, t_env *new1);
-void				lle_add_front(t_env **env, t_env *new1);
-void				lle_clear(t_env **env, void (*del)(void *));
-void				lle_del_one(t_env *env, void (*del)(void *));
-void				lle_iter(t_env *env, void (*f)(void *));
-t_env				*lle_last(t_env *env);
-t_env				*lle_map(t_env *env, void *(*f)(void *),
-						void (*del)(void *));
-t_env				*lle_new(void *content);
-int					lle_size(t_env *env);
-// content devient name par defaut, a adapter si beosin
+void			lle_add_back(t_env **env, t_env *new1);
+void			lle_add_front(t_env **env, t_env *new1);
+void			lle_clear(t_env **env, void (*del)(void *));
+void			lle_del_one(t_env *env, void (*del)(void *));
+void			lle_iter(t_env *env, void (*f)(void *));
+int				lle_size(t_env *env);
+t_env			*lle_last(t_env *env);
+t_env			*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
+t_env			*lle_new(void *content);
+t_env			**search_env_name(t_env *env, char *name);
 
 #endif
