@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 20:10:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:26:58 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,11 @@ void	cleanup_memory(char *line, char **splited_line);
 char	*ft_strdup_equal(const char *src);
 size_t	ft_strcat(char *dest, const char *src);
 int		ft_strncmp_end(char *s1, char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_strcpy(char *dest, const char *src);
 t_input	*cat_token(t_input *token, char *value, int len);
+
 
 // signals.c
 __sighandler_t	handler_sigint(void);
