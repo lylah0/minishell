@@ -411,3 +411,5 @@ FodyWeavers.xsd
 *.so.*
 *.dll
 *.dylib
+*mini/sh/obj/*.o
+*mini/sh/obj/*.d
