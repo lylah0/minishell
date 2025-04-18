@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:19:08 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/01 16:49:14 by monoguei         ###   ########.fr       */
+/*   Created: Invalid Date        by              +#+  #+#    #+#             */
+/*   Updated: 2025/04/08 16:28:18 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../minishell.h"
 
@@ -100,9 +101,9 @@ char	**parse_input(char *input)
 {
 	char	**first_parse;
 	char	**final_parse;
-	// int		i;
 
-	// i = 0;
+	if (!input)
+		return (NULL);
 	if (is_open_quotes(input))
 	{
 		printf("missing one quote\n");
@@ -114,11 +115,5 @@ char	**parse_input(char *input)
 	final_parse = second_parsing(first_parse);
 	if (!final_parse)
 		return (NULL);
-	// while (first_parse[i])
-	// {
-	// 	free(first_parse[i]);
-	// 	i++;
-	// }
-	// free(first_parse);
 	return (final_parse);
 }

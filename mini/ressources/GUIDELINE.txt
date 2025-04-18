@@ -15,6 +15,10 @@ Version basique :
 7. Optionally waits for the command to complete and collects its exit status (see [Exit Status](https://www.gnu.org/software/bash/manual/bash.html#Exit-Status)).
 	[ ] print : exit status
 
+
+
+
+
 ___To do :___
 	[Lylah] Run simple commands with absolute, relative path (e.g. /bin/ls, ../bin/ls)
 	[Lylah] Run simple commands without a path (e.g. ls, cat, grep, etc…)
@@ -23,12 +27,26 @@ OK	[Moni] Have a working history (you can navigate through commands with up/down
 	[ ] Implement pipes (|)
 	[ ] Implement redirections (<, >, >>)
 	[ ] Implement the here-doc (<<)
-	[Moni] environ, env, name=variable
+	[Moni] environ , env, name=variable
 	[Lylah] Handle double quotes ("") and single quotes (''), which should escape special characters, beside $ for double quotes.
 Mon	[ ] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
 	[ ] Implement the following built-ins:
 		[...] — echo (option -n only)
 		[...] — exit
+		[...] — env (with no options or arguments)
+		[.  ] — export (with no options)
+		[   ] — unset (with no options)
+		[ x ] — cd
+		[...] — pwd (a mod apres env)
+
+__moni__
+ - Lylah : je moccupe de env
+ - recuperer env sous forme de liste chainee Name = value
+ - fonction b_env -> afficher la liste chainee
+ - fonction c_cd -> modifier oldpwd, mettre a jour pwd
+ - mettre a jour pwd pour que ca corresponde a pwd (maj) donc selon environ
+ - export
+ - unset
 		[ x ] — env (with no options or arguments)
 FUCK	[.  ] — export (with no options)
 		[   ] — unset (with no options)  	--> lle_del_one

@@ -6,11 +6,12 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 15:15:40 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:22:23 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
 
 #define OFF 0
 #define ON 1
@@ -38,7 +39,7 @@ void    b_echo(t_input *input)
 		if (is_n_option(input->token) == ON)
 		{
 			flag_newline = ON;
-			input = input->next; 
+			input = input->next;
 			continue;
 		}
 		printf("%s", input->token);

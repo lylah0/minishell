@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   first_parsing.c                                    :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/19 15:11:36 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:12:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ char	**first_parsing(char *input)
 		}
 		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
 			len++;
+		else if (input[i] == ' ' || input[i] == '\t')
+		{
+			len++;
+			while (ft_iswhitespace(input[i]))
+				i++;
+			i -= 1;
+		}
 		i++;
 	}
 	len++;
