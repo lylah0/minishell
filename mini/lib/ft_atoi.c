@@ -6,20 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 16:14:34 by monoguei          #+#    #+#             */
-/*   Updated: 2025/03/14 16:54:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:46:48 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 int	ft_isdigit(int character);
-
-static int	ft_iswhitespace(int c)
-{
-	if (c == 32 || c == 9 || c == 10 || c == 11 || c == 12 || c == 13)
-	return (1);
-	return (0);
-}
 
 // convertir char en int
 int	ft_atoi(const char *str)
