@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/09 14:21:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:52:53 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ void	first_word(char **input, char **env)
 		printf("minishell: command not found: %s\n", input[0]);
 		return ;
 	}
-	printf("\ncmd found\n");
+	// printf("\ncmd found\n");
 }

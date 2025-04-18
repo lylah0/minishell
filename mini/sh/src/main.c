@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:30:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:06:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ char	*get_user_input(const char *prompt)
 		fprintf(stderr, "Error reading line\n");
 		return (NULL);
 	}
-	add_history(line);
 	return (line);
 }
 
@@ -83,6 +82,7 @@ int	main(int ac, char **av, char **envp)
 	char	*env_path;
 	t_input	*head;
 	t_data	*data;
+
 	(void)ac;
 	(void)av;
 	init_signals();
@@ -92,21 +92,6 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = get_user_input("minishell> ");
-		splited_input = parse_input(input);
-		// print_tokens(splited_input);
-		head = tokenize(splited_input);
-//		remove_quotes(head);
-		first_word(splited_input, envp);
-		data->input = head;
-		
-		// b_export(data);
-		print_all_token_types(head);
-		is_env_var(head);
-		print_token_list(head);
-		kind_of_token(data, head);
-		//exit
-		restore_terminal();
-		init_signals();
 		if (!ft_strlen(input))
 		{
 			restore_terminal();
@@ -114,6 +99,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		else
 		{
+			add_history(input);
 			splited_input = parse_input(input);
 			env_path = get_env_path(envp);
 			init_env(data, envp);
