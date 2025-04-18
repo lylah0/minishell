@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 20:07:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:24:28 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 void	b_unset(t_data *data)
 {
 	(void)data;
-	// t_env *env_to_del = NULL;
+	t_env *env_to_del = NULL;
 
-	// while (data->env)
-	// {
-	// 	if (ft_strncmp(data->input->next->token, data->env->name, (ft_strlen(data->env->name))))
-	// 		env_to_del = data->env;
-	// 	data->env = data->env->next;
-	// }
+	while (data->env)
+	{
+		if (data->input->next->token && ft_strncmp(data->input->next->token, data->env->name, (ft_strlen(data->env->name))))
+			env_to_del = data->env;
+		data->env = data->env->next;
+	}
 
-	// if (env_to_del)
-	// 	lle_del_one(env_to_del, lle_clear);
+	if (env_to_del)
+		lle_del_one(env_to_del, &lle_clear);
 }

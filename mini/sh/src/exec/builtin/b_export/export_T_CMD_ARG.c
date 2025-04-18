@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 20:24:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:25:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ char	*extract_value(char *input)
 	if (!separator)
 	{
 		// Si on ne trouve pas de '=', on renvoie une chaîne vide (cas "export VAR").
-		extracted_value = ft_strdup("");
+		//return (NULL);
+		return (ft_strdup(""));
 	}
 	else
 	{
@@ -108,7 +109,8 @@ void	add_env_var(t_data *data, char *input)
 			return;
 		}
 		new_node->name = extracted_name;
-		new_node->value = extracted_value;
+		if (extracted_value[1])
+			new_node->value = extracted_value;
 		new_node->next = NULL;
 
 		t_env *env_last = lle_last(data->env);

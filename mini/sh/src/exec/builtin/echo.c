@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:58:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:15:40 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void    b_echo(t_input *input)
 	int flag_newline = OFF;
 
 	input = input->next;
-	while (input && input->token && input->type == T_ARG)
+	while (input && input->token && (input->type == T_ARG || input->type == T_WORD))
 	{
 		if (is_n_option(input->token) == ON)
 		{
