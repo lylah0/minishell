@@ -6,21 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 14:41:40 by lylrandr         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../../../minishell.h"
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/02 16:37:28 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 15:12:45 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:59:29 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +87,12 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 	{
 		if (has_next_cmd(current))
 			pipe(fd);
+		if (is_builtin(current->token) && is_parent_builtin(current->token) && !has_next_cmd(current))
+		{
+			kind_of_token(data, current); // exécuté dans le parent
+			current = get_next_command(current);
+			continue;
+		}
 		pid = fork();
 		if (pid == 0)
 			child(prev_pipe, current, fd, env_path, data);

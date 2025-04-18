@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 14:27:08 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:58:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,13 @@ void	exec(t_input *current, t_data *data, char *env_path)
 	if (is_builtin(current->token))
 	{
 		kind_of_token(data, current);
-		exit(0);
+		if (current->next->next->type == T_PIPE)
+		{
+			current = current->next;
+			exec(current, data, env_path);
+		}
+		else
+			exit(0);
 	}
 	cmd = build_cmd_arg(current);
 	cmd_path = get_path(env_path, cmd[0]);

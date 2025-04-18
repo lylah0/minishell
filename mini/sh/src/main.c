@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:57:04 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:01:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	*get_user_input(const char *prompt)
 		fprintf(stderr, "Error reading line\n");
 		return (NULL);
 	}
-	add_history(line);
 	return (line);
 }
 
@@ -54,11 +53,11 @@ t_data	*init_data(t_data *data)
 
 t_input	*do_parsing(t_input *head, char **splited_input)
 {
-	//    print_tokens(splited_input);
+	//print_tokens(splited_input);
 	head = tokenize(splited_input);
-	//    print_all_token_types(head);
+	//print_all_token_types(head);
 	is_env_var(head);
-	//    print_token_list(head);
+	//print_token_list(head);
 	return (head);
 }
 
@@ -70,9 +69,11 @@ void	exec_cmd(t_input *head, t_data *data, char *env_path)
 	if (!curr)
 		return ;
 	if (is_builtin(head->token))
+	{
 		kind_of_token(data, head);
-	else
-		exec_pipe(curr, env_path, data);
+		return;
+	}
+	exec_pipe(curr, env_path, data);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -99,6 +100,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		else
 		{
+			add_history(input);
 			splited_input = parse_input(input);
 			env_path = get_env_path(envp);
 			init_env(data, envp);

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 14:27:05 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:51:16 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void				child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
 void				exec(t_input *current, t_data *data, char *env_path);
+int					is_parent_builtin(char *token);
+void				redir(t_data *data, t_input *current);
 
 // fonctions token
 
