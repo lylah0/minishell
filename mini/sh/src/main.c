@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 18:06:12 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/19 13:22:40 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,12 @@ int	main(int ac, char **av, char **envp)
 			data->input = head;
 			exec_cmd(head, data, env_path);
 			restore_terminal();
-			cleanup_memory(input, splited_input);
 			init_signals();
 		}
 	}
+	cleanup_memory(input, splited_input);// !! il faut vraiment le laisser 
+	// cleanup en dehors de la boucle sinon moni devient dingue a comprendre 
+	// pourquoi ses builtins ne fonctionne pas entre les appels ^^
 	// cleanup_memory(input, splited_input);// [ ] builtin exit
 	return (0);
 }
