@@ -6,100 +6,91 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/19 14:31:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:58:29 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int		cd_back(t_data *data)
+void cd_home(t_env *env)
 {
-	t_env	*current_dir_env;
-	char	*temp;
-	char	*back_path;
-	
-	back_path = getenv("OLDPWD");
-	if (!back_path)
-	{
-		ft_printf("cd: OLDPWD not set\n");
-		return (1);
-	}
+	t_env *current;
+	char *pwd_value;
+	char *new_pwd;
 
-	if (chdir(back_path) == -1)//ERROR
-	{
-		perror("cd");
-		return 1;
-	}
-	else
-	{	
-		current_dir_env = search_env_name(data->env, "OLDPWD");
-		temp = current_dir_env->value;
-		ft_printf("%s\n", back_path);
-		current_dir_env->value = ft_strdup(getenv("PWD"));
-		current_dir_env = search_env_name(data->env, "PWD");
-		free(current_dir_env->value);
-		current_dir_env->value = ft_strdup(back_path);
-		free(temp);
+	current = search_env_name(env, "OLDPWD");
+	pwd_value = getenv("PWD");
+	free (current->value);
+	current->value = ft_strdup(pwd_value);
+	chdir("HOME");
+	current = search_env_name(env, "PWD");
+	new_pwd = getenv("HOME");
+	free (current->value);
+	current->value = ft_strdup(new_pwd);
+}
 
+void cd_return(t_env *env)
+{
+	t_env *current;
+	char *new_oldpwd;
+	char *new_pwd;
 
-		// temp = current_dir_env->value;//je stock le nom de dir actuel pour quil devienne apres lancien dir
+	current = search_env_name(env, "OLDPWD");
+	new_pwd = getenv("OLDPWD");
 
-		// free (current_dir_env->value);
-		// current_dir_env->value = back_path;
+	free (current->value);
+	current->value = ft_strdup(new_pwd);
+	chdir("HOME");
+	current = search_env_name(env, "PWD");
+	new_oldpwd = getenv("PWD");
+	free (current->value);
+	current->value = ft_strdup(new_oldpwd);
+}
 
-		// current_dir_env = search_env_name(data->env, "OLDPWD");
-		// free (current_dir_env->value);
-		// current_dir_env->value = temp;
-	}
-	return 0;
+void cd_path(t_env *env, char *destination)
+{
+	t_env *current;
+	char *pwd_value;
+	char *new_pwd;
+
+	current = search_env_name(env, "OLDPWD");
+	pwd_value = getenv("PWD");
+	free (current->value);
+	current->value = ft_strdup(pwd_value);
+	new_pwd = ft_strjoin(pwd_value, "/");
+	new_pwd = ft_strjoin(new_pwd, destination);
+	chdir(new_pwd);
+	current = search_env_name(env, "PWD");
+	free (current->value);
+	current->value = ft_strdup(new_pwd);
 }
 
 
-/// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..` 
+
+/// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
 /// @param data Pointer to the shell data structure containing environment variables
 /// @param arg Path to change the current working directory to
-void	b_cd(t_data *data)
+void b_cd(t_data *data)
 {
-	t_env	*current_dir_env;
-	char	*home_path;
-
 	if (data->input->type == T_CMD)
 	{
-		home_path = getenv("HOME");
-		if (!home_path)
-		{
-			ft_printf("cd: HOME not set\n");
-			return;
-		}
-		if (chdir(home_path) == -1)
-		{
-			perror("cd");
-			return;
-		}
-		current_dir_env = search_env_name(data->env, "OLDPWD");
-		if (current_dir_env)
-		{
-			free(current_dir_env->value);
-			current_dir_env->value = ft_strdup(getenv("PWD"));
-		}
-		current_dir_env = search_env_name(data->env, "PWD");
-		if (current_dir_env)
-		{
-			free(current_dir_env->value);
-			current_dir_env->value = ft_strdup(home_path);
-		}
+		cd_home(data->env);
+		b_pwd(data);
+	}
+	else if (ft_strncmp(data->input->next->token, "-", 1) == 0)
+	{	
+		cd_return(data->env);
+		b_pwd(data);
+	}
+	else if (data->input->next->token[0] == '/') // Absolute path
+	{
+		cd_path(data->env, data->input->next->token);
+		b_pwd(data);
 	}
 	else
-	{
-		if (ft_strncmp(data->input->next->token, "-", 1) == 0)
-			cd_back(data);
-		// if (data->input->token == "..")
-		// if (data->input->token == ) path + /path
-	}
-	
+		printf("else\n");
+	// else if (data->input->next->token[0] == '.' && data->input->next->token[1] == '/') // Relative path
 }
-
-
 
 /*
 	Change the current working directory to directory. 

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/19 13:25:55 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:50:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
-void				b_pwd(void);
+void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 
 int					kind_of_token(t_data *data, t_input *input);

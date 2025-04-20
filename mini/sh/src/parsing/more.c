@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 17:52:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:37:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	first_word(char **input, char **env)
 	//	free(env_path);
 	if (!cmd_path)
 	{
-		printf("minishell: command not found: %s\n", input[0]);
+		// printf("minishell: command not found: %s\n", input[0]);// smeble ne pas detecter cd, les autre builtin ok... mystere...
 		return ;
 	}
 	// printf("\ncmd found\n");

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/11 14:25:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:36:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*extract_value(char *input)
 		);
 	}
 
-	printf("\textracted_value(%s) from input(%s)\n", extracted_value, input);
+	// printf("\textracted_value(%s) from input(%s)\n", extracted_value, input);
 	return (extracted_value);
 }
 
@@ -93,7 +93,7 @@ void	add_env_var(t_data *data, char *input)
 	char 	*extracted_value;
 	char 	*extracted_name;
 	(void)input;
-	printf("\tinput(%s)\n", input);
+	// printf("\tinput(%s)\n", input);
 	extracted_name = extract_name(input);
 	extracted_value = extract_value(input);
 	
@@ -119,7 +119,7 @@ void	add_env_var(t_data *data, char *input)
 		else
 			data->env = new_node;
 
-		printf("\tAdded new env var with name(%s) and value(%s)\n", new_node->name, new_node->value);
+		// printf("\tAdded new env var with name(%s) and value(%s)\n", new_node->name, new_node->value);
 		
 		// lle_add_back(&data->env, new_node);
 	}
@@ -130,9 +130,9 @@ void	add_env_var(t_data *data, char *input)
 			extracted_value = current->value;
 		}
 		current->value = extracted_value;
-		printf("\n_______current_value(%s)\textracted_value(%s)\n\n", current->value, extracted_value);
+		// printf("\n_______current_value(%s)\textracted_value(%s)\n\n", current->value, extracted_value);
 			// free(current->value);// pourquoi ? on pourrait simplement ecraser value ?
-		printf("\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
+		// printf("\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
 		// free(extracted_name);//pourquoi ?
 	}
 
