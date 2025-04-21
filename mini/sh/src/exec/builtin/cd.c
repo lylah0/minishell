@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/20 22:58:29 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:38:53 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,47 +22,87 @@ void cd_home(t_env *env)
 	pwd_value = getenv("PWD");
 	free (current->value);
 	current->value = ft_strdup(pwd_value);
-	chdir("HOME");
+	char *home = getenv("HOME");
+	chdir(home);
 	current = search_env_name(env, "PWD");
 	new_pwd = getenv("HOME");
+	if (new_pwd == NULL)
+		perror("minishell: cd: HOME not define");
 	free (current->value);
 	current->value = ft_strdup(new_pwd);
 }
 
-void cd_return(t_env *env)
+void cd_return(t_data *data)
 {
-	t_env *current;
-	char *new_oldpwd;
-	char *new_pwd;
+	char	*old_pwd;
+	char	*new_pwd;
 
-	current = search_env_name(env, "OLDPWD");
 	new_pwd = getenv("OLDPWD");
+	if (new_pwd == NULL)
+	{
+		perror("getenv");
+		data->exit_status = 1;
+		return ;
+	}
+	old_pwd = getcwd(NULL, 0);
+	if(old_pwd == NULL)
+	{
+		perror("getcwd");
+		data->exit_status = 1;
+		return ;
+	}
+	if (chdir(old_pwd) == -1)
+	{
+		perror("cd");
+		free(old_pwd);
+		data->exit_status = 1;
+		return ;
+	}
+	t_env *current = search_env_name(data->env, "OLDPWD");
+	free(current->value);
+	current->value = old_pwd;
 
-	free (current->value);
-	current->value = ft_strdup(new_pwd);
-	chdir("HOME");
-	current = search_env_name(env, "PWD");
-	new_oldpwd = getenv("PWD");
-	free (current->value);
-	current->value = ft_strdup(new_oldpwd);
+	current = search_env_name(data->env, "PWD");
+	free(current->value);
+	current->value = new_pwd;
+	data->exit_status = 0;
 }
 
-void cd_path(t_env *env, char *destination)
-{
-	t_env *current;
-	char *pwd_value;
-	char *new_pwd;
 
-	current = search_env_name(env, "OLDPWD");
-	pwd_value = getenv("PWD");
-	free (current->value);
-	current->value = ft_strdup(pwd_value);
-	new_pwd = ft_strjoin(pwd_value, "/");
-	new_pwd = ft_strjoin(new_pwd, destination);
-	chdir(new_pwd);
-	current = search_env_name(env, "PWD");
-	free (current->value);
-	current->value = ft_strdup(new_pwd);
+
+void	cd_path(t_data *data)
+{
+	char	*old_pwd;
+	char	*new_pwd;
+
+	old_pwd = getcwd(NULL, 0);
+	if(old_pwd == NULL)
+	{
+		perror("getcwd");
+		data->exit_status = 1;
+		return ;
+	}
+	if (chdir(data->input->next->token) == -1)
+	{
+		perror("cd");
+		free(old_pwd);
+		data->exit_status = 1;
+		return ;
+	}
+	t_env *current = search_env_name(data->env, "OLDPWD");
+	free(current->value);
+	current->value = old_pwd;
+	new_pwd = getcwd(NULL, 0);
+	if (new_pwd == NULL)
+	{
+		perror("getcwd");
+		data->exit_status = 1;
+		return ;
+	}
+	current = search_env_name(data->env, "PWD");
+	free(current->value);
+	current->value = new_pwd;
+	data->exit_status = 0;
 }
 
 
@@ -72,6 +112,9 @@ void cd_path(t_env *env, char *destination)
 /// @param arg Path to change the current working directory to
 void b_cd(t_data *data)
 {
+	struct stat	st;
+	char		*path;
+
 	if (data->input->type == T_CMD)
 	{
 		cd_home(data->env);
@@ -79,18 +122,27 @@ void b_cd(t_data *data)
 	}
 	else if (ft_strncmp(data->input->next->token, "-", 1) == 0)
 	{	
-		cd_return(data->env);
-		b_pwd(data);
-	}
-	else if (data->input->next->token[0] == '/') // Absolute path
-	{
-		cd_path(data->env, data->input->next->token);
-		b_pwd(data);
+		cd_return(data);
+		b_pwd(data);// need to stay to be like bash --posix
 	}
 	else
-		printf("else\n");
-	// else if (data->input->next->token[0] == '.' && data->input->next->token[1] == '/') // Relative path
+	{
+		path = data->input->next->token;
+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+		{
+			cd_path(data);
+			b_pwd(data);
+		}
+		else
+		{
+			printf("cd: %s: Not a directory\n", path);
+			data->exit_status = 1;
+		}
+	}
 }
+
+
+
 
 /*
 	Change the current working directory to directory. 
@@ -113,3 +165,50 @@ void b_cd(t_data *data)
 	`minishell: cd: <path>: No such file or directory`. Si c’est un fichier et pas un dossier : `Not 
 	a directory`.  
 */
+
+// void cd_absolute_path(t_env *env, char *absolute_path)
+// {
+// 	t_env *current;
+// 	char *pwd_value;
+// 	char *new_pwd;
+	
+// 	new_pwd = NULL;
+// 	pwd_value = NULL;
+// 	current = search_env_name(env, "OLDPWD");
+// 	new_pwd = getenv("OLDPWD");
+// 	free (current->value);
+// 	current->value = ft_strdup(pwd_value);
+// 	new_pwd = ft_strjoin(new_pwd, absolute_path);
+	
+// 	if (chdir(new_pwd) == -1)
+// 		perror("minishell: cd: relative path not found");
+
+// 	pwd_value = getenv("PWD");
+// 	current = search_env_name(env, "PWD");
+// 	free (current->value);
+// 	current->value = ft_strdup(new_pwd);
+// }
+
+// void cd_relative_path(t_env *env, char *relative_path)
+// {
+// 	t_env *current;
+// 	char *pwd_value;
+// 	char *new_pwd;
+
+// 	new_pwd = NULL;
+// 	pwd_value = NULL;
+
+// 	current = search_env_name(env, "OLDPWD");
+// 	new_pwd = getenv("OLDPWD");
+// 	free (current->value);
+// 	current->value = ft_strdup(pwd_value);
+// 	new_pwd = ft_strjoin(new_pwd, relative_path);
+
+// 	if (chdir(relative_path) == -1)
+// 		perror("minishell: cd: relative path not found");
+	
+// 	pwd_value = getenv("PWD");
+// 	current = search_env_name(env, "PWD");
+// 	free (current->value);
+// 	current->value = ft_strdup(new_pwd);	
+// }
