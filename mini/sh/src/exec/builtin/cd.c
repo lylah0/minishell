@@ -6,30 +6,35 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/21 16:38:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:49:28 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
+// (t_env *env_oldpwd, t_env *env_pwd, char *new_pwd, char *old_pwd)
+
+t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
+{
+	t_env	*current;
+	
+	current = search_env_name(env, env_to_update);
+	free (current->value);
+	current->value = ft_strdup(new_value);
+	return (env);// return env_to_update
+}
+
 void cd_home(t_env *env)
 {
-	t_env *current;
-	char *pwd_value;
+	char *old_pwd;
 	char *new_pwd;
 
-	current = search_env_name(env, "OLDPWD");
-	pwd_value = getenv("PWD");
-	free (current->value);
-	current->value = ft_strdup(pwd_value);
-	char *home = getenv("HOME");
-	chdir(home);
-	current = search_env_name(env, "PWD");
+	old_pwd = getcwd(NULL, 0);
+	update_env(env, "OLDPWD", old_pwd);
 	new_pwd = getenv("HOME");
-	if (new_pwd == NULL)
-		perror("minishell: cd: HOME not define");
-	free (current->value);
-	current->value = ft_strdup(new_pwd);
+	if (getenv("HOME") == NULL)
+		perror("minishell: cd");
+	update_env(env, "PWD", new_pwd);
 }
 
 void cd_return(t_data *data)
@@ -45,7 +50,7 @@ void cd_return(t_data *data)
 		return ;
 	}
 	old_pwd = getcwd(NULL, 0);
-	if(old_pwd == NULL)
+	if (old_pwd == NULL)
 	{
 		perror("getcwd");
 		data->exit_status = 1;
@@ -54,17 +59,12 @@ void cd_return(t_data *data)
 	if (chdir(old_pwd) == -1)
 	{
 		perror("cd");
-		free(old_pwd);
+		free(old_pwd);// ?
 		data->exit_status = 1;
 		return ;
 	}
-	t_env *current = search_env_name(data->env, "OLDPWD");
-	free(current->value);
-	current->value = old_pwd;
-
-	current = search_env_name(data->env, "PWD");
-	free(current->value);
-	current->value = new_pwd;
+	update_env(data->env, "OLDPWD", old_pwd);
+	update_env(data->env, "PWD", new_pwd);
 	data->exit_status = 0;
 }
 
@@ -89,9 +89,7 @@ void	cd_path(t_data *data)
 		data->exit_status = 1;
 		return ;
 	}
-	t_env *current = search_env_name(data->env, "OLDPWD");
-	free(current->value);
-	current->value = old_pwd;
+	update_env(data->env, "OLDPWD", old_pwd);
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd == NULL)
 	{
@@ -99,13 +97,9 @@ void	cd_path(t_data *data)
 		data->exit_status = 1;
 		return ;
 	}
-	current = search_env_name(data->env, "PWD");
-	free(current->value);
-	current->value = new_pwd;
+	update_env(data->env, "PWD", new_pwd);
 	data->exit_status = 0;
 }
-
-
 
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
 /// @param data Pointer to the shell data structure containing environment variables
@@ -141,9 +135,6 @@ void b_cd(t_data *data)
 	}
 }
 
-
-
-
 /*
 	Change the current working directory to directory. 
 	If directory is not supplied, 
@@ -165,50 +156,3 @@ void b_cd(t_data *data)
 	`minishell: cd: <path>: No such file or directory`. Si c’est un fichier et pas un dossier : `Not 
 	a directory`.  
 */
-
-// void cd_absolute_path(t_env *env, char *absolute_path)
-// {
-// 	t_env *current;
-// 	char *pwd_value;
-// 	char *new_pwd;
-	
-// 	new_pwd = NULL;
-// 	pwd_value = NULL;
-// 	current = search_env_name(env, "OLDPWD");
-// 	new_pwd = getenv("OLDPWD");
-// 	free (current->value);
-// 	current->value = ft_strdup(pwd_value);
-// 	new_pwd = ft_strjoin(new_pwd, absolute_path);
-	
-// 	if (chdir(new_pwd) == -1)
-// 		perror("minishell: cd: relative path not found");
-
-// 	pwd_value = getenv("PWD");
-// 	current = search_env_name(env, "PWD");
-// 	free (current->value);
-// 	current->value = ft_strdup(new_pwd);
-// }
-
-// void cd_relative_path(t_env *env, char *relative_path)
-// {
-// 	t_env *current;
-// 	char *pwd_value;
-// 	char *new_pwd;
-
-// 	new_pwd = NULL;
-// 	pwd_value = NULL;
-
-// 	current = search_env_name(env, "OLDPWD");
-// 	new_pwd = getenv("OLDPWD");
-// 	free (current->value);
-// 	current->value = ft_strdup(pwd_value);
-// 	new_pwd = ft_strjoin(new_pwd, relative_path);
-
-// 	if (chdir(relative_path) == -1)
-// 		perror("minishell: cd: relative path not found");
-	
-// 	pwd_value = getenv("PWD");
-// 	current = search_env_name(env, "PWD");
-// 	free (current->value);
-// 	current->value = ft_strdup(new_pwd);	
-// }
