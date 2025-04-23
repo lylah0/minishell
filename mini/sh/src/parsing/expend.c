@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 15:34:10 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:34:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*extract_var_name(const char *str, int *i)
 }
 
 static void	handle_env_var_expansion(const char *src, int *i, char **result)
+// static void	handle_env_var_expansion(t_env *env, const char *src, int *i, char **result)
 {
 	char	*tmp;
 	char	*var_name;
@@ -44,7 +45,9 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result)
 		return;
 	}
 	var_name = extract_var_name(src, i);
-	var_value = getenv(var_name);
+	var_value = getenv(var_name); //TO DO : utiliser env du programme et pas du pc
+	// t_env *current = search_env_name(env, var_name);// ajouter t_env *env au prototype
+	// var_value = current->value;// va chercher la value de lenv du shell original et ne reprend donc pas les modifications apportees a notre env de minishell
 	if (!var_value)
 		var_value = "";
 	tmp = ft_strjoin(*result, var_value);

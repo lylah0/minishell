@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 22:23:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:34:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ t_env	*search_env_name(t_env *env, char *name)
 	current = env;
 	while (current != NULL && ft_strcmp(current->name, name) != 0)
 		current = current->next;
-
+	if (current == NULL)
+		return (NULL);
 	return_env = &current;
 	return (*return_env);
 }

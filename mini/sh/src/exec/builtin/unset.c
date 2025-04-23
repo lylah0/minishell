@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:43:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:27:44 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,4 @@ void	b_unset(t_data *data)
 		current = current->next;
 	}
 }
+// [ ] si env_var inexistant, message derreur

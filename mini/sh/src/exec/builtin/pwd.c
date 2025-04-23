@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/20 20:55:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:51:05 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	b_pwd(t_data *data)
 	t_env *current;
 
 	// ft_putendl_fd(getcwd(NULL, 0), 1);
+
 	current = search_env_name(data->env, "PWD");
 	printf("%s\n", current->value);
 
