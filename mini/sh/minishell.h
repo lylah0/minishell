@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 17:40:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:22:18 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int					is_parent_builtin(char *token);
 void				simple_redir(t_input *current);
 void				redir(t_input *current);
 void				heredoc_append(t_input *current);
+void				heredoc(t_input *current);
 
 // fonctions token
 
