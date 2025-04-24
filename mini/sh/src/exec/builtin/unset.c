@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/23 15:07:58 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:22:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ void	b_unset(t_data *data)
 	}
 
 	if (env_to_del)
-		lle_del_one(env_to_del, &lle_clear);
+		lle_del_one(env_to_del, (void *)lle_clear);
 }
