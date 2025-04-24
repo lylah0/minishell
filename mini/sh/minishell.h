@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 18:51:16 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:40:41 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ void				if_quotes(char *input, char **array, int *k, int *i);
 int					while_quotes(char *input, int i);
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
-void				is_env_var(t_input *input);
+void 				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
 void				print_token_list(t_input *head);
-char				*handle_double_quote(char *str, int *i);
+char				*handle_double_quote(char *str, int *i, t_data *data);
 char				*handle_env_variable(char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
-char				*expand_token_string(const char *src);
+char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
 
 // fonctions execution
@@ -104,23 +104,29 @@ void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
-void				parent(int *prev_pipe, t_input **current, int fd[2]);
+void				parent(int *prev_pipe, t_input **current, int fd[2], t_data **data);
 void				child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
 void				exec(t_input *current, t_data *data, char *env_path);
 int					is_parent_builtin(char *token);
-void				redir(t_data *data, t_input *current);
+
+//fonctions redirection
+
+void				simple_redir(t_input *current);
+void				redir(t_input *current);
+void				heredoc_append(t_input *current);
 
 // fonctions token
 
 int					is_cmd(char *token, char **env);
-t_input				*tokenize(char **input);
-t_token_type		get_token_type(t_input *token, char *input);
+t_input				*tokenize(char **input, t_data *data);
+t_token_type		get_token_type(t_input *token, char *input, t_data *data);
 void				is_cmd_arg(t_input *token);
 // int			num_var(t_input *token);
-void				parse_and_expand_token(t_input *token);
+void				parse_and_expand_token(t_input *token, t_data *data);
 char				*handle_single_quote(char *str, int *i);
+char				*my_getenv(t_data *data, char *var_name);
 
 // fonctions exit code
 
@@ -199,6 +205,7 @@ t_input				*cat_token(t_input *token, char *value, int len);
 __sighandler_t		handler_sigint(void);
 void				init_signals(void);
 void				restore_terminal(void);
+
 
 // UTILS/lle
 void				lle_add_back(t_env **env, t_env *new1);

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 18:59:29 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:30:19 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,14 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		close(fd[0]);
 		close(fd[1]);
 	}
-	if (current->type == T_OP)
-		redir(data, current);
+	if ((current->next && current->next->next) && (current->next->type == T_OP || current->next->next->type == T_OP))
+		redir(current);
 	exec(current, data, env_path);
 }
 
-void	parent(int *prev_pipe, t_input **current, int fd[2])
+void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
 {
+	(void)data;
 	if (*prev_pipe != 0)
 		close(*prev_pipe);
 	if (has_next_cmd(*current))
@@ -87,9 +88,9 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 	{
 		if (has_next_cmd(current))
 			pipe(fd);
-		if (is_builtin(current->token) && is_parent_builtin(current->token) && !has_next_cmd(current))
+		if (is_builtin(current->token) && is_parent_builtin(current->token) && prev_pipe == 0)
 		{
-			kind_of_token(data, current); // exécuté dans le parent
+			kind_of_token(data, current);
 			current = get_next_command(current);
 			continue;
 		}
@@ -97,7 +98,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		if (pid == 0)
 			child(prev_pipe, current, fd, env_path, data);
 		else
-			parent(&prev_pipe, &current, fd);
+			parent(&prev_pipe, &current, fd, &data);
 	}
 	wait_all();
 }

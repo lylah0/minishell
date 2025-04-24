@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 15:34:10 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:03:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*extract_var_name(const char *str, int *i)
 	return (name);
 }
 
-static void	handle_env_var_expansion(const char *src, int *i, char **result)
+static void	handle_env_var_expansion(const char *src, int *i, char **result, t_data *data)
 {
 	char	*tmp;
 	char	*var_name;
@@ -44,7 +44,7 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result)
 		return;
 	}
 	var_name = extract_var_name(src, i);
-	var_value = getenv(var_name);
+	var_value = my_getenv(data, var_name);
 	if (!var_value)
 		var_value = "";
 	tmp = ft_strjoin(*result, var_value);
@@ -53,7 +53,7 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result)
 	free(var_name);
 }
 
-char	*expand_token_string(const char *src)
+char	*expand_token_string(const char *src, t_data *data)
 {
 	int		i = 0;
 	char	*result;
@@ -64,13 +64,12 @@ char	*expand_token_string(const char *src)
 	while (src[i])
 	{
 		if (src[i] == '$')
-			handle_env_var_expansion(src, &i, &result);
+			handle_env_var_expansion(src, &i, &result, data);
 		else
 		{
 			tmp_str[0] = src[i];
 			tmp_str[1] = '\0';
 			tmp = ft_strjoin(result, tmp_str);
-//			free(result);
 			result = tmp;
 			i++;
 		}
@@ -79,12 +78,12 @@ char	*expand_token_string(const char *src)
 }
 
 
-void is_env_var(t_input *input)
+void is_env_var(t_input *input, t_data *data)
 {
 	t_input *curr = input;
 	char	*expanded;
 
-	expanded = expand_token_string(curr->token);
+	expanded = expand_token_string(curr->token, data);
 	input->token = expanded;
 }
 

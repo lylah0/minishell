@@ -6,13 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 16:27:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:14:50 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_input	*tokenize(char **input)
+t_input	*tokenize(char **input, t_data *data)
 {
 	int		i;
 	t_input	*tail;
@@ -43,19 +43,19 @@ t_input	*tokenize(char **input)
 	current = head;
 	while (current)
 	{
-		current->type = get_token_type(current, current->token);
+		current->type = get_token_type(current, current->token, data);
 		current = current->next;
 	}
 	is_cmd_arg(head);
 	return (head);
 }
 
-t_token_type	get_token_type(t_input *token, char *input)
+t_token_type	get_token_type(t_input *token, char *input, t_data *data)
 {
 	if (ft_strchr(input, '\'') || ft_strchr(input, '"') || ft_strchr(input,
 			'$'))
 	{
-		parse_and_expand_token(token);
+		parse_and_expand_token(token, data);
 		return (T_WORD);
 	}
 	if (ft_strncmp(input, "|", 1) == 0)

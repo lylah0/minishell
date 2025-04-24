@@ -6,35 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/03/27 18:34:13 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:15:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Appelle la fonction qui enleve les quotes et remplace par les nouveaux tokens
-/*
-void	remove_quotes(t_input *head)
-{
-	t_input	*curr;
-	char	*new;
-
-	curr = head;
-	while (curr)
-	{
-		if (curr->type == T_SQUOTE || curr->type == T_DQUOTE)
-		{
-			new = handle_quoted_token(curr->token);
-			if (!new)
-				return ;
-			free(curr->token);
-			curr->token = new;
-		}
-		curr = curr->next;
-	}
-}*/
-
-void	parse_and_expand_token(t_input *token)
+void	parse_and_expand_token(t_input *token, t_data *data)
 {
 	int		i = 0;
 	char	*input;
@@ -48,7 +26,7 @@ void	parse_and_expand_token(t_input *token)
 		if (input[i] == '\'')
 			temp = handle_single_quote(input, &i);
 		else if (input[i] == '"')
-			temp = handle_double_quote(input, &i);
+			temp = handle_double_quote(input, &i, data);
 		else if (input[i] == '$')
 			temp = handle_env_variable(input, &i);
 		else
@@ -81,7 +59,7 @@ char *handle_single_quote(char *str, int *i)
 	return (ft_substr(str, start, len));
 }
 
-char	*handle_double_quote(char *str, int *i)
+char	*handle_double_quote(char *str, int *i, t_data *data)
 {
 	int		start;
 	int		len;
@@ -96,7 +74,7 @@ char	*handle_double_quote(char *str, int *i)
 	char *content = ft_substr(str, start, len);
 	if (str[*i] == '"')
 		(*i)++;
-	char *expanded = expand_token_string(content);
+	char *expanded = expand_token_string(content, data);
 	free(content);
 	return expanded;
 }
@@ -131,20 +109,3 @@ char *extract_plain_text(char *str, int *i)
 	}
 	return ft_substr(str, start, len);
 }
-
-/*
-int	num_var(t_input *token)
-{
-	int	i;
-	int	num;
-
-	i = 0;
-	while (token->token[i])
-	{
-		if (token->token[i] == '$')
-			num++;
-		i++;
-	}
-	return (num);
-}
-*/

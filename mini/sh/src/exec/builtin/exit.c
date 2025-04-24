@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/06 14:07:20 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:07:27 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	b_exit(t_data *data)
 				exit(ft_atoi(arg) % 256);
 			}
 			else
-			{	
+			{
 				printf("`bash: exit: %s: numeric argument required`\n", arg);
 				exit(255);
 			}

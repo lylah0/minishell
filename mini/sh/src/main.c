@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 19:01:09 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:42:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ t_data	*init_data(t_data *data)
 	return (data);
 }
 
-t_input	*do_parsing(t_input *head, char **splited_input)
+t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 {
 	//print_tokens(splited_input);
-	head = tokenize(splited_input);
+	head = tokenize(splited_input, data);
 	//print_all_token_types(head);
-	is_env_var(head);
+	is_env_var(head, data);
 	//print_token_list(head);
 	return (head);
 }
@@ -68,11 +68,6 @@ void	exec_cmd(t_input *head, t_data *data, char *env_path)
 	curr = head;
 	if (!curr)
 		return ;
-	if (is_builtin(head->token))
-	{
-		kind_of_token(data, head);
-		return;
-	}
 	exec_pipe(curr, env_path, data);
 }
 
@@ -104,7 +99,7 @@ int	main(int ac, char **av, char **envp)
 			splited_input = parse_input(input);
 			env_path = get_env_path(envp);
 			init_env(data, envp);
-			head = do_parsing(head, splited_input);
+			head = do_parsing(head, splited_input, data);
 			data->input = head;
 			exec_cmd(head, data, env_path);
 			restore_terminal();

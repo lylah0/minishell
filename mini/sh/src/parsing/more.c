@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/09 14:21:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:03:14 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,15 @@ void	first_word(char **input, char **env)
 		return ;
 	}
 	printf("\ncmd found\n");
+}
+
+char	*my_getenv(t_data *data, char *var_name)
+{
+	while (data->env->next && !(ft_strncmp(data->env->name, var_name, ft_strlen(var_name)) == 0
+		&& data->env->name[ft_strlen(var_name)] == '\0'))
+		data->env = data->env->next;
+	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
+		return (data->env->value);
+	else
+		return (NULL);
 }
