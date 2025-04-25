@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/20 21:27:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:22:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,3 +195,5 @@ int	main(int ac, char **av, char **envp)
 	cleanup_memory(input, splited_input);
 	return (0);
 }
+
+// Lylah [ ] echo $? (exit code)

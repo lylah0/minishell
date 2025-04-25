@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/24 21:57:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:20:28 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,24 @@ void cd_return(t_data *data)
 	char	*new_pwd;
 
 	new_pwd = strdup((search_env_name(data->env, "OLDPWD"))->value);
-	if (new_pwd == NULL)
-	{
-		perror("getenv");
-		data->exit_status = 1;
-		return ;
-	}
+	// if (new_pwd == NULL) // doublon avec verif dans cd main
+	// {
+	// 	perror("OLDPWD");
+	// 	data->exit_status = 1;
+	// 	return ;
+	// }
 
 	old_pwd = strdup((search_env_name(data->env, "PWD"))->value);
 	if (old_pwd == NULL)
 	{
-		perror("oldpwd");
+		perror("PWD");
 		data->exit_status = 1;
 		return ;
 	}
 
 	if (chdir(new_pwd) == -1)
 	{
-		perror("cd");
+		perror("cd -");
 		free(new_pwd);// ?
 		data->exit_status = 1;
 		return ;
@@ -110,6 +110,19 @@ void	cd_path(t_data *data)
 	update_env(data->env, "PWD", new_pwd);
 	data->exit_status = 0;
 }
+#define OK 0
+#define ERR 1
+int check_opening_dir(char *directory)
+{
+	if (opendir(directory) == NULL)
+	{
+		perror("opendir");
+		return (ERR);
+	}
+	return (OK);
+}
+
+
 
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
 /// @param data Pointer to the shell data structure containing environment variables
@@ -118,6 +131,7 @@ void b_cd(t_data *data)
 {
 	struct stat	st;
 	char		*path;
+	t_env		*oldpwd = search_env_name(data->env, "OLDPWD");
 
 	if (data->input->type == T_CMD)
 	{
@@ -126,13 +140,18 @@ void b_cd(t_data *data)
 	}
 	else if (ft_strncmp(data->input->next->token, "-", 1) == 0)
 	{	
+		if (oldpwd == NULL)	
+		{
+			perror("OLDPWD");
+			return ;
+		}
 		cd_return(data);
 		b_pwd(data);// need to stay to be like bash --posix
 	}
 	else
 	{
 		path = data->input->next->token;
-		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && check_opening_dir(path) == OK)
 		{
 			cd_path(data);
 			b_pwd(data);
