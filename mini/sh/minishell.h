@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/25 10:04:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:29:48 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void				cleanup_memory(char *line, char **splited_line);
 char				*ft_strdup_equal(const char *src);
 size_t				ft_strcat(char *dest, const char *src);
 int					ft_strncmp_end(char *s1, char *s2, size_t n);
-int		ft_strcmp(const char *s1, const char *s2);
+int					ft_strcmp(const char *s1, const char *s2);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
@@ -204,15 +204,18 @@ void				init_signals(void);
 void				restore_terminal(void);
 
 // UTILS/lle
-void			lle_add_back(t_env **env, t_env *new1);
-void			lle_add_front(t_env **env, t_env *new1);
-void			lle_clear(t_env **env, void (*del)(void *));
-void			lle_del_one(t_env *env, void (*del)(void *));
-void			lle_iter(t_env *env, void (*f)(void *));
-int				lle_size(t_env *env);
-t_env			*lle_last(t_env *env);
-t_env			*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
-t_env			*lle_new(void *content);
-t_env			*search_env_name(t_env *env, char *name);
+void				lle_add_back(t_env **env, t_env *new1);
+void				lle_add_front(t_env **env, t_env *new1);
+void				lle_clear(t_env **env, void (*del)(void *));
+void				lle_del_one(t_env *env, void (*del)(void *));
+void				lle_iter(t_env *env, void (*f)(void *));
+int					lle_size(t_env *env);
+t_env				*lle_last(t_env *env);
+t_env				*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
+t_env				*lle_new(void *content);
+t_env				*search_env_name(t_env *env, char *name);
+char				*search_env_value_safe(t_env *env, const char *name);
+
+
 
 #endif

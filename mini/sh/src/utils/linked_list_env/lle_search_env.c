@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/22 16:34:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:19:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,16 @@ t_env	*search_env_name(t_env *env, char *name)
 		return (NULL);
 	return_env = &current;
 	return (*return_env);
+}
+
+/// @brief Searches for an environment variable's value by name in a linked list.
+/// @param env Pointer to the head of the linked list of environment variables.
+/// @param name The name of the environment variable to search for.
+/// @return The value of the environment variable as a string, or NULL if not found.
+char *search_env_value_safe(t_env *env, const char *name)
+{
+	t_env *var = search_env_name(env, name);
+	if (!var || !var->value)
+		return NULL;
+	return var->value;
 }

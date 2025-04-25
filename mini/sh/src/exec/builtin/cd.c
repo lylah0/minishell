@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 10:20:28 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:31:01 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
 	if (current == NULL)
 		return NULL;
+	
 	free (current->value);
 	current->value = ft_strdup(new_value);
+	if (!current->value)
+		return NULL;
 	return (current);
 }
 
@@ -33,7 +36,7 @@ void cd_home(t_env *env)
 	update_env(env, "OLDPWD", old_pwd);
 	new_pwd = getenv("HOME");
 	
-	if (search_env_name(env, "HOME") == NULL)// getenv(HOME) ??
+	if (new_pwd && search_env_value_safe(env, "HOME") == NULL)// getenv(HOME) ??
 		perror("minishell: cd");
 	update_env(env, "PWD", new_pwd);
 }
@@ -65,7 +68,7 @@ void cd_return(t_data *data)
 	if (chdir(new_pwd) == -1)
 	{
 		perror("cd -");
-		free(new_pwd);// ?
+		free(new_pwd);
 		data->exit_status = 1;
 		return ;
 	}
@@ -80,14 +83,15 @@ void cd_return(t_data *data)
 
 void	cd_path(t_data *data)
 {
-	char	*old_pwd;
+	char	*old_pwd = getcwd(NULL, 0);
 	char	*new_pwd;
 
 	// old_pwd = getcwd(NULL, 0);
-	old_pwd = (search_env_name(data->env, "PWD"))->value;
+	// old_pwd = (search_env_name(data->env, "PWD"))->value;
 	if (old_pwd == NULL)
 	{
-		perror("PWD");
+		perror("getcwd");
+		// perror("PWD");
 		data->exit_status = 1;
 		return ;
 	}
@@ -99,15 +103,17 @@ void	cd_path(t_data *data)
 		return ;
 	}
 	update_env(data->env, "OLDPWD", old_pwd);
+	free(old_pwd);//
 
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd == NULL)
 	{
-		// perror("getcwd");
+		perror("getcwd");
 		data->exit_status = 1;
 		return ;
 	}
 	update_env(data->env, "PWD", new_pwd);
+	free(new_pwd);//
 	data->exit_status = 0;
 }
 #define OK 0
@@ -131,14 +137,14 @@ void b_cd(t_data *data)
 {
 	struct stat	st;
 	char		*path;
-	t_env		*oldpwd = search_env_name(data->env, "OLDPWD");
+	char		*oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
 
 	if (data->input->type == T_CMD)
 	{
 		cd_home(data->env);
 		b_pwd(data);
 	}
-	else if (ft_strncmp(data->input->next->token, "-", 1) == 0)
+	else if (ft_strncmp(data->input->next->token, "-", 1) == 0 && !data->input->next->next)
 	{	
 		if (oldpwd == NULL)	
 		{
@@ -151,21 +157,26 @@ void b_cd(t_data *data)
 	else
 	{
 		path = data->input->next->token;
-		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && check_opening_dir(path) == OK)
+		// if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && check_opening_dir(path) == OK)
+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && !data->input->next->next)
 		{
 			cd_path(data);
 			b_pwd(data);
 		}
 		else
 		{
-			printf("cd: %s: Not a directory\n", path);
+			perror("cd");
 			data->exit_status = 1;
 		}
 	}
+	free (oldpwd);
 }
 
 
-// [ ] verifier la validite du dossier ouvert
+// [chdir ok] verifier la validite du dossier ouvert
+			// Le chemin n'existe pas	-1	ENOENT	No such file or directory
+			// Ce n’est pas un répertoire	-1	ENOTDIR	Not a directory
+			// Tu n’as pas le droit d’y aller	-1	EACCES	Permission denied
 // [ ] trop dargumetnts message erreur
 // [ ] cas ou je supprime PWD, cd, segv --> bash: cd: OLDPWD not set
 /*
