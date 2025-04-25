@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 18:22:20 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:28:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	redir(t_input *current)
 			if (!current->token || !current->next || !current->next->token)
 				break;
 			if (!ft_strncmp(current->token, ">>", 3))
-				heredoc_append(current);
+				append(current);
 			else if (!ft_strncmp(current->token, "<<", 3))
 				heredoc(current);
 			else if (!ft_strncmp(current->token, ">", 2) || !ft_strncmp(current->token, "<", 2))
@@ -83,7 +83,7 @@ void	simple_redir(t_input *current)
 	}
 }
 
-void	heredoc_append(t_input *current)
+void	append(t_input *current)
 {
 	int	fd;
 
@@ -98,6 +98,4 @@ void	heredoc_append(t_input *current)
 		dup2(fd, 1);
 		close(fd);
 	}
-	else
-		heredoc(current);
 }

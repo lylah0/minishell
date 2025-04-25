@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 17:21:51 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:21:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	kind_of_token(t_data *data, t_input *input)
 	}
 	else if (ft_strncmp_end(input_str, "cd", 2) == 0)
 	{
-		b_cd(data, input);
+		b_cd(data);
 		return (0);
 	}
 	else if (ft_strncmp_end(input_str, "pwd", 3) == 0)
 	{
-		b_pwd();
+		b_pwd(data);
 		return (0);
 	}
 	else if (ft_strncmp_end(input_str, "env", 3) == 0)
@@ -52,7 +52,7 @@ int	kind_of_token(t_data *data, t_input *input)
 		b_export(data);
 		return (0);
 	}
-//	else // pas forcement arg, peut etre path/bin
+	else // pas forcement arg, peut etre path/bin
 //		printf("core_exec.c > kind_of_token :\t***VERY USEFULL INFORMATION*** : is a cmd/path :)\n\n");
 	return (1);
 }

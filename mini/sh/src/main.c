@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/24 17:42:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:09:38 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ int	main(int ac, char **av, char **envp)
 			data->input = head;
 			exec_cmd(head, data, env_path);
 			restore_terminal();
-			cleanup_memory(input, splited_input);
 			init_signals();
 		}
 	}
+	cleanup_memory(input, splited_input);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/23 15:07:47 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:22:14 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,17 @@
 
 /// @brief built-in print working directory `pwd`
 /// @param
-void	b_pwd(void)
+void	b_pwd(t_data *data)
 {
-	ft_putendl_fd(getcwd(NULL, 0), 1);
+	t_env *current;
+
+	// ft_putendl_fd(getcwd(NULL, 0), 1);
+
+	current = search_env_name(data->env, "PWD");
+	if (!current)
+	{
+		perror("pwd");
+		return;
+	}
+	printf("%s\n", current->value);
 }
