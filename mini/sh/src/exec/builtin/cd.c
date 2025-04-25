@@ -6,25 +6,22 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/22 16:48:56 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:57:15 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-// (t_env *env_oldpwd, t_env *env_pwd, char *new_pwd, char *old_pwd)
-
 t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 {
 	t_env	*current;
 	
-	current = search_env_name(env, env_to_update);// je pourrais ne pas trouver l'env_var
+	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
 	if (current == NULL)
 		return NULL;
 	free (current->value);
 	current->value = ft_strdup(new_value);
-	// free(new_value);
-	return (current);// return env_to_update
+	return (current);
 }
 
 void cd_home(t_env *env)
@@ -36,7 +33,7 @@ void cd_home(t_env *env)
 	update_env(env, "OLDPWD", old_pwd);
 	new_pwd = getenv("HOME");
 	
-	if (getenv("HOME") == NULL)
+	if (search_env_name(env, "HOME") == NULL)// getenv(HOME) ??
 		perror("minishell: cd");
 	update_env(env, "PWD", new_pwd);
 }
