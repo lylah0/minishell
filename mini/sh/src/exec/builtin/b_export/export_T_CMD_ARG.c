@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/20 20:36:54 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:12:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ char	*extract_name(char *input)
 	extracted_name = ft_substr(input, 0, separator - input);
 	return (extracted_name);
 }
-// printf("export_T_CMD_ARG.c > add_env_var :\tSUCCESS name(%s) extracted from imput(%s) :)\n", extracted_name, input);
-// printf("export_T_CMD_ARG.c > add_env_var :\tcurrent->name(%s)\n", current->name);
 
 char	*extract_value(char *input)
 {
@@ -66,22 +64,9 @@ char	*extract_value(char *input)
 
 	separator = ft_strchr(input, '=');
 	if (!separator)
-	{
-		// Si on ne trouve pas de '=', on renvoie une chaîne vide (cas "export VAR").
-		//return (NULL);
 		return (ft_strdup(""));
-	}
 	else
-	{
-		// On extrait la sous-chaîne après le '='
-		extracted_value = ft_substr(
-			input,
-			separator - input + 1,
-			ft_strlen(input) - (separator - input + 1)
-		);
-	}
-
-	// printf("\textracted_value(%s) from input(%s)\n", extracted_value, input);
+		extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
 	return (extracted_value);
 }
 
@@ -93,12 +78,8 @@ void	add_env_var(t_data *data, char *input)
 	char 	*extracted_value;
 	char 	*extracted_name;
 	(void)input;
-	// printf("\tinput(%s)\n", input);
 	extracted_name = extract_name(input);
 	extracted_value = extract_value(input);
-	
-	// print extractedname et value pour export blupblup et voir ce que ca donne
-
 	current = exist_already_in_env(data->env, extracted_name);// current == NULL si input na pas ete trouve dans env
 	if (current == NULL) // variable does not exist
 	{
@@ -118,22 +99,12 @@ void	add_env_var(t_data *data, char *input)
 			env_last->next = new_node;
 		else
 			data->env = new_node;
-
-		// printf("\tAdded new env var with name(%s) and value(%s)\n", new_node->name, new_node->value);
-		
-		// lle_add_back(&data->env, new_node);
 	}
 	else //mettre variable a jour
 	{
 		if (!extracted_value || extracted_value[0] == '\0')
-		{
 			extracted_value = current->value;
-		}
 		current->value = extracted_value;
-		// printf("\n_______current_value(%s)\textracted_value(%s)\n\n", current->value, extracted_value);
-			// free(current->value);// pourquoi ? on pourrait simplement ecraser value ?
-		// printf("\tUpdated env var with name(%s) to new value(%s)\n", extracted_name, extracted_value);
-		// free(extracted_name);//pourquoi ?
 	}
 
 }
@@ -161,6 +132,5 @@ t_env *exist_already_in_env(t_env *env, char *name_var)
 			env = env->next;
 	}
 	printf("export_T_CMD_ARG.c > exist_already_in_env :\tno match env_name_linked_list / env_name_input_token \n");
-	
 	return (NULL);
 }

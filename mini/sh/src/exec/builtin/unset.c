@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/22 16:27:44 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:06:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	b_unset(t_data *data)
 
 	while (current)
 	{
-		if (ft_strcmp(arg, current->name) == 0)
+		if (ft_strncmp(arg, current->name) == 0)
 		{
 			if (prev)
 				prev->next = current->next;

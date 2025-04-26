@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 11:31:01 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:19:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void cd_return(t_data *data)
 	free(old_pwd);
 	data->exit_status = 0;
 }
-// lylah [ ] commande invalide ajouter message dans terminal
+// lylah [ ] commande invalide ajouter message dans terminal ok dans la version de lylah
 
 
 void	cd_path(t_data *data)
