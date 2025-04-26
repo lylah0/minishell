@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/26 12:40:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:04:59 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,10 @@ void	b_unset(t_data *data)
 			else
 				data->env = current->next;
 			lle_del_one(current, free);
-			print_lle(data);
-
 			return;
 		}
 		prev = current;
 		current = current->next;
 	}
 }
-// [ ] si env_var inexistant, message derreur
+// [x] si env_var inexistant, message derreur

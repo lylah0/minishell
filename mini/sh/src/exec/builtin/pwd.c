@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 17:22:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:04:22 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	b_pwd(t_data *data)
 	current = search_env_name(data->env, "PWD");
 	if (!current)
 	{
-		perror("pwd");
+		perror("pwd not set");
 		return;
 	}
 	printf("%s\n", current->value);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 17:24:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:02:11 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,13 @@ t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
 	if (current == NULL)
 	{
-		perror("update_env: current NULL");
+		perror("bash: cd: env_var not found");
 		return NULL;
 	}
-
 	free (current->value);
 	current->value = ft_strdup(new_value);
 	if (!current->value)
-	{
-		perror("update_env: current->value NULL");
 		return NULL;
-	}
 	return (current);
 }
 
@@ -43,11 +39,14 @@ void cd_home(t_env *env)
 	new_pwd = getenv("HOME");
 
 	if (new_pwd && search_env_value_safe(env, "HOME") == NULL)// getenv(HOME) ??
-		perror("minishell: cd");
+	{
+		perror("minishell: cd HOME not set");
+		return ;
+	}
 	update_env(env, "PWD", new_pwd);
 }
-// [ ] HOME non defini message derreur / cd: HOME not set
-// [ ] voir utilisation correcte de perror
+// [x] HOME non defini message derreur / cd: HOME not set
+// [x] voir utilisation correcte de perror
 
 
 void cd_return(t_data *data)
@@ -84,7 +83,7 @@ void cd_return(t_data *data)
 	free(old_pwd);
 	data->exit_status = 0;
 }
-// lylah [ ] commande invalide ajouter message dans terminal
+// lylah [x] commande invalide ajouter message dans terminal
 
 
 void	cd_path(t_data *data)
@@ -103,7 +102,7 @@ void	cd_path(t_data *data)
 	}
 	if (chdir(data->input->next->token) == -1)
 	{
-		perror("cd");
+		perror("cd <path>");
 		free(old_pwd);
 		data->exit_status = 1;
 		return ;
@@ -143,15 +142,16 @@ void b_cd(t_data *data)
 {
 	struct stat	st;
 	char		*path;
-	char		*oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
+	char		*oldpwd;
 
 	if (data->input->type == T_CMD)
 	{
 		cd_home(data->env);
-		b_pwd(data);
+		// b_pwd(data);
 	}
 	else if (ft_strncmp(data->input->next->token, "-", 1) == 0 && !data->input->next->next)
 	{
+		oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
 		if (oldpwd == NULL)
 		{
 			perror("OLDPWD");
@@ -159,7 +159,10 @@ void b_cd(t_data *data)
 		}
 		cd_return(data);
 		b_pwd(data);// need to stay to be like bash --posix
+		free (oldpwd);
 	}
+	else if (data->input->next && data->input->next->next)
+		perror("cd: too many arguments");
 	else
 	{
 		path = data->input->next->token;
@@ -167,15 +170,14 @@ void b_cd(t_data *data)
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && !data->input->next->next)
 		{
 			cd_path(data);
-			b_pwd(data);
+			// b_pwd(data);
 		}
 		else
 		{
-			perror("cd");
+			perror("cd: path invalid");
 			data->exit_status = 1;
 		}
 	}
-	free (oldpwd);
 }
 
 
@@ -183,7 +185,7 @@ void b_cd(t_data *data)
 			// Le chemin n'existe pas	-1	ENOENT	No such file or directory
 			// Ce n’est pas un répertoire	-1	ENOTDIR	Not a directory
 			// Tu n’as pas le droit d’y aller	-1	EACCES	Permission denied
-// [ ] trop dargumetnts message erreur
+// [x] trop dargumetnts message erreur
 // [ ] cas ou je supprime PWD, cd, segv --> bash: cd: OLDPWD not set
 /*
 	Change the current working directory to directory.
