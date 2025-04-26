@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lle_search_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 16:54:22 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:22:23 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*search_env_name(t_env *env, char *name)
 	t_env	**return_env;
 
 	current = env;
-	while (current != NULL && ft_strcmp(current->name, name) != 0)
+	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)) != 0)
 		current = current->next;
 	if (current == NULL)
 		return (NULL);
@@ -36,7 +36,7 @@ t_env	*search_env_name(t_env *env, char *name)
 /// @return The value of the environment variable as a string, or NULL if not found.
 char *search_env_value_safe(t_env *env, const char *name)
 {
-	t_env *var = search_env_name(env, name);
+	t_env *var = search_env_name(env, (char *)name);
 	if (!var || !var->value)
 		return NULL;
 	return var->value;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 17:09:38 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:44:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 			splited_input = parse_input(input);
 			env_path = get_env_path(envp);
-			init_env(data, envp);
 			head = do_parsing(head, splited_input, data);
 			data->input = head;
 			exec_cmd(head, data, env_path);

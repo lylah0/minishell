@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 17:04:48 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:40:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
 
 /// @brief built-in `unset` `unset VAR1` `unset VAR1 VAR2`
 /// @param data
@@ -21,12 +22,19 @@ void	b_unset(t_data *data)
 	char	*arg;
 
 	if (!data || !data->input || !data->input->next)
+	{
+		perror("unset");
 		return;
-
+	}
+	
 	arg = (char *)data->input->next->token;
 	if (!arg)
+	{
+		perror("!arg");
 		return;
-
+	}
+	
+	printf("unset\n");
 	current = data->env;
 	prev = NULL;
 
@@ -38,9 +46,9 @@ void	b_unset(t_data *data)
 				prev->next = current->next;
 			else
 				data->env = current->next;
-			free(current->name);
-			free(current->value);
-			free(current);
+			lle_del_one(current, free);
+			print_lle(data);
+
 			return;
 		}
 		prev = current;
