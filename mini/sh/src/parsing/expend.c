@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 18:03:37 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:50:42 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*extract_var_name(const char *str, int *i)
 	if (str[*i] == '?')
 	{
 		(*i)++;
-		return ft_strdup("?");
+		return (ft_strdup("0")); //data->exit code :)
 	}
 	while (ft_isalnum(str[*i + len]) || str[*i + len] == '_')
 		len++;
@@ -64,7 +64,10 @@ char	*expand_token_string(const char *src, t_data *data)
 	while (src[i])
 	{
 		if (src[i] == '$')
+		{
+
 			handle_env_var_expansion(src, &i, &result, data);
+		}
 		else
 		{
 			tmp_str[0] = src[i];
@@ -76,7 +79,6 @@ char	*expand_token_string(const char *src, t_data *data)
 	}
 	return (result);
 }
-
 
 void is_env_var(t_input *input, t_data *data)
 {

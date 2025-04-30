@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 15:30:19 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:01:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		close(fd[1]);
 	}
 	if ((current->next && current->next->next) && (current->next->type == T_OP || current->next->next->type == T_OP))
+	{
+		validate_redirections(current);
 		redir(current);
+	}
 	exec(current, data, env_path);
 }
 

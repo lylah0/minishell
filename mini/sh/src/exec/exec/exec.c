@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/23 16:54:49 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:58:49 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	exec(t_input *current, t_data *data, char *env_path)
 	char	**cmd;
 	char	*cmd_path;
 
+(void)data;
 	if (is_builtin(current->token))
 	{
 		kind_of_token(data, current);

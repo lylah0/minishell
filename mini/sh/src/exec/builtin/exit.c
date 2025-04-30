@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/23 15:07:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:57:11 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	ft_str_isdigit(const char *str)
 /// @param data The structure containing input and exit status information.
 void	b_exit(t_data *data)
 {
+	data->should_exit = 1;
+	data->exit_status = 0;
 	if (data->input->type == T_CMD_ARG)
 	{
 		printf("T_CMD_ARG\n");

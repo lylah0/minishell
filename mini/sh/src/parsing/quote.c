@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 17:15:09 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:48:17 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ char	*handle_env_variable(char *str, int *i)
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_' && str[*i] != '?'))
 		return ft_strdup("$");
+	if (str[*i] == '?')
+	{
+		var_name = extract_var_name(str, i);
+		return (var_name);
+	}
 	var_name = extract_var_name(str, i);
 	if (!var_name)
 		return ft_strdup("");

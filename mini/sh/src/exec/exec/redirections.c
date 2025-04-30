@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 18:22:20 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:00:11 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	simple_redir(t_input *current)
 		fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 		{
-			perror("open");
-			exit(1);
+//			perror("open");
+			return;
 		}
 		dup2(fd, 1);
 		close(fd);
@@ -75,8 +75,8 @@ void	simple_redir(t_input *current)
 		fd = open(current->next->token, O_RDONLY);
 		if (fd == -1)
 		{
-			perror("open");
-			exit(1);
+//			perror("open");
+			return;
 		}
 		dup2(fd, 0);
 		close(fd);
@@ -92,12 +92,39 @@ void	heredoc_append(t_input *current)
 		fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 		{
-			perror("open");
-			exit(1);
+//			perror("open");
+			return;
 		}
 		dup2(fd, 1);
 		close(fd);
 	}
 	else
 		heredoc(current);
+}
+
+int	validate_redirections(t_input *current)
+{
+	int	fd;
+
+	while (current)
+	{
+		if (current->type == T_OP && current->next)
+		{
+			if (!ft_strncmp(current->token, ">>", 3)
+				|| !ft_strncmp(current->token, ">", 2))
+				fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else if (!ft_strncmp(current->token, "<", 2))
+				fd = open(current->next->token, O_RDONLY);
+			else if (!ft_strncmp(current->token, "<<", 3))
+				return (1); // heredoc est géré ailleurs
+			if (fd == -1)
+			{
+				perror(current->next->token);
+				return (0); // échec → on ne fait rien
+			}
+			close(fd);
+		}
+		current = current->next;
+	}
+	return (1); // tout est ok
 }

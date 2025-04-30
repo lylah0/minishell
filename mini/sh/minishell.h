@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 18:22:18 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:17:36 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -68,6 +72,7 @@ typedef struct s_data
 	t_env			*env;     // tableau envp
 	char			**copy_env;
 	int				exit_status;
+	int				should_exit;
 }					t_data;
 
 // FONCTIONS LYLAH
@@ -117,6 +122,7 @@ void				simple_redir(t_input *current);
 void				redir(t_input *current);
 void				heredoc_append(t_input *current);
 void				heredoc(t_input *current);
+int					validate_redirections(t_input *current);
 
 // fonctions token
 
@@ -152,7 +158,7 @@ void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
-void				b_pwd(void);
+void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 
 int					kind_of_token(t_data *data, t_input *input);
@@ -209,6 +215,7 @@ void				restore_terminal(void);
 
 
 // UTILS/lle
+t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
 void				lle_add_front(t_env **env, t_env *new1);
 void				lle_clear(t_env **env, void (*del)(void *));
