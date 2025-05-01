@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:13:34 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:30:27 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 {
 	t_env	*current;
 
-	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
+	current = search_env_name(env, env_to_update);
 	if (current == NULL)
 	{
-		perror("bash: cd: env_var not found");
+		// perror("bash: cd: env_var not found");
 		return NULL;
 	}
 	free (current->value);
@@ -40,7 +40,7 @@ void cd_home(t_env *env)
 
 	if (new_pwd && search_env_value_safe(env, "HOME") == NULL)// getenv(HOME) ??
 	{
-		perror("minishell: cd HOME not set");
+		// perror("minishell: cd HOME not set");
 		return ;
 	}
 	update_env(env, "PWD", new_pwd);
@@ -57,7 +57,7 @@ void cd_return(t_data *data)
 	new_pwd = strdup((search_env_name(data->env, "OLDPWD"))->value);
 	// if (new_pwd == NULL) // doublon avec verif dans cd main
 	// {
-	// 	perror("OLDPWD");
+		// perror("OLDPWD");
 	// 	data->exit_status = 1;
 	// 	return ;
 	// }
@@ -65,14 +65,14 @@ void cd_return(t_data *data)
 	old_pwd = strdup((search_env_name(data->env, "PWD"))->value);
 	if (old_pwd == NULL)
 	{
-		perror("PWD");
+		// perror("PWD");
 		data->exit_status = 1;
 		return ;
 	}
 
 	if (chdir(new_pwd) == -1)
 	{
-		perror("cd -");
+		// perror("cd -");
 		free(new_pwd);
 		data->exit_status = 1;
 		return ;
@@ -95,14 +95,14 @@ void	cd_path(t_data *data)
 	// old_pwd = (search_env_name(data->env, "PWD"))->value;
 	if (old_pwd == NULL)
 	{
-		perror("getcwd");
-		// perror("PWD");
+		// perror("getcwd");
+		perror("PWD");
 		data->exit_status = 1;
 		return ;
 	}
 	if (chdir(data->input->next->token) == -1)
 	{
-		perror("cd <path>");
+		// perror("cd <path>");
 		free(old_pwd);
 		data->exit_status = 1;
 		return ;
@@ -113,7 +113,7 @@ void	cd_path(t_data *data)
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd == NULL)
 	{
-		perror("getcwd");
+		// perror("getcwd");
 		data->exit_status = 1;
 		return ;
 	}
@@ -127,7 +127,7 @@ int check_opening_dir(char *directory)
 {
 	if (opendir(directory) == NULL)
 	{
-		perror("opendir");
+		// perror("opendir");
 		return (ERR);
 	}
 	return (OK);
@@ -154,7 +154,7 @@ void b_cd(t_data *data)
 		oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
 		if (oldpwd == NULL)
 		{
-			perror("OLDPWD");
+			// perror("OLDPWD");
 			return ;
 		}
 		cd_return(data);
@@ -162,7 +162,8 @@ void b_cd(t_data *data)
 		free (oldpwd);
 	}
 	else if (data->input->next && data->input->next->next)
-		perror("cd: too many arguments");
+		ft_printf("cd: too many arguments");
+		// perror("cd: too many arguments");
 	else
 	{
 		path = data->input->next->token;
@@ -174,7 +175,8 @@ void b_cd(t_data *data)
 		}
 		else
 		{
-			perror("cd: path invalid");
+			// perror("cd: path invalid");
+			ft_printf("cd: path invalid");
 			data->exit_status = 1;
 		}
 	}

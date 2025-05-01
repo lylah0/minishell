@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:55:48 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 15:56:34 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:27:53 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,7 @@ t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
 t_env				*search_env_name(t_env *env, char *name);
 char				*search_env_value_safe(t_env *env, char *name);
+t_env	*update_env(t_env *env, char *env_to_update, char *new_value);
 
 // content devient name par defaut, a adapter si beosin
 
