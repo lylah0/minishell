@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -10,6 +11,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
 #include "../../../minishell.h"
 
 t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
@@ -199,4 +202,8 @@ void b_cd(t_data *data)
 	droits, etc.). On doit alors gérer les erreurs : par ex, si le dossier n’existe pas, afficher 
 	`minishell: cd: <path>: No such file or directory`. Si c’est un fichier et pas un dossier : `Not 
 	a directory`.  
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc

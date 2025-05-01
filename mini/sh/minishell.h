@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/25 11:29:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:06:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,9 +213,7 @@ int					lle_size(t_env *env);
 t_env				*lle_last(t_env *env);
 t_env				*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
 t_env				*lle_new(void *content);
-t_env				*search_env_name(t_env *env, char *name);
-char				*search_env_value_safe(t_env *env, const char *name);
-
-
+int					lle_size(t_env *env);
+// content devient name par defaut, a adapter si beosin
 
 #endif

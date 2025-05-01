@@ -1,6 +1,12 @@
 {
+<<<<<<< HEAD
 	"files.associations": {
 		"libft.h": "c",
 		"system_error": "c"
 	}
+=======
+    "files.associations": {
+        "typeinfo": "c"
+    }
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
 }
