@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 20:07:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:41:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,34 @@
 /// @param data 
 void	b_unset(t_data *data)
 {
-	(void)data;
-	// t_env *env_to_del = NULL;
+	t_env	*current;
+	t_env	*prev;
+	char	*arg;
 
-	// while (data->env)
-	// {
-	// 	if (ft_strncmp(data->input->next->token, data->env->name, (ft_strlen(data->env->name))))
-	// 		env_to_del = data->env;
-	// 	data->env = data->env->next;
-	// }
+	if (!data || !data->input || !data->input->next)
+		return;
 
-	// if (env_to_del)
-	// 	lle_del_one(env_to_del, lle_clear);
+	arg = (char *)data->input->next->token;
+	if (!arg)
+		return;
+
+	current = data->env;
+	prev = NULL;
+
+	while (current)
+	{
+		if (ft_strncmp(arg, current->name, ft_strlen(current->name)) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				data->env = current->next;
+			free(current->name);
+			free(current->value);
+			free(current);
+			return;
+		}
+		prev = current;
+		current = current->next;
+	}
 }

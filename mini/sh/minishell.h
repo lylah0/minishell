@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/10 11:29:43 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:41:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -137,12 +141,12 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_cd(t_data *data, t_input *arg);
+void				b_cd(t_data *data);
 void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
-void				b_pwd(void);
+void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 
 int					kind_of_token(t_data *data, t_input *input);
@@ -208,6 +212,9 @@ t_env				*lle_map(t_env *env, void *(*f)(void *),
 						void (*del)(void *));
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
+t_env				*search_env_name(t_env *env, char *name);
+char				*search_env_value_safe(t_env *env,char *name);
+
 // content devient name par defaut, a adapter si beosin
 
 #endif

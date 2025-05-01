@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/10 11:30:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:48:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,15 +116,14 @@ int	main(int ac, char **av, char **envp)
 		{
 			splited_input = parse_input(input);
 			env_path = get_env_path(envp);
-			init_env(data, envp);
 			head = do_parsing(head, splited_input);
 			data->input = head;
 			exec_cmd(head, data, env_path);
 			restore_terminal();
-			cleanup_memory(input, splited_input);
 			init_signals();
 		}
 	}
+			cleanup_memory(input, splited_input);
 	// cleanup_memory(input, splited_input);// [ ] builtin exit
 	return (0);
 }

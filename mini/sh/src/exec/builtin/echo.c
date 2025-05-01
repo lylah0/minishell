@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/09 15:39:21 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:27:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void    b_echo(t_input *input)
 	int flag_newline = OFF;
 
 	input = input->next;
-	while (input && input->token)
+	while (input && input->token && (input->type == T_ARG || input->type == T_WORD))
 	{
 		if (is_n_option(input->token) == ON)
 		{
