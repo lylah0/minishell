@@ -3,10 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/01 15:10:52 by monoguei         ###   ########.fr       */
+=======
+<<<<<<< HEAD
+/*   Updated: 2025/04/25 17:12:35 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/01 14:47:32 by monoguei         ###   ########.fr       */
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +107,13 @@ void	add_env_var(t_data *data, char *input)
 			env_last->next = new_node;
 		else
 			data->env = new_node;
+<<<<<<< HEAD
+=======
+
+		printf("\tAdded new env var with name(%s) and value(%s)\n", extracted_name, extracted_value);
+		// lle_add_back(&data->env, new_node);
+		// printf("\tAdded new env var with name(%s) and value(%s)\n", current->name, current->value);
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
 	}
 	else //mettre variable a jour
 	{

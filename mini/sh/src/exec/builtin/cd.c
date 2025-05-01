@@ -1,3 +1,21 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
+/*   Updated: 2025/04/26 12:19:52 by monoguei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 #include "../../../minishell.h"
 
 t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
@@ -332,4 +350,12 @@ void b_cd(t_data *data)
 	droits, etc.). On doit alors gérer les erreurs : par ex, si le dossier n’existe pas, afficher 
 	`minishell: cd: <path>: No such file or directory`. Si c’est un fichier et pas un dossier : `Not 
 	a directory`.  
+<<<<<<< HEAD
 */
+=======
+<<<<<<< HEAD
+*/
+=======
+*/
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de

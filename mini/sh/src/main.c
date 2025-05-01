@@ -3,10 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/01 15:08:28 by monoguei         ###   ########.fr       */
+=======
+<<<<<<< HEAD
+/*   Updated: 2025/04/25 10:22:02 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/01 14:48:54 by monoguei         ###   ########.fr       */
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +199,7 @@ int	main(int ac, char **av, char **envp)
 		// print_token_list(head);
 		restore_terminal();
 		init_signals();
+<<<<<<< HEAD
 		if (!ft_strlen(input))
 		{
 			restore_terminal();
@@ -209,6 +218,31 @@ int	main(int ac, char **av, char **envp)
 	}
 			cleanup_memory(input, splited_input);
 	// cleanup_memory(input, splited_input);// [ ] builtin exit
+=======
+<<<<<<< HEAD
+	}
+	cleanup_memory(input, splited_input);
+=======
+		if (!ft_strlen(input))
+		{
+			restore_terminal();
+			init_signals();
+		}
+		else
+		{
+			splited_input = parse_input(input);
+			env_path = get_env_path(envp);
+			head = do_parsing(head, splited_input);
+			data->input = head;
+			exec_cmd(head, data, env_path);
+			restore_terminal();
+			init_signals();
+		}
+	}
+			cleanup_memory(input, splited_input);
+	// cleanup_memory(input, splited_input);// [ ] builtin exit
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 	return (0);
 }
 

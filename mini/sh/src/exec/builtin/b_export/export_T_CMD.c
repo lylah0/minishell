@@ -3,10 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/01 15:11:02 by monoguei         ###   ########.fr       */
+=======
+<<<<<<< HEAD
+/*   Updated: 2025/04/11 14:45:29 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/01 14:35:29 by monoguei         ###   ########.fr       */
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 /*                                                                            */
 /* ************************************************************************** */
 

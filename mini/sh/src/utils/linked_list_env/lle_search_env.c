@@ -13,7 +13,11 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
 /*   Updated: 2025/05/01 14:42:33 by monoguei         ###   ########.fr       */
+<<<<<<< HEAD
 >>>>>>> 74eb669 (builtins ok git add .)
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +37,11 @@ t_env	*search_env_name(t_env *env, char *name)
 	while (current != NULL && ft_strcmp(current->name, name) != 0)
 =======
 	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)) != 0)
+<<<<<<< HEAD
 >>>>>>> 74eb669 (builtins ok git add .)
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 		current = current->next;
 	if (current == NULL)
 		return (NULL);
@@ -49,7 +57,11 @@ t_env	*search_env_name(t_env *env, char *name)
 char *search_env_value_safe(t_env *env, const char *name)
 =======
 char *search_env_value_safe(t_env *env, char *name)
+<<<<<<< HEAD
 >>>>>>> 74eb669 (builtins ok git add .)
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 {
 	t_env *var = search_env_name(env, name);
 	if (!var || !var->value)
@@ -59,4 +71,8 @@ char *search_env_value_safe(t_env *env, char *name)
 }
 =======
 }
+<<<<<<< HEAD
 >>>>>>> 74eb669 (builtins ok git add .)
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de

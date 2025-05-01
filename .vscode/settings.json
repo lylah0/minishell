@@ -8,5 +8,9 @@
     "files.associations": {
         "typeinfo": "c"
     }
+<<<<<<< HEAD
 >>>>>>> 74eb669 (builtins ok git add .)
+=======
+>>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 }

@@ -6,7 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/01 15:08:07 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/01 15:06:52 by monoguei         ###   ########.fr       */
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +224,12 @@ t_env				*lle_last(t_env *env);
 t_env				*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
+<<<<<<< HEAD
 t_env				*search_env_name(t_env *env, char *name);
 char				*search_env_value_safe(t_env *env,char *name);
 
+=======
+>>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
 // content devient name par defaut, a adapter si beosin
 
 #endif
