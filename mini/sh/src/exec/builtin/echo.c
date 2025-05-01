@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 16:10:43 by lylrandr         ###   ########.fr       */
+/*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/01 16:26:19 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,31 @@
 #define OFF 0
 #define ON 1
 
-int	is_n_option(const char *token)
+int is_n_option(const char *token)
 {
-	int	i;
-
 	if (ft_strncmp(token, "-n", 2) == 0)
 	{
-		i = 2;
+		int i = 2;
 		while (token[i] && token[i] == 'n')
 			i++;
 		if (token[i] == '\0')
-			return (ON);
+			return ON;
 	}
-	return (OFF);
+	return OFF;
 }
 
-void	b_echo(t_input *input)
+void    b_echo(t_input *input)
 {
-	int	flag_newline;
+	int flag_newline = OFF;
 
-	flag_newline = OFF;
 	input = input->next;
-	while (input && input->token && (input->type == T_ARG || input->type == T_WORD))
+	while (input && input->token && (input->type == T_ARG || input->type == T_WORD) && (input->type == T_ARG || input->type == T_WORD))
 	{
 		if (is_n_option(input->token) == ON)
 		{
 			flag_newline = ON;
 			input = input->next;
-			continue ;
+			continue;
 		}
 		printf("%s", input->token);
 		if (input->next)

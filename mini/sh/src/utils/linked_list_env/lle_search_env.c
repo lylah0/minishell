@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 13:44:57 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:28:29 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_env	*search_env_name(t_env *env, char *name)
 
 	current = env;
 	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)) != 0)
+	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)) != 0)
 		current = current->next;
 	if (current == NULL)
 		return (NULL);
@@ -34,7 +35,7 @@ t_env	*search_env_name(t_env *env, char *name)
 /// @param env Pointer to the head of the linked list of environment variables.
 /// @param name The name of the environment variable to search for.
 /// @return The value of the environment variable as a string, or NULL if not found.
-char *search_env_value_safe(t_env *env, const char *name)
+char *search_env_value_safe(t_env *env, char *name)
 {
 	t_env *var = search_env_name(env, name);
 	if (!var || !var->value)

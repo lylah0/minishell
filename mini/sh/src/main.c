@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 18:49:57 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:49:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_data	*init_data(t_data *data)
 		return (NULL);
 	data->copy_env = NULL;
 	data->exit_status = 0;
+	data->stdout_redir = 0;
 	return (data);
 }
 
@@ -109,10 +110,9 @@ int	main(int ac, char **av, char **envp)
 			if (data->should_exit)
 				break;
 			restore_terminal();
-			cleanup_memory(input, splited_input);
 			init_signals();
 		}
 	}
-	printf("exit correct\n");
+	cleanup_memory(input, splited_input);
 	exit(0);
 }

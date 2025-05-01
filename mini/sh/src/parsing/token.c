@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 17:14:50 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:52:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_input	*tokenize(char **input, t_data *data)
 	tail = malloc(sizeof(t_input));
 	if (!tail)
 		exit(1);
-	tail->token = input[0];
+	tail->token = ft_strdup(input[0]);
 	tail->prev = NULL;
 	tail->next = NULL;
 	head = tail;
@@ -33,7 +33,7 @@ t_input	*tokenize(char **input, t_data *data)
 		new_node = malloc(sizeof(t_input));
 		if (!new_node)
 			exit(1);
-		new_node->token = input[i];
+		new_node->token = ft_strdup(input[i]);
 		new_node->prev = tail;
 		new_node->next = NULL;
 		tail->next = new_node;

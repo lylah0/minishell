@@ -6,13 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/30 15:00:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:52:58 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	redir(t_input *current)
+void	redir(t_input *current, t_data *data)
 {
 	while (current)
 	{
@@ -21,11 +21,11 @@ void	redir(t_input *current)
 			if (!current->token || !current->next || !current->next->token)
 				break;
 			if (!ft_strncmp(current->token, ">>", 3))
-				heredoc_append(current);
+				heredoc_append(current, data);
 			else if (!ft_strncmp(current->token, "<<", 3))
 				heredoc(current);
 			else if (!ft_strncmp(current->token, ">", 2) || !ft_strncmp(current->token, "<", 2))
-				simple_redir(current);
+				simple_redir(current, data);
 		}
 		current = current->next;
 	}
@@ -54,7 +54,7 @@ void	heredoc(t_input *current)
 	close(hd_pipe[0]);
 }
 
-void	simple_redir(t_input *current)
+void	simple_redir(t_input *current, t_data *data)
 {
 	int	fd;
 
@@ -62,28 +62,23 @@ void	simple_redir(t_input *current)
 	{
 		fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-		{
-//			perror("open");
 			return;
-		}
 		dup2(fd, 1);
 		close(fd);
+		data->stdout_redir = 1;
 		return;
 	}
 	else if ((ft_strncmp(current->token, "<", 1) == 0) && current->next)
 	{
 		fd = open(current->next->token, O_RDONLY);
 		if (fd == -1)
-		{
-//			perror("open");
 			return;
-		}
 		dup2(fd, 0);
 		close(fd);
 	}
 }
 
-void	heredoc_append(t_input *current)
+void	heredoc_append(t_input *current, t_data *data)
 {
 	int	fd;
 
@@ -91,12 +86,10 @@ void	heredoc_append(t_input *current)
 	{
 		fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-		{
-//			perror("open");
 			return;
-		}
 		dup2(fd, 1);
 		close(fd);
+		data->stdout_redir = 1;
 	}
 	else
 		heredoc(current);
@@ -116,15 +109,12 @@ int	validate_redirections(t_input *current)
 			else if (!ft_strncmp(current->token, "<", 2))
 				fd = open(current->next->token, O_RDONLY);
 			else if (!ft_strncmp(current->token, "<<", 3))
-				return (1); // heredoc est géré ailleurs
+				return (1);
 			if (fd == -1)
-			{
-				perror(current->next->token);
-				return (0); // échec → on ne fait rien
-			}
+				return (0);
 			close(fd);
 		}
 		current = current->next;
 	}
-	return (1); // tout est ok
+	return (1);
 }

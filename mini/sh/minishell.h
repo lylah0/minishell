@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/30 16:17:36 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:57:49 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_data
 	char			**copy_env;
 	int				exit_status;
 	int				should_exit;
+	int				stdout_redir;
 }					t_data;
 
 // FONCTIONS LYLAH
@@ -118,9 +119,9 @@ int					is_parent_builtin(char *token);
 
 //fonctions redirection
 
-void				simple_redir(t_input *current);
-void				redir(t_input *current);
-void				heredoc_append(t_input *current);
+void				simple_redir(t_input *current, t_data *data);
+void				redir(t_input *current, t_data *data);
+void				heredoc_append(t_input *current, t_data *data);
 void				heredoc(t_input *current);
 int					validate_redirections(t_input *current);
 
@@ -153,14 +154,13 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_cd(t_data *data, t_input *arg);
 void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
-
+void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input);
 
 // init_environment // b_export
@@ -226,6 +226,7 @@ t_env				*lle_map(t_env *env, void *(*f)(void *),
 						void (*del)(void *));
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
+char				*search_env_value_safe(t_env *env, char *name);
 // content devient name par defaut, a adapter si beosin
 
 #endif

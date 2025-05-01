@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/18 16:01:49 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:33:42 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	swap_words(char **a, char **b)
 	*b = temp;
 }
 
-// ret 1 = swap nec
-// ret 0 = PAS de swap
 int	compare_words(char *w1, char *w2)
 {
 	int i = 0;
@@ -34,9 +32,9 @@ int	compare_words(char *w1, char *w2)
 	while (w1[i] && w2[i])
 	{
 		if (w1[i] < w2[i])
-			return 0;//
+			return 0;
 		if (w1[i] > w2[i])
-			return 1;// b > a SWAP
+			return 1;
 		if  (w1[i] == w2[i])
 			i++;
 	}
@@ -98,7 +96,7 @@ void	create_env_copy_array(t_data *data)
 		env_count++;
 		current = current->next;
 	}
-	data->copy_env = malloc((env_count + 1) * sizeof(char *));// [malloc a liberer !][_]
+	data->copy_env = malloc((env_count + 1) * sizeof(char *));
 	if (!data->copy_env)
 		return ;
 
@@ -109,7 +107,6 @@ void	create_env_copy_array(t_data *data)
 		name = ft_strdup(current->name);
 		if (current->value)
 		{
-			// printf("caca %s\n", current->value);
 			value = ft_strdup(current->value);
 		}
 		if (!name || !value)
@@ -120,7 +117,6 @@ void	create_env_copy_array(t_data *data)
 		}
 		if (value[0] != '\0')
 		{
-			// printf("&&&&&& value = %s\n", value); // a effacer
 			char *temp = ft_strjoin(equal, quote);
 			temp = ft_strjoin(temp, value);
 			temp = ft_strjoin(temp, quote);
@@ -129,7 +125,6 @@ void	create_env_copy_array(t_data *data)
 		else
 		{
 			data->copy_env[i] = ft_strdup(name);
-			// printf("name = %s\n", name);
 			free(name);
 			free(value);
 		}
@@ -137,7 +132,7 @@ void	create_env_copy_array(t_data *data)
 		current = current->next;
 	}
 	data->copy_env[i] = NULL;
-}// reprendre cette fonction pour affichage de export
+}
 int get_array_length(char **array)
 {
 	int len = 0;

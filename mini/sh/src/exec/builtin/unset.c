@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 13:50:01 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:26:40 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	b_unset(t_data *data)
 
 	while (current)
 	{
-		if (ft_strncmp(arg, current->name, ft_strlen(arg)) == 0)
+		if (ft_strncmp(arg, current->name, ft_strlen(current->name)) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
@@ -47,4 +47,3 @@ void	b_unset(t_data *data)
 		current = current->next;
 	}
 }
-// [ ] si env_var inexistant, message derreur

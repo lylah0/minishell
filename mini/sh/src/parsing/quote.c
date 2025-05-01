@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/30 17:48:17 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:01:53 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*handle_double_quote(char *str, int *i, t_data *data)
 		(*i)++;
 	char *expanded = expand_token_string(content, data);
 	free(content);
-	return expanded;
+	return (expanded);
 }
 
 char	*handle_env_variable(char *str, int *i)
@@ -84,14 +84,14 @@ char	*handle_env_variable(char *str, int *i)
 	char	*var_name;
 	char	*var_value;
 
-	(*i)++;
-	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_' && str[*i] != '?'))
-		return ft_strdup("$");
-	if (str[*i] == '?')
+	if (str[*i + 1] == '?')
 	{
-		var_name = extract_var_name(str, i);
-		return (var_name);
+		*i += 2;
+		return ft_strdup("0");
 	}
+	(*i)++;
+	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
+		return ft_strdup("$");
 	var_name = extract_var_name(str, i);
 	if (!var_name)
 		return ft_strdup("");
@@ -101,6 +101,7 @@ char	*handle_env_variable(char *str, int *i)
 		return ft_strdup("");
 	return ft_strdup(var_value);
 }
+
 
 char *extract_plain_text(char *str, int *i)
 {
