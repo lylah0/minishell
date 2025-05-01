@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/01 15:09:53 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/18 17:22:23 by monoguei         ###   ########.fr       */
-=======
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 09:59:39 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 14:27:54 by monoguei         ###   ########.fr       */
->>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
->>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
+/*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/01 15:50:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
 
 #define OFF 0
 #define ON 1

@@ -3,18 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/01 15:11:02 by monoguei         ###   ########.fr       */
-=======
-<<<<<<< HEAD
-/*   Updated: 2025/04/11 14:45:29 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/01 14:35:29 by monoguei         ###   ########.fr       */
->>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
->>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
+/*   Updated: 2025/05/01 16:02:11 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +84,6 @@ void	create_env_copy_array(t_data *data)
 	t_env	*current;
 	char	*name = NULL;
 	char	*value = NULL;
-	char	*name = NULL;
-	char	*value = NULL;
 	int		i;
 	int		env_count;
 	char	*quote = "\"";
@@ -120,32 +110,13 @@ void	create_env_copy_array(t_data *data)
 		if (current->value)
 		{
 			// printf("caca %s\n", current->value);
-		{
-			// printf("caca %s\n", current->value);
 			value = ft_strdup(current->value);
-		}
 		}
 		if (!name || !value)
 		{
 			free(name);
 			free(value);
 			return ;
-		}	
-		if (value[0] != '\0')
-		{
-			// printf("&&&&&& value = %s\n", value); // a effacer
-			char *temp = ft_strjoin(equal, quote);
-			temp = ft_strjoin(temp, value);
-			temp = ft_strjoin(temp, quote);
-			data->copy_env[i] = ft_strjoin(name, temp);
-		}
-		else
-		{
-			data->copy_env[i] = ft_strdup(name);
-			// printf("name = %s\n", name);
-			free(name);
-			free(value);
-		}
 		}	
 		if (value[0] != '\0')
 		{

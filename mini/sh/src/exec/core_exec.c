@@ -3,18 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/01 16:25:16 by monoguei          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/01 15:08:38 by monoguei         ###   ########.fr       */
-=======
-<<<<<<< HEAD
-/*   Updated: 2025/04/25 17:00:59 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/01 14:40:34 by monoguei         ###   ########.fr       */
->>>>>>> 74eb669b58f6d41c2f4459b5b95133d259260ddc
->>>>>>> eb617a4c514e795db0ef1fe9f6c22ce25ebbf2de
+/*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/01 16:02:36 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +30,10 @@ int	kind_of_token(t_data *data, t_input *input)
 	else if (ft_strncmp_end(input_str, "cd", 2) == 0)
 	{
 		b_cd(data);
-		b_cd(data);
 		return (0);
 	}
 	else if (ft_strncmp_end(input_str, "pwd", 3) == 0)
 	{
-		b_pwd(data);
 		b_pwd(data);
 		return (0);
 	}
