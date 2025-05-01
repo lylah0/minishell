@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/25 11:29:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:08:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <dirent.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/types.h>
@@ -142,10 +146,12 @@ void				print_tokens(char **tokens);
 
 /// built-in
 void				b_cd(t_data *data);
+void				b_cd(t_data *data);
 void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
+void				b_pwd(t_data *data);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 
@@ -213,9 +219,10 @@ int					lle_size(t_env *env);
 t_env				*lle_last(t_env *env);
 t_env				*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
 t_env				*lle_new(void *content);
+int					lle_size(t_env *env);
 t_env				*search_env_name(t_env *env, char *name);
-char				*search_env_value_safe(t_env *env, const char *name);
+char				*search_env_value_safe(t_env *env,char *name);
 
-
+// content devient name par defaut, a adapter si beosin
 
 #endif

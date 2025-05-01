@@ -1,6 +1,12 @@
 {
+<<<<<<< HEAD
 	"files.associations": {
 		"libft.h": "c",
 		"system_error": "c"
 	}
+=======
+    "files.associations": {
+        "typeinfo": "c"
+    }
+>>>>>>> 74eb669 (builtins ok git add .)
 }

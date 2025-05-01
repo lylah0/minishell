@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 17:12:35 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:10:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	add_env_var(t_data *data, char *input)
 			extracted_value = current->value;
 		current->value = extracted_value;
 	}
-
 }
 
 

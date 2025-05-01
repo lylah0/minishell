@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/25 10:22:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:08:28 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,8 +191,24 @@ int	main(int ac, char **av, char **envp)
 		// print_token_list(head);
 		restore_terminal();
 		init_signals();
+		if (!ft_strlen(input))
+		{
+			restore_terminal();
+			init_signals();
+		}
+		else
+		{
+			splited_input = parse_input(input);
+			env_path = get_env_path(envp);
+			head = do_parsing(head, splited_input);
+			data->input = head;
+			exec_cmd(head, data, env_path);
+			restore_terminal();
+			init_signals();
+		}
 	}
-	cleanup_memory(input, splited_input);
+			cleanup_memory(input, splited_input);
+	// cleanup_memory(input, splited_input);// [ ] builtin exit
 	return (0);
 }
 
