@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/06 14:07:20 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:10:44 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	b_exit(t_data *data)
 {
 	if (data->input->type == T_CMD_ARG)
 	{
-		printf("T_CMD_ARG\n");
+		// printf("T_CMD_ARG\n");
 		char *arg;
 		arg = data->input->next->token;
 		if (!data->input->next->next)
@@ -50,13 +50,15 @@ void	b_exit(t_data *data)
 			}
 			else
 			{	
-				printf("`bash: exit: %s: numeric argument required`\n", arg);
+				// printf("`bash: exit: %s: numeric argument required`\n", arg);
+				printf(" numeric argument required\n", arg);
 				exit(255);
 			}
 		}
 		else
 		{
-			printf("`bash: exit: too many arguments`\n");
+			// printf("`bash: exit: too many arguments`\n");
+			printf(" too many arguments\n");
 			data->exit_status = 1;
 		}
 	}

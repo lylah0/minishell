@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:25:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:35:33 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,9 @@ t_env *exist_already_in_env(t_env *env, char *name_var)
 	while (env)
 	{
 		if (ft_strncmp(env->name, name_var, ft_strlen(name_var)) == 0)
-		{
-			// if (env->next)
-			// 	// printf("export_T_CMD_ARG.c > exist_already_in_env :\tenv_var with name %s found before %s\n", env->name, env->next->name);
-			// else
-				// printf("export_T_CMD_ARG.c > exist_already_in_env :\tenv_var with name %s found, no next variable\n", env->name);
 			return (env);
-		}
 		else
 			env = env->next;
 	}
-	printf("export_T_CMD_ARG.c > exist_already_in_env :\tno match env_name_linked_list / env_name_input_token \n");
 	return (NULL);
 }
