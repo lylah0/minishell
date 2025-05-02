@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/24 18:03:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:50:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	is_cmd(char *token, char **env)
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "cd", 2) == 0)
+	// if (ft_strncmp(cmd, "echo", 4) == 0)
+	// 	return (1);
+	if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (1);

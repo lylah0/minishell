@@ -6,11 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/24 17:42:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:49:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int exit_code = 0;
 
 char	*get_user_input(const char *prompt)
 {
@@ -19,7 +21,7 @@ char	*get_user_input(const char *prompt)
 	line = readline(prompt);
 	if (!line)
 	{
-		fprintf(stderr, "Error reading line\n");
+//		fprintf(stderr, "Error reading line\n");
 		return (NULL);
 	}
 	return (line);
@@ -48,6 +50,7 @@ t_data	*init_data(t_data *data)
 		return (NULL);
 	data->copy_env = NULL;
 	data->exit_status = 0;
+	data->stdout_redir = 0;
 	return (data);
 }
 
@@ -87,6 +90,8 @@ int	main(int ac, char **av, char **envp)
 	init_env(data, envp);
 	while (1)
 	{
+		data->should_exit = 0;
+		data->exit_status = 0;
 		input = get_user_input("minishell> ");
 		if (!ft_strlen(input))
 		{
@@ -102,10 +107,12 @@ int	main(int ac, char **av, char **envp)
 			head = do_parsing(head, splited_input, data);
 			data->input = head;
 			exec_cmd(head, data, env_path);
+			if (data->should_exit)
+				break;
 			restore_terminal();
-			cleanup_memory(input, splited_input);
 			init_signals();
 		}
 	}
-	return (0);
+	cleanup_memory(input, splited_input);
+	exit(0);
 }

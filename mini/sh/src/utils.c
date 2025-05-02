@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/07 20:37:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:47:02 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,18 @@ void	cleanup_memory(char *line, char **splited_line)
 	j = 0;
 	while (splited_line[j])
 	{
-		free(splited_line[j]);
+		if (splited_line[j])
+			free(splited_line[j]);
 		j++;
 	}
 	free(splited_line);
 }
 
-/// @brief 
-/// @param s1 
-/// @param s2 
-/// @param n 
-/// @return 
+/// @brief
+/// @param s1
+/// @param s2
+/// @param n
+/// @return
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
