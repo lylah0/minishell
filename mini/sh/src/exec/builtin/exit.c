@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 18:10:44 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/03 11:38:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ void	b_exit(t_data *data)
 			if (ft_str_isdigit(arg) == 1)
 			{
 				printf("exit\n");
-				exit(ft_atoi(arg) % 256);
+				data->exit_status = ft_atoi(arg) % 256;
+				exit(data->exit_status);
 			}
 			else
 			{	
 				// printf("`bash: exit: %s: numeric argument required`\n", arg);
-				printf(" numeric argument required\n", arg);
+				ft_putstr_fd(" numeric argument required\n", 2);
 				exit(255);
 			}
 		}

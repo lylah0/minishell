@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:01:04 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/02 20:54:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ int	main(int ac, char **av, char **envp)
 			env_path = get_env_path(envp);
 			head = do_parsing(head, splited_input, data);
 			data->input = head;
-			exec_cmd(head, data, env_path);
+			// exec_cmd(head, data, env_path);
+			kind_of_token(data, head);
 			restore_terminal();
 			init_signals();
 		}
