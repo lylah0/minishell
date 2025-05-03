@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:36:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/03 11:59:40 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
-/// @brief check if env var name syntax is valid
-/// @param s env var name
-/// @return
 bool is_valid_env_var_syntax(char *s)
 {
 	int		i;
@@ -31,17 +28,17 @@ bool is_valid_env_var_syntax(char *s)
 				i++;
 			else
 			{
-				ft_putstr_fd("bash: export: '", 1);
-				ft_printf("%s", s);
-				ft_putendl_fd("': not a valid identifier", 1);
+				// ft_putstr_fd("bash: export: '", 1);
+				// ft_printf("%s", s);
+				ft_putendl_fd(" not a valid identifier", 2);
 				return (FALSE);
 			}
 		}
 		return (TRUE);
 	}
-	ft_putstr_fd("bash: export: '", 1);
-	ft_printf("%s", s);
-	ft_putendl_fd("': not a valid identifier", 1);
+	// ft_putstr_fd("bash: export: '", 1);
+	// ft_printf("%s", s);
+	ft_putendl_fd(" not a valid identifier", 2);
 	return (FALSE);
 }
 
@@ -70,8 +67,10 @@ char	*extract_value(char *input)
 	return (extracted_value);
 }
 
-/// @brief add or maj
-/// @param input
+
+/// @brief Add or update an environment variable in the linked list
+/// @param data Pointer to the data structure containing the environment variables
+/// @param input The input string containing the environment variable in the format "NAME=VALUE"
 void	add_env_var(t_data *data, char *input)
 {
 	t_env	*current = data->env;
@@ -100,7 +99,7 @@ void	add_env_var(t_data *data, char *input)
 		else
 			data->env = new_node;
 	}
-	else //mettre variable a jour
+	else
 	{
 		if (!extracted_value || extracted_value[0] == '\0')
 			extracted_value = current->value;
@@ -108,7 +107,6 @@ void	add_env_var(t_data *data, char *input)
 	}
 
 }
-
 
 /// @brief Check if an environment variable with the given name already exists in the linked list
 /// @param env Pointer to the head of the environment variable linked list

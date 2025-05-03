@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:26:19 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:04:45 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ void    b_echo(t_input *input)
 			input = input->next;
 			continue;
 		}
-		printf("%s", input->token);
+		ft_printf("%s", input->token);
 		if (input->next)
 		{
-			printf(" ");
+			ft_printf(" ");
 			input = input->next;
 		}
 		else
 			break ;
 	}
 	if (flag_newline == OFF)
-		printf("\n");
+		ft_printf("\n");
 }
