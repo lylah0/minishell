@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 17:57:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/03 11:42:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,20 @@ void	b_exit(t_data *data)
 			if (ft_str_isdigit(arg) == 1)
 			{
 				printf("exit\n");
-				exit(ft_atoi(arg) % 256);
+				data->exit_status = ft_atoi(arg) % 256;
+				exit(data->exit_status);
 			}
 			else
-			{
-				printf("`bash: exit: %s: numeric argument required`\n", arg);
+			{	
+				// printf("`bash: exit: %s: numeric argument required`\n", arg);
+				ft_putstr_fd(" numeric argument required\n", 2);
 				exit(255);
 			}
 		}
 		else
 		{
-			printf("`bash: exit: too many arguments`\n");
+			// printf("`bash: exit: too many arguments`\n");
+			printf(" too many arguments\n");
 			data->exit_status = 1;
 		}
 	}
