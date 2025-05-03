@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/03 12:04:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/03 14:54:30 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	cd_path(t_data *data)
 		return ;
 	}
 	update_env(data->env, "PWD", new_pwd);
-	free(new_pwd);//
+	free(new_pwd);
 	data->exit_status = 0;
 }
 
@@ -134,7 +134,10 @@ void b_cd(t_data *data)
 		free (oldpwd);
 	}
 	else if (data->input->next && data->input->next->next)
+	{
 		ft_putstr_fd(" too many arguments\n", 2);
+		data->exit_status = 1;
+	}		
 	else
 	{
 		path = data->input->next->token;
@@ -142,7 +145,7 @@ void b_cd(t_data *data)
 			cd_path(data);
 		else
 		{
-			ft_putstr_fd(" No such a file or directory\n", 2);
+			ft_putstr_fd(" No such file or directory\n", 2);
 			data->exit_status = 1;
 		}
 	}

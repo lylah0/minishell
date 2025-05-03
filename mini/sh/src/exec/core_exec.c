@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:28:47 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/03 14:58:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	b_exit_status(t_data *data)
+{
+	ft_printf("exit status : %i\n", data->exit_status);
+}
 
 int	kind_of_token(t_data *data, t_input *input)
 {
@@ -50,6 +55,11 @@ int	kind_of_token(t_data *data, t_input *input)
 	else if (ft_strncmp_end(input_str, "export", 6) == 0)
 	{
 		b_export(data);
+		return (0);
+	}
+	else if (ft_strncmp_end(input_str, "exs", 3) == 0)
+	{
+		b_exit_status(data);
 		return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/03 12:10:54 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/03 14:46:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	ft_str_isdigit(const char *str)
 /// @param data The structure containing input and exit status information.
 void	b_exit(t_data *data)
 {
-	data->should_exit = 1;
-	data->exit_status = 0;
+	// data->should_exit = 1;
+	// data->exit_status = 0;
 	if (data->input->type == T_CMD_ARG)
 	{
 		char *arg;
@@ -45,12 +45,16 @@ void	b_exit(t_data *data)
 		if (!data->input->next->next)
 		{
 			if (ft_str_isdigit(arg) == 1)
+			{
 				data->exit_status = ft_atoi(arg) % 256;
+				exit(data->exit_status);
+			}
 			else
 			{	
 				ft_putstr_fd(" numeric argument required\n", 2);
 				// exit(255);
-				exit(2);
+				data->exit_status = 2;
+				exit(data->exit_status);
 			}
 		}
 		else
@@ -62,10 +66,12 @@ void	b_exit(t_data *data)
 	else
 	{
 		ft_putstr_fd("exit\n", 1);
-		exit(0);
+		exit(data->exit_status);
 	}
 }
 
 // `echo $?` pour tester dans le terminal et obtenir le exit_code
 // [ ] si exit dans pipe !!! ca ne quitte pas le term !!!
 // [ ] free proprement ce quil faut !!!
+
+
