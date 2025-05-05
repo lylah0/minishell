@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/09 15:39:32 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:25:41 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ __sighandler_t	handler_sigint(void)
 void	init_signals(void)
 {
 	struct termios term;
+	signal(SIGPIPE, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler_sigint());
 	if (tcgetattr(0, &g_term_backup) == 0)

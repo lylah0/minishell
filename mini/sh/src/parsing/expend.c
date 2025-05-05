@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/22 15:34:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:10:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+char	*safe_strjoin_replace(char **dest, const char *suffix)
+{
+	char	*tmp;
+	char	*safe_src;
+
+	if (!suffix)
+		return (*dest);
+	if (*dest)
+		safe_src = ft_strdup(*dest);
+	else
+		safe_src = ft_strdup("");
+	if (!safe_src)
+		return (NULL);
+	tmp = ft_strjoin(safe_src, suffix);
+	free(safe_src);
+	if (*dest)
+		free(*dest);
+	*dest = tmp;
+	return (*dest);
+}
 
 char	*extract_var_name(const char *str, int *i)
 {
@@ -20,7 +41,7 @@ char	*extract_var_name(const char *str, int *i)
 	if (str[*i] == '?')
 	{
 		(*i)++;
-		return ft_strdup("?");
+		return (ft_strdup("0"));
 	}
 	while (ft_isalnum(str[*i + len]) || str[*i + len] == '_')
 		len++;
@@ -29,25 +50,28 @@ char	*extract_var_name(const char *str, int *i)
 	return (name);
 }
 
-static void	handle_env_var_expansion(const char *src, int *i, char **result)
-// static void	handle_env_var_expansion(t_env *env, const char *src, int *i, char **result)
+static void	handle_env_var_expansion(const char *src, int *i, char **result, t_data *data)
 {
 	char	*tmp;
 	char	*var_name;
 	char	*var_value;
 
 	(*i)++;
-	if (!src[*i] || (!ft_isalnum(src[*i]) && src[*i] != '_' && src[*i] != '?'))
+	if (src[*i] == '?')
 	{
-		tmp = ft_strjoin(*result, "$");
-		free(*result);
-		*result = tmp;
+		(*i)++;
+		var_value = ft_strdup("0");  // temporairement 0
+		safe_strjoin_replace(result, var_value);
+		free(var_value);
+		return;
+	}
+	if (!src[*i] || (!ft_isalnum(src[*i]) && src[*i] != '_'))
+	{
+		safe_strjoin_replace(result, "$");
 		return;
 	}
 	var_name = extract_var_name(src, i);
-	var_value = getenv(var_name); //TO DO : utiliser env du programme et pas du pc
-	// t_env *current = search_env_name(env, var_name);// ajouter t_env *env au prototype
-	// var_value = current->value;// va chercher la value de lenv du shell original et ne reprend donc pas les modifications apportees a notre env de minishell
+	var_value = my_getenv(data, var_name);
 	if (!var_value)
 		var_value = "";
 	tmp = ft_strjoin(*result, var_value);
@@ -56,38 +80,46 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result)
 	free(var_name);
 }
 
-char	*expand_token_string(const char *src)
+
+char	*expand_token_string(const char *src, t_data *data)
 {
 	int		i = 0;
 	char	*result;
 	char	*tmp;
 	char	tmp_str[2];
+	char	*old;
 
 	result = ft_calloc(1, sizeof(char));
+	if (!result)
+		return (NULL);
 	while (src[i])
 	{
 		if (src[i] == '$')
-			handle_env_var_expansion(src, &i, &result);
+		{
+			handle_env_var_expansion(src, &i, &result, data);
+			continue;
+		}
 		else
 		{
 			tmp_str[0] = src[i];
 			tmp_str[1] = '\0';
 			tmp = ft_strjoin(result, tmp_str);
-//			free(result);
+			old = result;
 			result = tmp;
+			free(old);
 			i++;
 		}
 	}
 	return (result);
 }
 
-
-void is_env_var(t_input *input)
+void is_env_var(t_input *input, t_data *data)
 {
 	t_input *curr = input;
 	char	*expanded;
 
-	expanded = expand_token_string(curr->token);
+	expanded = expand_token_string(curr->token, data);
+	free(input->token);
 	input->token = expanded;
 }
 

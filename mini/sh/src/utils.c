@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/18 16:13:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:47:02 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@ void	cleanup_memory(char *line, char **splited_line)
 	j = 0;
 	while (splited_line[j])
 	{
-		free(splited_line[j]);
+		if (splited_line[j])
+			free(splited_line[j]);
 		j++;
 	}
 	free(splited_line);
 }
 
-/// @brief Compares two strings up to n characters.
-/// @param s1 The first string to compare.
-/// @param s2 The second string to compare.
-/// @param n The maximum number of characters to compare.
-/// @return An integer less than, equal to, or greater than zero if s1 is found, 
-/// respectively, to be less than, to match, or be greater than s2.
+/// @brief
+/// @param s1
+/// @param s2
+/// @param n
+/// @return
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -48,20 +48,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	if (i < n && (s1[i] || s2[i]))
 		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 	return (0);
-}
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 // copie colle avec malloc ET ajoute = a la fin
