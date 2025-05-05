@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 16:57:49 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:27:17 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ typedef struct s_data
 	t_input			*input; // ligne de commande
 	t_env			*env;     // tableau envp
 	char			**copy_env;
-	int				exit_status;
 	int				should_exit;
 	int				stdout_redir;
+	int				stdin_redir;
 }					t_data;
 
 // FONCTIONS LYLAH
@@ -158,6 +158,7 @@ void				b_echo(t_input *input);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
+char				*extract_name(char *input);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);

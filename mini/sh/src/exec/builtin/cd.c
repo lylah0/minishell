@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:25:52 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:28:31 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
 	if (current == NULL)
 	{
-		perror("bash: cd: env_var not found");
+		perror("minishell: cd: env_var not found");
 		return NULL;
 	}
 	free (current->value);
@@ -58,7 +58,7 @@ void cd_return(t_data *data)
 	// if (new_pwd == NULL) // doublon avec verif dans cd main
 	// {
 	// 	perror("OLDPWD");
-	// 	data->exit_status = 1;
+	// 	exit_code = 1;
 	// 	return ;
 	// }
 
@@ -66,7 +66,7 @@ void cd_return(t_data *data)
 	if (old_pwd == NULL)
 	{
 		perror("PWD");
-		data->exit_status = 1;
+		exit_code = 1;
 		return ;
 	}
 
@@ -74,14 +74,14 @@ void cd_return(t_data *data)
 	{
 		perror("cd -");
 		free(new_pwd);
-		data->exit_status = 1;
+		exit_code = 1;
 		return ;
 	}
 	update_env(data->env, "OLDPWD", old_pwd);
 	update_env(data->env, "PWD", new_pwd);
 	free(new_pwd);
 	free(old_pwd);
-	data->exit_status = 0;
+	exit_code = 0;
 }
 // lylah [x] commande invalide ajouter message dans terminal
 
@@ -97,14 +97,14 @@ void	cd_path(t_data *data)
 	{
 		perror("getcwd");
 		// perror("PWD");
-		data->exit_status = 1;
+		exit_code = 1;
 		return ;
 	}
 	if (chdir(data->input->next->token) == -1)
 	{
 		perror("cd <path>");
 		free(old_pwd);
-		data->exit_status = 1;
+		exit_code = 1;
 		return ;
 	}
 	update_env(data->env, "OLDPWD", old_pwd);
@@ -114,12 +114,12 @@ void	cd_path(t_data *data)
 	if (new_pwd == NULL)
 	{
 		perror("getcwd");
-		data->exit_status = 1;
+		exit_code = 1;
 		return ;
 	}
 	update_env(data->env, "PWD", new_pwd);
 	free(new_pwd);//
-	data->exit_status = 0;
+	exit_code = 0;
 }
 #define OK 0
 #define ERR 1
@@ -142,38 +142,36 @@ void b_cd(t_data *data)
 	char		*path;
 	char		*oldpwd;
 
-	if (data->input->type == T_CMD)
+	if (data->input->next && data->input->next->next)
 	{
-		cd_home(data->env);
-		// b_pwd(data);
+		ft_putendl_fd("cd: too many arguments", 2);
+		exit_code = 1;
+		return;
 	}
+	else if (data->input->type == T_CMD)
+		cd_home(data->env);
 	else if (ft_strncmp(data->input->next->token, "-", 1) == 0 && !data->input->next->next)
 	{
 		oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
 		if (oldpwd == NULL)
 		{
 			perror("OLDPWD");
+			exit_code = 1;
 			return ;
 		}
 		cd_return(data);
 		b_pwd(data);// need to stay to be like bash --posix
 		free (oldpwd);
 	}
-	else if (data->input->next && data->input->next->next)
-		perror("cd: too many arguments");
 	else
 	{
 		path = data->input->next->token;
-		// if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && check_opening_dir(path) == OK)
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && !data->input->next->next)
-		{
 			cd_path(data);
-			// b_pwd(data);
-		}
 		else
 		{
-			perror("cd: path invalid");
-			data->exit_status = 1;
+			ft_putendl_fd("cd: No such file or directory", 2);
+			exit_code = 1;
 		}
 	}
 }

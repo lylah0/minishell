@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:49:09 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:29:14 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ t_data	*init_data(t_data *data)
 	if (!data->env)
 		return (NULL);
 	data->copy_env = NULL;
-	data->exit_status = 0;
 	data->stdout_redir = 0;
+	data->stdin_redir = 0;
 	return (data);
 }
 
@@ -91,7 +91,6 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		data->should_exit = 0;
-		data->exit_status = 0;
 		input = get_user_input("minishell> ");
 		if (!ft_strlen(input))
 		{
@@ -114,5 +113,5 @@ int	main(int ac, char **av, char **envp)
 		}
 	}
 	cleanup_memory(input, splited_input);
-	exit(0);
+	exit(exit_code);
 }

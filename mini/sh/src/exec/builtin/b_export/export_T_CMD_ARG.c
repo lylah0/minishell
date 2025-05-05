@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:36:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:47:47 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,22 @@
 /// @brief check if env var name syntax is valid
 /// @param s env var name
 /// @return
-bool is_valid_env_var_syntax(char *s)
+bool	is_valid_env_var_syntax(char *s)
 {
 	int		i;
 	char	c;
 
 	i = 0;
-	if (s[i] == '_' || ft_isalpha(s[i]) == TRUE)
+	if (!s || !*s || ft_isdigit(s[0]) || s[0] == '=')
+		return (FALSE);
+	while (s[i] && s[i] != '=')
 	{
+		c = s[i];
+		if (!(ft_isalnum(c) || c == '_'))
+			return (FALSE);
 		i++;
-		while (s[i])
-		{
-			c = s[i];
-			if (c == '_' || ft_isalnum(c) || c == '=')
-				i++;
-			else
-			{
-				ft_putstr_fd("bash: export: '", 1);
-				ft_printf("%s", s);
-				ft_putendl_fd("': not a valid identifier", 1);
-				return (FALSE);
-			}
-		}
-		return (TRUE);
 	}
-	ft_putstr_fd("bash: export: '", 1);
-	ft_printf("%s", s);
-	ft_putendl_fd("': not a valid identifier", 1);
-	return (FALSE);
+	return (TRUE);
 }
 
 char	*extract_name(char *input)
@@ -66,7 +54,8 @@ char	*extract_value(char *input)
 	if (!separator)
 		return (ft_strdup(""));
 	else
-		extracted_value = ft_substr(input, separator - input + 1, ft_strlen(input) - (separator - input + 1));
+		extracted_value = ft_substr(input, separator - input + 1,
+				ft_strlen(input) - (separator - input + 1));
 	return (extracted_value);
 }
 
@@ -74,47 +63,48 @@ char	*extract_value(char *input)
 /// @param input
 void	add_env_var(t_data *data, char *input)
 {
-	t_env	*current = data->env;
-	char 	*extracted_value;
-	char 	*extracted_name;
+	t_env	*current;
+	char	*extracted_value;
+	char	*extracted_name;
+	t_env	*new_node;
+	t_env	*env_last;
+
+	current = data->env;
 	(void)input;
 	extracted_name = extract_name(input);
 	extracted_value = extract_value(input);
 	current = exist_already_in_env(data->env, extracted_name);
 	if (current == NULL)
 	{
-		t_env *new_node = malloc(sizeof(t_env));
+		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 		{
 			perror("malloc");
-			return;
+			return ;
 		}
 		new_node->name = extracted_name;
 		if (extracted_value[1])
 			new_node->value = extracted_value;
 		new_node->next = NULL;
-
-		t_env *env_last = lle_last(data->env);
+		env_last = lle_last(data->env);
 		if (env_last)
 			env_last->next = new_node;
 		else
 			data->env = new_node;
 	}
-	else //mettre variable a jour
+	else // mettre variable a jour
 	{
 		if (!extracted_value || extracted_value[0] == '\0')
 			extracted_value = current->value;
 		current->value = extracted_value;
 	}
-
 }
-
 
 /// @brief Check if an environment variable with the given name already exists in the linked list
 /// @param env Pointer to the head of the environment variable linked list
 /// @param name_var Name of the environment variable to search for
 /// @return Pointer to the t_env node if the variable exists, NULL otherwise
-t_env *exist_already_in_env(t_env *env, char *name_var)
+t_env	*exist_already_in_env(t_env *env, char *name_var)
 {
 	if (!name_var || !env)
 		return (NULL);

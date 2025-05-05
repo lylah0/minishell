@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:26:32 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:10:54 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	b_pwd(t_data *data)
 	current = search_env_name(data->env, "PWD");
 	if (!current)
 	{
-		perror("pwd");
+		ft_putendl_fd(" too many arguments", 2);
 		return;
 	}
 	printf("%s\n", current->value);

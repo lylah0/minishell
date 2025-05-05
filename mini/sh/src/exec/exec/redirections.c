@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 16:52:58 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:48:54 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ void	simple_redir(t_input *current, t_data *data)
 	{
 		fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-			return;
+		{
+			perror(current->next->token);
+			exit_code = 1;
+			exit (1);
+		}
 		dup2(fd, 1);
 		close(fd);
 		data->stdout_redir = 1;
@@ -72,9 +76,14 @@ void	simple_redir(t_input *current, t_data *data)
 	{
 		fd = open(current->next->token, O_RDONLY);
 		if (fd == -1)
-			return;
+		{
+			perror(current->next->token); //a modifier pour exit code
+			exit_code = 1;
+			exit (1);
+		}
 		dup2(fd, 0);
 		close(fd);
+		data->stdin_redir = 1;
 	}
 }
 

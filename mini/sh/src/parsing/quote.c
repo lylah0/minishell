@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 15:01:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:54:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ char	*handle_env_variable(char *str, int *i)
 	if (str[*i + 1] == '?')
 	{
 		*i += 2;
-		return ft_strdup("0");
+		var_value = ft_itoa(exit_code);
+		return var_value;
 	}
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
