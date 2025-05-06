@@ -6,13 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 16:27:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:52:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_input	*tokenize(char **input)
+t_input	*tokenize(char **input, t_data *data)
 {
 	int		i;
 	t_input	*tail;
@@ -24,7 +24,7 @@ t_input	*tokenize(char **input)
 	tail = malloc(sizeof(t_input));
 	if (!tail)
 		exit(1);
-	tail->token = input[0];
+	tail->token = ft_strdup(input[0]);
 	tail->prev = NULL;
 	tail->next = NULL;
 	head = tail;
@@ -33,7 +33,7 @@ t_input	*tokenize(char **input)
 		new_node = malloc(sizeof(t_input));
 		if (!new_node)
 			exit(1);
-		new_node->token = input[i];
+		new_node->token = ft_strdup(input[i]);
 		new_node->prev = tail;
 		new_node->next = NULL;
 		tail->next = new_node;
@@ -43,19 +43,19 @@ t_input	*tokenize(char **input)
 	current = head;
 	while (current)
 	{
-		current->type = get_token_type(current, current->token);
+		current->type = get_token_type(current, current->token, data);
 		current = current->next;
 	}
 	is_cmd_arg(head);
 	return (head);
 }
 
-t_token_type	get_token_type(t_input *token, char *input)
+t_token_type	get_token_type(t_input *token, char *input, t_data *data)
 {
 	if (ft_strchr(input, '\'') || ft_strchr(input, '"') || ft_strchr(input,
 			'$'))
 	{
-		parse_and_expand_token(token);
+		parse_and_expand_token(token, data);
 		return (T_WORD);
 	}
 	if (ft_strncmp(input, "|", 1) == 0)

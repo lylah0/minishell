@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afloras <afloras@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:57 by afloras           #+#    #+#             */
-/*   Updated: 2024/01/27 15:57:58 by afloras          ###   ########.fr       */
+/*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
+/*   Updated: 2025/04/23 15:07:09 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+/// @brief built-in env `env`
+/// @param data
+void	b_env(t_data *data)
 {
-	if (!lst)
-		return ;
-	if (del)
-		(*del)(lst->content);
-	free(lst);
+	print_lle(data);
 }

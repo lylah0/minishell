@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 19:57:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:36:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ __sighandler_t	handler_sigint(void)
 void	init_signals(void)
 {
 	struct termios term;
-	signal(SIGQUIT, SIG_IGN);//ctrl+/
-	signal(SIGINT, handler_sigint());//ctrl+c
+	signal(SIGPIPE, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handler_sigint());
 	if (tcgetattr(0, &g_term_backup) == 0)
 	{
 		term = g_term_backup;

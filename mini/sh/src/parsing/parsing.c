@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 14:12:24 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:40:31 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,7 @@ void	if_operator(char *input, char **array, int *k, int i)
 		len++;
 	array[i] = malloc(sizeof(char) * (len + 1));
 	if (!array[i])
-	{
-		perror("malloc");
 		return ;
-	}
 	while (input[*k] == '|' || input[*k] == '<' || input[*k] == '>')
 	{
 		array[i][j] = input[*k];

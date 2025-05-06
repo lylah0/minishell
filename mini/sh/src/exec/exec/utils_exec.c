@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afloras <afloras@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:57 by afloras           #+#    #+#             */
-/*   Updated: 2024/01/27 15:57:58 by afloras          ###   ########.fr       */
+/*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/04/23 17:14:56 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+int	is_parent_builtin(char *token)
 {
-	if (!lst)
-		return ;
-	if (del)
-		(*del)(lst->content);
-	free(lst);
+	if (!ft_strncmp(token, "cd", 3)
+		|| !ft_strncmp(token, "export", 7)
+		|| !ft_strncmp(token, "unset", 6)
+		|| !ft_strncmp(token, "exit", 5))
+		return (1);
+	return (0);
 }
+

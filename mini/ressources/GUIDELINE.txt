@@ -15,10 +15,6 @@ Version basique :
 7. Optionally waits for the command to complete and collects its exit status (see [Exit Status](https://www.gnu.org/software/bash/manual/bash.html#Exit-Status)).
 	[ ] print : exit status
 
-
-
-
-
 ___To do :___
 	[Lylah] Run simple commands with absolute, relative path (e.g. /bin/ls, ../bin/ls)
 	[Lylah] Run simple commands without a path (e.g. ls, cat, grep, etc…)
@@ -27,36 +23,34 @@ OK	[Moni] Have a working history (you can navigate through commands with up/down
 	[ ] Implement pipes (|)
 	[ ] Implement redirections (<, >, >>)
 	[ ] Implement the here-doc (<<)
-	[Moni] environ , env, name=variable
+	[Moni] environ, env, name=variable
 	[Lylah] Handle double quotes ("") and single quotes (''), which should escape special characters, beside $ for double quotes.
 Mon	[ ] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
 	[ ] Implement the following built-ins:
-		[ x ] — echo (option -n only)
-		[ x ] — exit
+		[...] — echo (option -n only)
+		[...] — exit
 		[ x ] — env (with no options or arguments)
-		[ x ] — export (with no options)
-		[ x ] — unset (with no options)
-		[   ] — cd
-		[...] — pwd (a mod apres env)
+FUCK	[.  ] — export (with no options)
+		[   ] — unset (with no options)  	--> lle_del_one
+		[ x ] — cd							--> [ ]	maj OLDPWD
+		[...] — pwd (a mod apres env)		--> me semble ok
 
-__moni__
- - Lylah : je moccupe de env
- - recuperer env sous forme de liste chainee Name = value
- - fonction b_env -> afficher la liste chainee
- - fonction c_cd -> modifier oldpwd, mettre a jour pwd
- - mettre a jour pwd pour que ca corresponde a pwd (maj) donc selon environ
- - export
- - unset
-		[ x ] — env (with no options or arguments)
-FUCK	[ x ] — export (with no options)
-		[ x ] — unset (with no options)  	--> lle_del_one
-		[   ] — cd
-				[ ] -> cd
-				[ ] -> cd -
-				[ ] -> cd ..
-				[ ] -> cd <path>
-		[   ] — pwd
-				[ ]	-> MAJ env PWD et OLDPWD
 
 _________MONI___________
+
+[x] faire de l'ordre
+[x] commenter mes fonctions
+[keep_on_trying] etre gentille avec Moni du futur
+[ ] avancer dans les builtins
+	[ ] export
+		[x] tri alphabetique
+		[ ] structure
+		[ ] ajout variable
+		[ ] modifier variable
+	[ ] unset
+		[ ] supprimer variable
+	[ ]	cd
+		[ ] verifier path
+	[x] echo
+	[ ]	exit
 

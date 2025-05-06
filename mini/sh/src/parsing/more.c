@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/20 21:37:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:50:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	is_cmd(char *token, char **env)
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "cd", 2) == 0)
+	// if (ft_strncmp(cmd, "echo", 4) == 0)
+	// 	return (1);
+	if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (1);
@@ -65,8 +65,19 @@ void	first_word(char **input, char **env)
 	//	free(env_path);
 	if (!cmd_path)
 	{
-		// printf("minishell: command not found: %s\n", input[0]);// smeble ne pas detecter cd, les autre builtin ok... mystere...
+		printf("minishell: command not found: %s\n", input[0]);
 		return ;
 	}
-	// printf("\ncmd found\n");
+	printf("\ncmd found\n");
+}
+
+char	*my_getenv(t_data *data, char *var_name)
+{
+	while (data->env->next && !(ft_strncmp(data->env->name, var_name, ft_strlen(var_name)) == 0
+		&& data->env->name[ft_strlen(var_name)] == '\0'))
+		data->env = data->env->next;
+	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
+		return (data->env->value);
+	else
+		return (NULL);
 }

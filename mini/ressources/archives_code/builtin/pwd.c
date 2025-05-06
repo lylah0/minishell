@@ -3,21 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 15:37:35 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:26:32 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
+/// @brief built-in print working directory `pwd`
+/// @param data Pointer to the data structure containing environment variables
 void	b_pwd(t_data *data)
 {
-	char	*pwd_value;
-	pwd_value = search_env_value_safe(data->env, "PWD");
-	
-	ft_printf("%s\n", pwd_value);
-}
+	t_env *current;
 
-// [OK] print pwd
+	current = search_env_name(data->env, "PWD");
+	if (!current)
+	{
+		perror("pwd");
+		return;
+	}
+	printf("%s\n", current->value);
+}

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/07 19:44:09 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:32:16 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	print_lle(t_data *data)
 	while (current)
 	{
 		printf("%s", current->name);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
-		printf("=%s\n", current->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+		if (current->value != NULL)
+			printf("=%s\n", current->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		current = current->next;
 	}
 }

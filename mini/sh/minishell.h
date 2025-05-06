@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/01 15:55:48 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:27:53 by monoguei         ###   ########.fr       */
+/*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/06 15:33:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <dirent.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <dirent.h>
+# include <stdarg.h>
+
 
 # define TRUE 1
 # define FALSE 0
@@ -77,6 +75,8 @@ typedef struct s_data
 	t_env			*env;     // tableau envp
 	char			**copy_env;
 	int				exit_status;
+	int				should_exit;
+	int				stdout_redir;
 }					t_data;
 
 // FONCTIONS LYLAH
@@ -97,13 +97,13 @@ void				if_quotes(char *input, char **array, int *k, int *i);
 int					while_quotes(char *input, int i);
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
-void				is_env_var(t_input *input);
+void 				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
 void				print_token_list(t_input *head);
-char				*handle_double_quote(char *str, int *i);
+char				*handle_double_quote(char *str, int *i, t_data *data);
 char				*handle_env_variable(char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
-char				*expand_token_string(const char *src);
+char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
 
 // fonctions execution
@@ -113,24 +113,37 @@ void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
-void				exec_parent(int *prev_pipe, t_input **current, int fd[2]);
-void				exec_child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
+void				parent(int *prev_pipe, t_input **current, int fd[2], t_data **data);
+void				child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
+void				exec(t_input *current, t_data *data, char *env_path);
+int					is_parent_builtin(char *token);
+
+//fonctions redirection
+
+void				simple_redir(t_input *current, t_data *data);
+void				redir(t_input *current, t_data *data);
+void				heredoc_append(t_input *current, t_data *data);
+void				heredoc(t_input *current);
+int					validate_redirections(t_input *current);
 
 // fonctions token
 
 int					is_cmd(char *token, char **env);
-t_input				*tokenize(char **input);
-t_token_type		get_token_type(t_input *token, char *input);
+t_input				*tokenize(char **input, t_data *data);
+t_token_type		get_token_type(t_input *token, char *input, t_data *data);
 void				is_cmd_arg(t_input *token);
 // int			num_var(t_input *token);
-void				parse_and_expand_token(t_input *token);
+void				parse_and_expand_token(t_input *token, t_data *data);
 char				*handle_single_quote(char *str, int *i);
+char				*my_getenv(t_data *data, char *var_name);
 
 // fonctions exit code
 
 void				get_exit_code(void);
+void	ft_printf_stderr(const char *s, ...);
+
 
 // fonctions path
 char				**split_path(char *fullpath);
@@ -146,16 +159,14 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_cd(t_data *data);
-void				b_cd(t_data *data);
-void				b_echo(t_input *input);
+void				b_echo(t_data *data);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
 void				b_pwd(t_data *data);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
-
+void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input);
 
 // init_environment // b_export
@@ -199,32 +210,29 @@ void				cleanup_memory(char *line, char **splited_line);
 char				*ft_strdup_equal(const char *src);
 size_t				ft_strcat(char *dest, const char *src);
 int					ft_strncmp_end(char *s1, char *s2, size_t n);
-int					ft_strcmp(const char *s1, const char *s2);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
-
 
 // signals.c
 __sighandler_t		handler_sigint(void);
 void				init_signals(void);
 void				restore_terminal(void);
 
+
 // UTILS/lle
+t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
 void				lle_add_front(t_env **env, t_env *new1);
 void				lle_clear(t_env **env, void (*del)(void *));
 void				lle_del_one(t_env *env, void (*del)(void *));
 void				lle_iter(t_env *env, void (*f)(void *));
-int					lle_size(t_env *env);
 t_env				*lle_last(t_env *env);
-t_env				*lle_map(t_env *env, void *(*f)(void *),void (*del)(void *));
+t_env				*lle_map(t_env *env, void *(*f)(void *),
+						void (*del)(void *));
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
-t_env				*search_env_name(t_env *env, char *name);
 char				*search_env_value_safe(t_env *env, char *name);
-t_env	*update_env(t_env *env, char *env_to_update, char *new_value);
-
 // content devient name par defaut, a adapter si beosin
 
 #endif

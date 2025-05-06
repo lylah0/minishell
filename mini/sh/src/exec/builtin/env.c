@@ -6,15 +6,37 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/04 11:57:01 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:31:04 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in env `env`
-/// @param data 
-void	b_env(t_data *data)
+void	b_env(t_data* data)
 {
+	t_input *current;
+
+	current = data->input;
+	while (current->next)
+	{
+		current = current->next;
+		if (ft_strncmp_end(current->token, "env", 3) != 0)
+		{
+			ft_printf_stderr("env: '%s': No such file or directory\n", current->token);
+			return ;
+		}
+	}
 	print_lle(data);
 }
+
+/*
+tests
+	env
+	print env ok
+
+	env env
+	print 1x env.
+
+[ ]	env hola
+	print env		--> "env: ʻhola’: No such file or directory
+*/
