@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/05 18:09:11 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:15:53 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <dirent.h>
+# include <stdarg.h>
+
 
 # define TRUE 1
 # define FALSE 0
@@ -139,6 +141,8 @@ char				*my_getenv(t_data *data, char *var_name);
 // fonctions exit code
 
 void				get_exit_code(void);
+void	ft_printf_stderr(const char *s, ...);
+
 
 // fonctions path
 char				**split_path(char *fullpath);

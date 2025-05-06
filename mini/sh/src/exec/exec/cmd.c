@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 16:56:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:30:29 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,10 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 			int devnull = open("/dev/null", O_WRONLY);
 			if (devnull != -1)
 			{
-				dup2(devnull, 2);
+				// dup2(devnull, 2);
+				// avant d'exécuter le child…
+				if (data->stdout_redir >= 0)
+					dup2(data->stdout_redir, STDERR_FILENO);
 				close(devnull);
 			}
 			child(prev_pipe, current, fd, env_path, data);

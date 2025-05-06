@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/05 18:08:35 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:22:56 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int	kind_of_token(t_data *data, t_input *input)
 		b_pwd(data);
 		return (0);
 	}
-	// else if (ft_strncmp_end(input_str, "env", 3) == 0)
-	// {
-	// 	b_env(data);
-	// 	return (0);
-	// }
+	else if (ft_strncmp_end(input_str, "env", 3) == 0)
+	{
+		b_env(data);
+		return (0);
+	}
 	// else if (ft_strncmp_end(input_str, "unset", 5) == 0)
 	// {
 	// 	b_unset(data);
