@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 15:31:04 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:34:29 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ tests
 	env env
 	print 1x env.
 
-[ ]	env hola
-	print env		--> "env: ʻhola’: No such file or directory
+	env hola 
+	"env: ʻhola’: No such file or directory
 */
