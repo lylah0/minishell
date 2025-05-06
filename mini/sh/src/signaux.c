@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signaux.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 15:25:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:39:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
