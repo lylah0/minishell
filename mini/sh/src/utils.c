@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 14:47:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:19:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,20 +112,37 @@ int	ft_strncmp_end(char *s1, char *s2, size_t n)
 	i = 0;
 	if (n == 0)
 		return (0);
-	if (ft_strlen(s1) == n)
+	while (i < n && s1[i] && s2[i])
 	{
-		while (s1[i] && s2[i] && n > 1)
-		{
-			if (s1[i] != s2[i])
-				return ((char)s1[i] - (char)s2[i]);
-			i++;
-			n--;
-		}
-		return (0);
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	else
-		return (-1);
+	if (i < n && (s1[i] || s2[i]))
+		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	return (0);
 }
+// int	ft_strncmp_end(char *s1, char *s2, size_t n)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	if (n == 0)
+// 		return (0);
+// 	if (ft_strlen(s1) == n)
+// 	{
+// 		while (s1[i] && s2[i] && n > 1)
+// 		{
+// 			if (s1[i] != s2[i])
+// 				return ((char)s1[i] - (char)s2[i]);
+// 			i++;
+// 			n--;
+// 		}
+// 		return (0);
+// 	}
+// 	else
+// 		return (-1);
+// }
 
 // copie colle avec malloc
 char	*ft_strdup(const char *src)
@@ -145,6 +162,11 @@ char	*ft_strdup(const char *src)
 		i++;
 	}
 	dest[i] = 0;
+	if (dest == NULL)
+	{
+		free(dest);
+		exit_code = 1;
+	}	
 	return (dest);
 }
 

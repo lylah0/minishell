@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/05 17:53:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:38:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_env	*search_env_name(t_env *env, char *name)
 /// @param env Pointeur vers la tête de la liste chaînée des variables d'environnement.
 /// @param name Le nom de la variable d'environnement à rechercher.
 /// @return La valeur de la variable d'environnement si elle existe et est définie, NULL sinon.
-char *search_env_value_safe(t_env *env, char *name)
+char *search_env_value(t_env *env, char *name)
 {
 	t_env *var = search_env_name(env, name);
 	if (!var || !var->value)

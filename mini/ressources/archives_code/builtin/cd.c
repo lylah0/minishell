@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:25:52 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:54:21 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
+/// @brief Met à jour une variable d'environnement avec une nouvelle valeur
+/// @param env L'environnement dans lequel la variable doit être mise à jour
+/// @param env_to_update Le nom de la variable d'environnement à mettre à jour
+/// @param new_value La nouvelle valeur à attribuer à la variable
+/// @return Un pointeur vers la variable mise à jour, ou NULL en cas d'erreur
 t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 {
 	t_env	*current;
@@ -38,7 +43,7 @@ void cd_home(t_env *env)
 	update_env(env, "OLDPWD", old_pwd);
 	new_pwd = getenv("HOME");
 
-	if (new_pwd && search_env_value_safe(env, "HOME") == NULL)// getenv(HOME) ??
+	if (new_pwd && search_env_value(env, "HOME") == NULL)// getenv(HOME) ??
 	{
 		perror("minishell: cd HOME not set");
 		return ;

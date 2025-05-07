@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 15:15:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:42:56 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,18 +219,17 @@ void				restore_terminal(void);
 
 
 // UTILS/lle
-t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
 void				lle_add_front(t_env **env, t_env *new1);
 void				lle_clear(t_env **env, void (*del)(void *));
 void				lle_del_one(t_env *env, void (*del)(void *));
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
-t_env				*lle_map(t_env *env, void *(*f)(void *),
-						void (*del)(void *));
+t_env				*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *));
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
-char				*search_env_value_safe(t_env *env, char *name);
+t_env				*search_env_name(t_env *env, char *name);
+char				*search_env_value(t_env *env, char *name);
 // content devient name par defaut, a adapter si beosin
 
 #endif
