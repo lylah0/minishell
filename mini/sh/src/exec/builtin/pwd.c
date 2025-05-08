@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/07 16:59:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 09:53:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,4 @@ void	b_pwd(t_data *data)
 	pwd_value = search_env_value(data->env, "PWD");
 	ft_printf("%s\n", pwd_value);
 }
-
 // [OK] print pwd

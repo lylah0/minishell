@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 21:30:16 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 08:44:19 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	exit_multiple_arg(void)
 
 void	b_exit(t_data *data)
 {
-	exit_code = 0;
+	// exit_code = 0;// est ce vraiment necessaire de mettre a zero ici, plutot dans la boucle dans l'init du main
 	if (!data->input->next)// aucun argument
 		exit_no_arg();	
 	else if (data->input->next)
@@ -115,4 +115,14 @@ TEST
 	exit hello you	"exit", "bash: exit: hello: numeric argument required", quit, echo $? = 2
 	exit hello 42	"exit", "bash: exit: hello: numeric argument required", quit, echo $? = 2
 
+
+
+
+
+bash-5.1$ exit 9999999999999
+
+
+exit
+moni@moni:~/Desktop/CODE$ echo $?
+255
 */

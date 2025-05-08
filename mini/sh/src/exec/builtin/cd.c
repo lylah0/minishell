@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/07 18:40:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 09:43:40 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	cd_path(t_data *data)
 	new_oldpwd_value = getcwd(NULL, 0);
 	if (chdir(data->input->next->token) == -1)
 	{
-		perror("cd <path>");
+		ft_printf_stderr("bash: cd: %s: ", data->input->next->token);
+		perror("");
 		free(new_oldpwd_value);
 		exit_code = 1;
 		return ;
@@ -89,28 +90,22 @@ void	cd_path(t_data *data)
 void b_cd(t_data *data)
 {
 	t_input		*arg;
-	struct stat	st;
-
 
 	arg = data->input->next;
 	if (!arg)
 		cd_home(data);
 	else if (arg && ft_strncmp_end(arg->token, "-", 1) == 0)
 	{
-		cd_return(data);
-		printf("cd -");// a supprimer
-		b_pwd(data);
-	}
-	else if (arg && !arg->next)
-	{	
-		if (stat(arg->token, &st) == 0 && S_ISDIR(st.st_mode))
-			cd_path(data);
+		if (ft_strlen(arg->token)>1)
+			ft_printf_stderr("option not needed for minishell\n"); //seulement cd - est géré, pas d'options -*
 		else
 		{
-			ft_printf_stderr("cd: %s: No such file or directory\n", arg->token);
-			exit_code = 1;
+			cd_return(data);
+			b_pwd(data);
 		}
 	}
+	else if (arg && !arg->next)
+		cd_path(data);
 	else
 	{
 		ft_printf_stderr("bash: cd: too many arguments\n");
@@ -135,7 +130,7 @@ OK	cd 'srcs'
 OK	cd "srcs"
 OK	cd /etc				bash: cd: /mini: No such file or directory
 OK	cd sr
-[ ]	cd Makefile			cd: Makefile: No such file or directory		--> bash: cd: Makefile: Not a directory
+[OK]	cd Makefile			cd: Makefile: No such file or directory
 OK	cd /
 OK	cd '/'
 [ ]	cd //				pwd = / --> pwd = // 

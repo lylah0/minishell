@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/07 17:42:56 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:58:46 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ void	add_env_var(t_data *data, char *input);
 // t_env	*add_env_var(t_data *data, char *input);
 
 t_env	*exist_already_in_env(t_env *env, char *name_var);
+void	print_export(t_data *data);
 
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
@@ -199,6 +200,7 @@ void				b_export(t_data *data);
 void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
 t_env				*exist_already_in_env(t_env *env, char *name_var);
+void export(t_data *data);
 
 // // init_arg
 // void init_input(t_input *input);
