@@ -1,68 +1,128 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   export_T_CMD.c                                     :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-// /*   Updated: 2025/05/08 13:53:47 by monoguei         ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_T_CMD.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/08 18:17:15 by monoguei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "../../../../minishell.h"
+#include "../../../../minishell.h"
 
-// void lle_to_array(t_data *data)
-// {
-// 	char	**copy_env;
-// 	t_env	*current;
-// 	size_t		i;
-// 	size_t		j;
-
-// 	(void)copy_env;
-// 	data->copy_env = malloc(sizeof(char **) * lle_size(data->env) + 1);
-// 	if (!data->copy_env)
-// 		return ;
-// 	j = 0;
-// 	current = data->env;
+char	*strjoin_name_equal_value(char *name, char *value)
+{
+	int i = 0;
+	int j = 0;
+	int tot_len = ft_strlen(name) + ft_strlen(value) + 2;// 1 pour = et 1 pour \0
 	
-// 	while (current)
-// 	{
-// 		i = 0;
-// 		while (ft_strlen(current->name) < i)
-// 		{
-// 			current->name[i] = data->copy_env[i][j];
-// 			printf("%c", data->copy_env[i][j]);
-// 			i++;
-// 		}
-// 		if (current->value)
-// 		{
-// 			data->copy_env[i][j] = '=';
-// 			while (ft_strlen(current->name) + ft_strlen(current->value) < i)
-// 			{
-// 				current->name[i] = data->copy_env[i][j];
+	if (!value)
+		tot_len = tot_len - 1;
+	char *s = malloc(sizeof(char) * tot_len);
+	if (!s)
+		return NULL;
+	while (name[i])
+	{
+		s[i] = name[i];
+		i++;
+	}
+	if (value)
+	{
+		s[i++] = '=';
+		while (value[j])
+			s[i++] = value[j++];
+	}	
+	s[i] = '\0';
 
-// 				i++;
-// 			}
-// 		}
-// 		data->copy_env[i][j] = 0;
-// 		i = 0;
-// 		j++;
-// 		current = current->next;
-// 	}
-// }
+	return (s);
+}
 
+void lle_to_array(t_data *data)
+{
+	char	**copy_env;
+	t_env	*current;
+	int		index_array;
 
-// void print_export(t_data *data)
-// {
-// 	int  i = 0;
-// 	lle_to_array(data);
-// 	// while (data->copy_env[i])
-// 	// {
-// 	// 	printf("%s\n", data->copy_env[i]);
-// 	// 	i++;
-// 	// }	
-// 	// create_env_copy_array(data);
-// 	// sort_words(data->copy_env, get_array_length(data->copy_env));
-// 	// print_copy_env(data);
-// }
+	(void)copy_env;
+	index_array = 0;
+	current = data->env;
+	data->copy_env = malloc(sizeof(char **) * lle_size(current) + 1);
+	if (!data->copy_env)
+		return ;
+	
+	while (current)
+	{
+		data->copy_env[index_array] = strjoin_name_equal_value(current->name, current->value);
+		index_array++;
+		current = current->next;
+	}
+}
+
+void	swap_words(char **a, char **b)
+{
+	char *temp;
+	temp = NULL;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int	compare_words(char *w1, char *w2)
+{
+	int i = 0;
+
+	while (w1[i] && w2[i])
+	{
+		if (w1[i] < w2[i])
+			return 0;
+		if (w1[i] > w2[i])
+			return 1;
+		if  (w1[i] == w2[i])
+			i++;
+	}
+	if (w1[i])
+		return 1;
+	else
+		return 0;
+}
+
+void	sort_words(char	**words, int len)
+{
+	int	i = 0;
+	int	j = 1;
+
+	while(i < len && j < len)
+	{
+		if (compare_words(words[i], words[j]) == 1)
+			swap_words(&words[i], &words[j]);
+		else
+			j++;
+		if (j == len)
+		{
+			i++;
+			j = i + 1;
+		}
+	}
+}
+
+void	print_env_array(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < lle_size(data->env))
+	{
+		ft_printf("%s\n", data->copy_env[i]);
+		i++;
+	}
+}
+
+void print_export(t_data *data)
+{
+	lle_to_array(data);
+	sort_words(data->copy_env, lle_size(data->env));
+	print_env_array(data);
+}
