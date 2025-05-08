@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 15:40:31 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:06:05 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	word_len(char *input)
 		i++;
 	if (input[i] == '\'' || input[i] == '"')
 	{
+		if (input[i - 1] != ' ' || input[i - 1] != '\t')
+			i++;
 		quote = input[i];
 		i++;
 		while (input[i] && input[i] != quote)

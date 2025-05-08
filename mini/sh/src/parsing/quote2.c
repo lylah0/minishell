@@ -6,13 +6,12 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 16:32:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:20:20 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Supprime les '"' ou '\'' qui entourent un token et retourne le contenu sans les quotes
 char	*handle_quoted_token(char *quoted_str)
 {
 	int	len;
@@ -50,30 +49,37 @@ char	**malloc_second_parsing(int len)
 	return (tab_token);
 }
 
-//Stock un token entre quotes + la suite tant qu'il n'y a pas de separateur
 void	if_quotes(char *input, char **array, int *k, int *i)
 {
-	char	quote;
 	int		start;
-	int		len;
-	int		j;
+	int		j = 0;
+	char	quote;
 
-	quote = input[*k];
 	start = *k;
-	(*k)++;
-	while (input[*k] && input[*k] != quote)
-		(*k)++;
-	if (input[*k] == quote)
-		(*k)++;
-	while (input[*k] && input[*k] != ' ' && input[*k] != '|' && input[*k] != '<'
-		&& input[*k] != '>' && input[*k] != ';' && input[*k] != '&'
-		&& input[*k] != '(' && input[*k] != ')')
-		(*k)++;
-	len = *k - start;
-	array[*i] = malloc(sizeof(char) * (len + 1));
+	while (start > 0 && input[start - 1] != ' ' && input[start - 1] != '\t'
+		&& input[start - 1] != '|' && input[start - 1] != '<'
+		&& input[start - 1] != '>' && input[start - 1] != '\0')
+		start--;
+	*k = start;
+	while (input[*k] && !(ft_iswhitespace(input[*k]) || input[*k] == '|'
+		|| input[*k] == '<' || input[*k] == '>'))
+	{
+		if (input[*k] == '\'' || input[*k] == '"')
+		{
+			quote = input[*k];
+			(*k)++;
+			while (input[*k] && input[*k] != quote)
+				(*k)++;
+			if (input[*k] == quote)
+				(*k)++;
+		}
+		else
+			(*k)++;
+	}
+	int len = *k - start;
+	array[*i] = malloc(len + 1);
 	if (!array[*i])
-		return ;
-	j = 0;
+		return;
 	while (j < len)
 	{
 		array[*i][j] = input[start + j];
@@ -82,10 +88,13 @@ void	if_quotes(char *input, char **array, int *k, int *i)
 	array[*i][j] = '\0';
 }
 
+
 //Parcours un token depuis un guillemet jusqu'a la fin du meme type de guillemet puis copie la suite
 //jusqu'a un separateur
 int	while_quotes(char *input, int i)
 {
+	if (input[i - 1] != ' ' || input[i - 1] != '\t')
+		i++;
 	if (input[i] == '\'')
 	{
 		i++;

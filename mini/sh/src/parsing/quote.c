@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/05 21:54:34 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:08:59 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 void	parse_and_expand_token(t_input *token, t_data *data)
 {
 	int		i = 0;
-	char	*input;
-	char	*result;
+	char	*input = token->token;
+	char	*result = ft_calloc(1, sizeof(char));
 	char	*temp;
+	char	*joined;
 
- 	result = ft_calloc(1, sizeof(char));
-	input = token->token;
 	while (input[i])
 	{
 		if (input[i] == '\'')
@@ -31,16 +30,23 @@ void	parse_and_expand_token(t_input *token, t_data *data)
 			temp = handle_env_variable(input, &i);
 		else
 			temp = extract_plain_text(input, &i);
-
-		char *joined = ft_strjoin(result, temp);
+		if (!temp)
+			break;
+		joined = ft_strjoin(result, temp);
 		free(result);
 		result = joined;
 		free(temp);
 	}
+	if (!result)
+		result = ft_strdup("");
 	free(token->token);
 	token->token = result;
-	token->type = T_WORD;
+	if (token->token[0] == '\0')
+		token->type = T_SKIP;
+	else
+		token->type = T_WORD;
 }
+
 
 char *handle_single_quote(char *str, int *i)
 {
@@ -61,20 +67,24 @@ char *handle_single_quote(char *str, int *i)
 
 char	*handle_double_quote(char *str, int *i, t_data *data)
 {
+	char	*content;
+	char	*expanded;
 	int		start;
 	int		len;
 
 	start = ++(*i);
 	len = 0;
+	printf("ici\n");
+	printf("str: %s, start: %d\n", str, start);
 	while (str[*i] && str[*i] != '"')
 	{
 		(*i)++;
 		len++;
 	}
-	char *content = ft_substr(str, start, len);
+	content = ft_substr(str, start, len);
 	if (str[*i] == '"')
 		(*i)++;
-	char *expanded = expand_token_string(content, data);
+	expanded = expand_token_string(content, data);
 	free(content);
 	return (expanded);
 }
@@ -87,8 +97,7 @@ char	*handle_env_variable(char *str, int *i)
 	if (str[*i + 1] == '?')
 	{
 		*i += 2;
-		var_value = ft_itoa(exit_code);
-		return var_value;
+		return ft_itoa(exit_code);
 	}
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
@@ -102,7 +111,6 @@ char	*handle_env_variable(char *str, int *i)
 		return ft_strdup("");
 	return ft_strdup(var_value);
 }
-
 
 char *extract_plain_text(char *str, int *i)
 {

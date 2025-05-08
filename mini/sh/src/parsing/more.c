@@ -6,16 +6,36 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/05 23:15:03 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:26:02 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	get_exit_code(void)
+t_input *filter_args(t_input *args)
 {
-	printf("get exit code");
+	t_input *filtered = NULL;
+	t_input **tail = &filtered;
+
+	while (args)
+	{
+		if (args->type == T_OP && args->next)
+		{
+			args = args->next->next;
+			continue;
+		}
+		if (args->type == T_ARG || args->type == T_WORD)
+		{
+			*tail = args;
+			tail = &args->next;
+		}
+		args = args->next;
+	}
+	*tail = NULL;
+	return filtered;
 }
+
+
 
 int	is_cmd(char *token, char **env)
 {
@@ -37,8 +57,8 @@ int	is_cmd(char *token, char **env)
 
 int	is_builtin(char *cmd)
 {
-	//if (ft_strncmp(cmd, "echo", 4) == 0)
-	//	return (1);
+	if (ft_strncmp(cmd, "echo", 4) == 0)
+		return (1);
 	if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "exit", 4) == 0)
@@ -55,22 +75,6 @@ int	is_builtin(char *cmd)
 		return (0);
 }
 
-void	first_word(char **input, char **env)
-{
-	char	*env_path;
-	char	*cmd_path;
-
-	env_path = get_env_path(env);
-	cmd_path = get_path(env_path, input[0]);
-	//	free(env_path);
-	if (!cmd_path)
-	{
-		printf("minishell: command not found: %s\n", input[0]);
-		return ;
-	}
-	printf("\ncmd found\n");
-}
-
 char	*my_getenv(t_data *data, char *var_name)
 {
 	while (data->env->next && !(ft_strncmp(data->env->name, var_name, ft_strlen(var_name)) == 0
@@ -80,4 +84,21 @@ char	*my_getenv(t_data *data, char *var_name)
 		return (data->env->value);
 	else
 		return (NULL);
+}
+
+bool	in_quotes(char *str, int index)
+{
+	bool	in_single = false;
+	bool	in_double = false;
+	int		i = 0;
+
+	while (i < index && str[i])
+	{
+		if (str[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (str[i] == '"' && !in_single)
+			in_double = !in_double;
+		i++;
+	}
+	return in_double;
 }

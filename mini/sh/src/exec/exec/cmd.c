@@ -6,18 +6,22 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/05 21:50:17 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:26:14 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	wait_all(void)
+void wait_all(void)
 {
-	int	status;
+	int status;
+	pid_t pid;
 
-	while (wait(&status) > 0)
-		;
+	while ((pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+	}
 }
 
 int	has_next_cmd(t_input *node)
@@ -53,13 +57,9 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		close(fd[0]);
 		close(fd[1]);
 	}
-	if ((current->next && current->next->next) && (current->next->type == T_OP || current->next->next->type == T_OP))
+	if (has_redirection(current))
 	{
-		if (!validate_redirections(current))
-		{
-			exit_code = 1;
-			exit(1);
-		}
+		validate_redirections(current);
 		redir(current, data);
 	}
 	exec(current, data, env_path);
@@ -84,7 +84,6 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {
 	int		fd[2];
 	int		prev_pipe;
-	int		devnull;
 	pid_t	pid;
 	t_input	*current;
 
@@ -96,7 +95,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 	{
 		if (has_next_cmd(current))
 			pipe(fd);
-		if (is_builtin(current->token) && is_parent_builtin(current->token) && prev_pipe == 0)
+		if (is_builtin(current->token) && is_parent_builtin(current->token) && is_safe_to_exec_in_parent(current))
 		{
 			kind_of_token(data, current);
 			current = get_next_command(current);
@@ -104,15 +103,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		}
 		pid = fork();
 		if (pid == 0)
-		{
-			devnull = open("/dev/null", O_WRONLY);
-			if (devnull != -1)
-			{
-				dup2(devnull, 2);
-				close(devnull);
-			}
 			child(prev_pipe, current, fd, env_path, data);
-		}
 		else
 			parent(&prev_pipe, &current, fd, &data);
 	}

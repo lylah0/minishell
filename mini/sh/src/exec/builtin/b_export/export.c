@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/05 22:00:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:42:41 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	b_export(t_data *data)
 		print_copy_env(data);
 		return ;
 	}
-	while (curr)
+	while (curr && curr->type != T_PIPE)
 	{
 		if (is_valid_env_var_syntax(curr->token))
 			add_env_var(data, curr->token);

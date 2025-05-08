@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/05 22:27:17 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:50:05 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/libft.h"
+# include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -21,18 +22,16 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <dirent.h>
 
 # define TRUE 1
 # define FALSE 0
 
-extern int	exit_code;
+extern int			exit_code;
 
 // signals.c
 __sighandler_t		handler_sigint(void);
@@ -47,6 +46,7 @@ typedef enum s_token_type
 	T_FILE,
 	T_OP,
 	T_PIPE,
+	T_SKIP,
 	T_WORD
 }					t_token_type;
 
@@ -68,8 +68,8 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	t_input			*input; // ligne de commande
-	t_env			*env;     // tableau envp
+	t_input *input; // ligne de commande
+	t_env *env;     // tableau envp
 	char			**copy_env;
 	int				should_exit;
 	int				stdout_redir;
@@ -94,7 +94,7 @@ void				if_quotes(char *input, char **array, int *k, int *i);
 int					while_quotes(char *input, int i);
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
-void 				is_env_var(t_input *input, t_data *data);
+void				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
 void				print_token_list(t_input *head);
 char				*handle_double_quote(char *str, int *i, t_data *data);
@@ -102,6 +102,7 @@ char				*handle_env_variable(char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
 char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
+bool				in_quotes(char *str, int index);
 
 // fonctions execution
 
@@ -110,20 +111,25 @@ void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
-void				parent(int *prev_pipe, t_input **current, int fd[2], t_data **data);
-void				child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data);
+void				parent(int *prev_pipe, t_input **current, int fd[2],
+						t_data **data);
+void				child(int prev_pipe, t_input *current, int fd[2],
+char				*env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
 void				exec(t_input *current, t_data *data, char *env_path);
 int					is_parent_builtin(char *token);
+bool				is_safe_to_exec_in_parent(t_input *current);
+t_input				*filter_args(t_input *input);
 
-//fonctions redirection
+// fonctions redirection
 
 void				simple_redir(t_input *current, t_data *data);
 void				redir(t_input *current, t_data *data);
 void				heredoc_append(t_input *current, t_data *data);
 void				heredoc(t_input *current);
-int					validate_redirections(t_input *current);
+void				validate_redirections(t_input *current);
+bool				has_redirection(t_input *current);
 
 // fonctions token
 
@@ -137,8 +143,6 @@ char				*handle_single_quote(char *str, int *i);
 char				*my_getenv(t_data *data, char *var_name);
 
 // fonctions exit code
-
-void				get_exit_code(void);
 
 // fonctions path
 char				**split_path(char *fullpath);
@@ -165,22 +169,22 @@ void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input);
 
 // init_environment // b_export
-void    free_lle(t_data *data);
-void    print_lle(t_data *data);
-t_env   *create_lle(char **envp);
-void    swap_words(char **a, char **b);
-int     compare_words(char *w1, char *w2);
-void    sort_words(char **words, int len);
-void    print_copy_env(t_data *data);
-void    create_env_copy_array(t_data *data);
-int     get_array_length(char **array);
-bool    is_valid_env_var_syntax(char *s);
-void    b_export(t_data *data);
-void    init_env(t_data *data, char **envp);
-void	add_env_var(t_data *data, char *input);
+void				free_lle(t_data *data);
+void				print_lle(t_data *data);
+t_env				*create_lle(char **envp);
+void				swap_words(char **a, char **b);
+int					compare_words(char *w1, char *w2);
+void				sort_words(char **words, int len);
+void				print_copy_env(t_data *data);
+void				create_env_copy_array(t_data *data);
+int					get_array_length(char **array);
+bool				is_valid_env_var_syntax(char *s);
+void				b_export(t_data *data);
+void				init_env(t_data *data, char **envp);
+void				add_env_var(t_data *data, char *input);
 // t_env	*add_env_var(t_data *data, char *input);
 
-t_env	*exist_already_in_env(t_env *env, char *name_var);
+t_env				*exist_already_in_env(t_env *env, char *name_var);
 
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
@@ -214,7 +218,6 @@ __sighandler_t		handler_sigint(void);
 void				init_signals(void);
 void				restore_terminal(void);
 
-
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
@@ -228,6 +231,8 @@ t_env				*lle_map(t_env *env, void *(*f)(void *),
 t_env				*lle_new(void *content);
 int					lle_size(t_env *env);
 char				*search_env_value_safe(t_env *env, char *name);
+void				ft_printf_stderr(const char *s, ...);
+
 // content devient name par defaut, a adapter si beosin
 
 #endif

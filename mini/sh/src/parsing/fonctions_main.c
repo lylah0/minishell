@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fonctions_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 21:09:38 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/01 16:25:33 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:56:54 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	print_tokens(char **tokens)
 	printf("\n Vérification des tokens après expansion :\n");
 	while (curr)
 	{
-		printf("Token[%d]: %s (Type: %d)\n", i, curr->token, curr->type);
+		printf("Token[%d]: %s,(Type: %d)\n", i, curr->token, curr->type);
 		curr = curr->next;
 		i++;
 	}

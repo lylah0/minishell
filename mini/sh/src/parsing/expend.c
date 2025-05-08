@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 15:10:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:20:16 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,6 @@ char	*extract_var_name(const char *str, int *i)
 	int len = 0;
 	char *name;
 
-	if (str[*i] == '?')
-	{
-		(*i)++;
-		return (ft_strdup("0"));
-	}
 	while (ft_isalnum(str[*i + len]) || str[*i + len] == '_')
 		len++;
 	name = ft_substr(str, *i, len);
