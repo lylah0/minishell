@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/08 18:17:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:01:40 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ char	*strjoin_name_equal_value(char *name, char *value)
 {
 	int i = 0;
 	int j = 0;
-	int tot_len = ft_strlen(name) + ft_strlen(value) + 2;// 1 pour = et 1 pour \0
-	
-	if (!value)
-		tot_len = tot_len - 1;
+	int tot_len;
+	if (value)
+		tot_len = ft_strlen(name) + ft_strlen(value) + 2;// 1 pour = et 1 pour \0
+	else
+		tot_len = ft_strlen(name) + 1;
 	char *s = malloc(sizeof(char) * tot_len);
 	if (!s)
 		return NULL;
@@ -120,9 +121,24 @@ void	print_env_array(t_data *data)
 	}
 }
 
+void	free_array(char **array)
+{
+	int i = 0;
+
+	if (!array)
+		return;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
 void print_export(t_data *data)
 {
 	lle_to_array(data);
 	sort_words(data->copy_env, lle_size(data->env));
 	print_env_array(data);
+	free_array(data->copy_env);
 }

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/07 17:17:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:46:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	main(int ac, char **av, char **envp)
 			head = do_parsing(head, splited_input, data);
 			data->input = head;
 			exec_cmd(head, data, env_path);
+			// kind_of_token(data, head);
 			if (data->should_exit)
 				break;
 			restore_terminal();

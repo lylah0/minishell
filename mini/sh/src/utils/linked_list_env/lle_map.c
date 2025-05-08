@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 15:59:07 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 12:35:16 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:07:41 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ t_env	*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *))
 	t_env	*env_new;
 	t_env	*env_final;
 	void	*temp_name;
-
+	void	*temp_value;
+	
+	(void)temp_value;
 	if (!env || !f || !del)
 		return (0);
 	env_src = env;
@@ -32,8 +34,8 @@ t_env	*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *))
 	while (env_src)
 	{
 		temp_name = (*f)(env_src->name);
-		temp_name = (*f)(env_src->value);
-		env_new = lle_new(temp_name);
+		temp_value = (*f)(env_src->value);
+		env_new = lle_new(temp_name, temp_name);
 		if (!env_new)
 		{
 			(*del)(temp_name);

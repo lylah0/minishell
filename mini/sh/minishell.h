@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 14:58:46 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:31:51 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,11 @@ int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
+char	*ft_strndup(const char *src, int n);
+int find_equal(char *s);
+void	print_export(t_data *data);
+
+
 
 // signals.c
 __sighandler_t		handler_sigint(void);
@@ -228,10 +233,17 @@ void				lle_del_one(t_env *env, void (*del)(void *));
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
 t_env				*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *));
-t_env				*lle_new(void *content);
+t_env 				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);
 t_env				*search_env_name(t_env *env, char *name);
 char				*search_env_value(t_env *env, char *name);
 // content devient name par defaut, a adapter si beosin
+
+void	add_env_name(t_data *data, char *name);
+void	add_new_env_var_and_value(t_data *data, char *env_name, char *env_value);
+// void	update_env_value(t_data *data, char *env_name, char *env_value);
+t_env	*update_env_value(t_env *env, char *env_to_update, char *new_value);
+
+
 
 #endif

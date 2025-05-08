@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 15:50:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:14:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,33 @@ char	*ft_strdup(const char *src)
 	}	
 	return (dest);
 }
+
+char	*ft_strndup(const char *src, int n)
+{
+	int		i;
+	int		len;
+	char	*dest;
+
+	i = 0;
+	len = ft_strlen(src);
+	dest = (char *)malloc((len + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (i < n)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = 0;
+	if (dest == NULL)
+	{
+		free(dest);
+		exit_code = 1;
+	}	
+	return (dest);
+}
+
+
 char	*ft_equal_strdup(const char *src)
 {
 	int		i;

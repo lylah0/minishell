@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/08 09:43:40 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:33:53 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_env	*update_env_value(t_env *env, char *env_to_update, char *new_value)
 	}
 	free (current->value);
 	current->value = ft_strdup(new_value);
+	if (!current->value)
+		return NULL;
 	return (current);
 }
 
