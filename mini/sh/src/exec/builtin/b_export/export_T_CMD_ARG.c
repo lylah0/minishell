@@ -6,11 +6,37 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/08 20:33:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:57:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
+
+bool is_valid_env_var_syntax(char *s)
+{
+	int		i;
+	char	c;
+
+	i = 0;
+	if (s[i] == '_' || ft_isalpha(s[i]) == TRUE)
+	{
+		i++;
+		while (s[i])
+		{
+			c = s[i];
+			if (c == '_' || ft_isalnum(c) || c == '=')
+				i++;
+			else
+			{
+				ft_printf_stderr("bash: Aexport: '%s': not a valid identifier\n", s);
+				return (FALSE);
+			}
+		}
+		return (TRUE);
+	}
+	ft_printf_stderr("bash: Bexport: '%s': not a valid identifier\n", s);
+	return (FALSE);
+}
 
 void	add_env_name(t_data *data, char *env_name)
 {
@@ -36,13 +62,3 @@ void	add_new_env_var_and_value(t_data *data, char *env_name, char *env_value)
 		lle_add_back(&data->env, new_node);
 	}
 }
-// void	update_env_value(t_data *data, char *env_name, char *env_value)
-// {
-// 	t_env	*node_to_update;
-	
-// 	if (!data || !env_name || !env_value)
-// 		return;
-// 	node_to_update = search_env_name(data->env, env_name);// si cette var n'existe pas
-// 	free(node_to_update->value);
-// 	node_to_update->value = env_value;
-// }

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 20:31:51 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:39:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ void				restore_terminal(void);
 void				lle_add_back(t_env **env, t_env *new1);
 void				lle_add_front(t_env **env, t_env *new1);
 void				lle_clear(t_env **env, void (*del)(void *));
-void				lle_del_one(t_env *env, void (*del)(void *));
+void				lle_del_one(t_env **env, char *env_to_del);
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
 t_env				*lle_map(t_env *env, void *(*f)(void *), void (*del)(void *));

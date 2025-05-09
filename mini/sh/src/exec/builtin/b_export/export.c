@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/08 20:36:44 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:11:23 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,58 +60,32 @@ void	b_export(t_data *data)
 	char	*new_value;
 
 	arg = data->input;
-	
 	if (!arg->next)
 		print_export(data);
 	else 
 	{
-
 		while (arg->next)
 		{
+			// if (arg->next->type == T_SKIP)
+			// {
+			// 	arg->next = arg->next->next;
+			// 	continue ;
+			// }
 			if (ft_strchr(arg->next->token, '=') == NULL)// pas de '='
-				add_env_name(data, arg->next->token);
-			else// si '='
+				{
+					if (is_valid_env_var_syntax(arg->next->token) == TRUE)
+						add_env_name(data, arg->next->token);
+				}
+			else if (is_valid_env_var_syntax(arg->next->token) == TRUE)
 			{
 				new_value = extract_value(arg->next->token);
 				new_name = extract_name(arg->next->token);
-				printf("new_name %s, new_value %s\n", new_name, new_value);
 				if (search_env_name(data->env, new_name) == NULL) // pas trouve, new value
-				{
-					printf("name not found\n");
 					add_new_env_var_and_value(data, new_name, new_value);
-				}	
 				else // existe deja
-				{
-					printf("env nam found\n");
 					update_env_value(data->env, new_name, new_value);
-				}
 			}
 			arg->next = arg->next->next;
 		}
 	}
 }
-
-
-/*	 ______________________
-    |___REPRENDRE EXPORT___|
-
-	La regle est de tout reecrire par moi-meme. 
-	Ca devrais etre facile. Sinon ca vaut la peine de le refaire
-
-(1)	- cree le tableau depuis une liste chainee (refaire)
-	- imprimer le tableau (refaire)
-	- tester !
-
-(2)	- trier tableau (refaire si possible)
-	- tester !!!
-
-(3)	- ajout/mise a jour dune variable environnement
-	- nexiste pas : ajouter NAME, NAME="", NAME=value
-	- existe : maj value;
-	- plusieurs d'un coup :)
-
-	version manuel du test (ne dependant pas du shell) POUR CHAQUE ETAPE, UNE A UNE !!!
-	- tester depuis "init_env" afin que je nai pas besoin dutiliser le terminal pour tester. 
-	- ensuite tester depuis le terminal `export NAME=value`
-
-*/
