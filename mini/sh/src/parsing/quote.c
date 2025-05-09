@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 15:08:59 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:50:46 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	parse_and_expand_token(t_input *token, t_data *data)
 			break;
 		joined = ft_strjoin(result, temp);
 		free(result);
+
 		result = joined;
 		free(temp);
 	}
@@ -74,8 +75,6 @@ char	*handle_double_quote(char *str, int *i, t_data *data)
 
 	start = ++(*i);
 	len = 0;
-	printf("ici\n");
-	printf("str: %s, start: %d\n", str, start);
 	while (str[*i] && str[*i] != '"')
 	{
 		(*i)++;

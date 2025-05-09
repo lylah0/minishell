@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 13:50:05 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:50:00 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+
+# include <string.h>
 
 # define TRUE 1
 # define FALSE 0

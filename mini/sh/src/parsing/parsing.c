@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 16:06:05 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:39:38 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,29 @@ void	if_operator(char *input, char **array, int *k, int i)
 
 void	if_n_op(char *input, char **array, int *k, int *i)
 {
-	int	j;
+	int		j = 0;
+	char	quote;
 
-	j = 0;
-	while (input[*k] && input[*k] != '|' && input[*k] != '>'
-		&& input[*k] != '<' && input[*k] != ' ')
+	while (input[*k] && input[*k] != ' ' && input[*k] != '|' &&
+		input[*k] != '<' && input[*k] != '>')
 	{
-		array[*i][j] = input[*k];
-		(j)++;
-		(*k)++;
+		if (input[*k] == '\'' || input[*k] == '"')
+		{
+			quote = input[*k];
+			(*k)++;
+			while (input[*k] && input[*k] != quote)
+				array[*i][j++] = input[(*k)++];
+			if (input[*k] == quote)
+				(*k)++;
+		}
+		else
+		{
+			array[*i][j++] = input[(*k)++];
+		}
 	}
 	array[*i][j] = '\0';
 }
+
 
 char	**fill_tab(char *input, char **array)
 {
@@ -120,9 +131,10 @@ char	**fill_tab(char *input, char **array)
 
 	i = 0;
 	k = 0;
+	array[i] = NULL;
 	while (input[k])
 	{
-		while(input[k] == ' ')
+		while (input[k] == ' ')
 			k++;
 		len = word_len(&input[k]);
 		if (input[k] == '\'' || input[k] == '"')
@@ -138,6 +150,6 @@ char	**fill_tab(char *input, char **array)
 		}
 		i++;
 	}
-	array[i] = NULL;
+	i = 0;
 	return (array);
 }
