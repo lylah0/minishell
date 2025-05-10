@@ -1,9 +1,0 @@
-minishell: command not found: e/code/code
-VSCODE_GIT_ASKPASS_EXTRA_ARGS=
-VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-33dfe31707.sock
-VSCODE_INJECTION=1
-ZDOTDIR=/home/moni
-USER_ZDOTDIR=/home/moni
-TERM=xterm-256color
-minishell

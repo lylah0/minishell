@@ -1,0 +1,15 @@
+=== TESTS ENV ===
+
+[Test 1] env
+env.sh: line 23: ./minishell: No such file or directory
+✅ Échec attendu
+
+[Test 2] env env
+env.sh: line 23: ./minishell: No such file or directory
+✅ Échec attendu
+
+[Test 3] env hola
+env.sh: line 23: ./minishell: No such file or directory
+✅ Échec attendu
+
+=== Résultat : 3/3 tests réussis ===

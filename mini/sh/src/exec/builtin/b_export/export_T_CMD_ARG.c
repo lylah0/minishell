@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/09 13:57:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:23:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ bool is_valid_env_var_syntax(char *s)
 				i++;
 			else
 			{
-				ft_printf_stderr("bash: Aexport: '%s': not a valid identifier\n", s);
+				ft_printf_stderr("bash: export: '%s': not a valid identifier\n", s);
 				return (FALSE);
 			}
 		}
 		return (TRUE);
 	}
-	ft_printf_stderr("bash: Bexport: '%s': not a valid identifier\n", s);
+	ft_printf_stderr("bash: export: '%s': not a valid identifier\n", s);
 	return (FALSE);
 }
 

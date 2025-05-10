@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/09 13:56:41 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/10 11:19:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	print_env_array(t_data *data)
 	while (i < lle_size(data->env))
 	{
 
-		ft_printf("export %s\n", data->copy_env[i]);
+		ft_printf("export %s=\"%s\"\n", data->copy_env[i]);
 		i++;
 	}
 }
