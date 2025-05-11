@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:16:33 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:53:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ void	cd_home(t_data *data)
 
 	home_value = ft_strdup(search_env_value(data->env, "HOME"));
 	new_oldpwd_value = ft_strdup(search_env_value(data->env, "PWD"));
+	if (chdir(home_value) == -1)
+	{
+		perror("cd -");
+		free (new_oldpwd_value);
+		free (home_value);
+		exit_code = 1;
+		return ;
+	}
 	update_env_value(data->env, "OLDPWD", new_oldpwd_value);
 	update_env_value(data->env, "PWD", home_value);
 	free(new_oldpwd_value);
