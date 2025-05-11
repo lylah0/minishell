@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/09 15:50:00 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:15:32 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ bool				in_quotes(char *str, int index);
 // fonctions execution
 
 int					is_builtin(char *cmd);
-void				first_word(char **input, char **env);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
@@ -160,7 +159,7 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_echo(t_input *input);
+void				b_echo(t_data *data);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);
@@ -169,6 +168,7 @@ void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input);
+t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
 
 // init_environment // b_export
 void				free_lle(t_data *data);
@@ -184,9 +184,14 @@ bool				is_valid_env_var_syntax(char *s);
 void				b_export(t_data *data);
 void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
+void				print_export(t_data *data);
+void				add_env_name(t_data *data, char *env_name);
+void				add_new_env_var_and_value(t_data *data, char *env_name, char *env_value);
+
 // t_env	*add_env_var(t_data *data, char *input);
 
 t_env				*exist_already_in_env(t_env *env, char *name_var);
+void lle_del_one(t_env **env, char *env_to_del);
 
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
@@ -224,16 +229,16 @@ void				restore_terminal(void);
 t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
 void				lle_add_front(t_env **env, t_env *new1);
-void				lle_clear(t_env **env, void (*del)(void *));
-void				lle_del_one(t_env *env, void (*del)(void *));
+void				lle_del_one(t_env **env, char *env_to_del);
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
-t_env				*lle_map(t_env *env, void *(*f)(void *),
-						void (*del)(void *));
-t_env				*lle_new(void *content);
+t_env 				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);
-char				*search_env_value_safe(t_env *env, char *name);
+char				*search_env_value(t_env *env, char *name);
 void				ft_printf_stderr(const char *s, ...);
+
+char				*ft_strndup(const char *src, int n);
+
 
 // content devient name par defaut, a adapter si beosin
 

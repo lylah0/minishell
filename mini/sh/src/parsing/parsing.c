@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/09 16:39:38 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:41:42 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ char	**first_parsing(char *input)
 	len++;
 	array = malloc(sizeof(char *) * (len + 1));
 	if (!array)
+	{
+		perror("first_parsing");
 		return (NULL);
+	}
 	array[len] = NULL;
 	return (fill_tab(input, array));
 }

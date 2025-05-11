@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 16:08:21 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:34:50 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ void	exec(t_input *current, t_data *data, char *env_path)
 	char	**cmd;
 	char	*cmd_path;
 
+	if (!current)
+		return;
 	if (is_builtin(current->token))
 	{
 		kind_of_token(data, current);
-		if (current->next->next->type == T_PIPE)
+		if (current && current->next && current->next->next && current->next->next->type == T_PIPE)
 		{
 			current = current->next;
 			exec(current, data, env_path);
@@ -62,6 +64,11 @@ void	exec(t_input *current, t_data *data, char *env_path)
 	}
 	cmd = build_cmd_arg(current);
 	cmd_path = get_path(env_path, cmd[0]);
+	if (!cmd_path)
+	{
+		ft_printf_stderr("minishell: command not found: %s\n", cmd[0]);
+		exit(127);
+	}
 	execve(cmd_path, cmd, NULL);
 	printf("minishell: command not found: %s\n", cmd[0]);
 	exit(127);

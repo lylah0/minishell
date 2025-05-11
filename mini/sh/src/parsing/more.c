@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 18:26:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:59:49 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,13 @@ char	*my_getenv(t_data *data, char *var_name)
 
 bool	in_quotes(char *str, int index)
 {
-	bool	in_single = false;
-	bool	in_double = false;
-	int		i = 0;
+	bool	in_single;
+	bool	in_double;
+	int		i;
 
+	i = 0;
+	in_single = false;
+	in_double = false;
 	while (i < index && str[i])
 	{
 		if (str[i] == '\'' && !in_double)

@@ -3,27 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   lle_del_one.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 15:57:57 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 12:36:59 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:16:08 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief Deletes a single node in the linked list of environment variables.
-/// @param env Pointer to the environment variable node to delete.
-/// @param del Function pointer to a function that frees the content of the node.
-/// @example lle_del_one(node, free);
-void	lle_del_one(t_env *env, void (*del)(void *))
+void lle_del_one(t_env **env, char *env_to_del)
 {
-	if (!env)
-		return ;
-	if (del)
+	t_env *current;
+	t_env *prev;
+
+	if (!env || !*env || !env_to_del)
+		return;
+	current = *env;
+	prev = NULL;
+	while (current)
 	{
-		(*del)(env->name);
-		(*del)(env->value);
+		if (strcmp(current->name, env_to_del) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env = current->next;
+			free(current->name);
+			if (current->value)
+				free(current->value);
+			free(current);
+			return;
+		}
+		prev = current;
+		current = current->next;
 	}
-	free(env);
 }

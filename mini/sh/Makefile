@@ -1,7 +1,7 @@
 NAME = minishell
 CC = gcc
-# CFLAGS = -Wall -Werror -Wextra -g
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -g
+# CFLAGS = -Wall -Wextra -g
 LDFLAGS = -lreadline -lncurses  # Ajout pour readline
 
 SRC_DIR = src

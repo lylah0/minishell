@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 17:35:30 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:59:44 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	kind_of_token(t_data *data, t_input *input)
 {
 	char	*input_str;
-	input_str = input->token;
 
+	input_str = input->token;
 	if (ft_strncmp_end(input_str, "echo", 4) == 0)
 	{
-		b_echo(input);
+		b_echo(data);
 		return (0);
 	}
 	if (ft_strncmp_end(input_str, "exit", 4) == 0)
@@ -47,7 +47,7 @@ int	kind_of_token(t_data *data, t_input *input)
 		b_unset(data);
 		return (0);
 	}
-	else if (ft_strncmp_end(input_str, "export", 6) == 0)
+	else if (ft_strncmp_end(input_str, "export", 7) == 0)// a tester, si besoin de faire +1
 	{
 		b_export(data);
 		return (0);

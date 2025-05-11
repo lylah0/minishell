@@ -6,15 +6,63 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:33:42 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:16:38 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
-/// @brief swap words for sort NAME of environnement `export`
-/// @param a
-/// @param b
+char	*strjoin_name_equal_value(char *name, char *value)
+{
+	int i = 0;
+	int j = 0;
+	int tot_len;
+	if (value)
+		tot_len = ft_strlen(name) + ft_strlen(value) + 4;// = , \0 , " , "
+	else
+		tot_len = ft_strlen(name) + 1;
+	char *s = malloc(sizeof(char) * tot_len);
+	if (!s)
+		return NULL;
+	while (name[i])
+	{
+		s[i] = name[i];
+		i++;
+	}
+	if (value)
+	{
+		s[i++] = '=';
+		s[i++] = '"';
+		while (value[j])
+			s[i++] = value[j++];
+		s[i++] = '"';
+		}
+	s[i] = '\0';
+
+	return (s);
+}
+
+void lle_to_array(t_data *data)
+{
+	char	**copy_env;
+	t_env	*current;
+	int		index_array;
+
+	(void)copy_env;
+	index_array = 0;
+	current = data->env;
+	data->copy_env = malloc(sizeof(char **) * lle_size(current) + 1);
+	if (!data->copy_env)
+		return ;
+
+	while (current)
+	{
+		data->copy_env[index_array] = strjoin_name_equal_value(current->name, current->value);
+		index_array++;
+		current = current->next;
+	}
+}
+
 void	swap_words(char **a, char **b)
 {
 	char *temp;
@@ -63,80 +111,37 @@ void	sort_words(char	**words, int len)
 	}
 }
 
-void 	print_copy_env(t_data *data)
+void	print_env_array(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (data->copy_env[i])
+	while (i < lle_size(data->env))
 	{
-		ft_putstr_fd("export ", 1);
-		ft_putstr_fd(data->copy_env[i], 1);
-		ft_putendl_fd("",1);
+
+		ft_printf("export %s\n", data->copy_env[i]);
 		i++;
 	}
 }
 
-void	create_env_copy_array(t_data *data)
+void	free_array(char **array)
 {
-	t_env	*current;
-	char	*name = NULL;
-	char	*value = NULL;
-	int		i;
-	int		env_count;
-	char	*quote = "\"";
-	char	*equal = "=";
+	int i = 0;
 
-	i = 0;
-	env_count = 0;
-	current = data->env;
-
-	while (current)
+	if (!array)
+		return;
+	while (array[i])
 	{
-		env_count++;
-		current = current->next;
-	}
-	data->copy_env = malloc((env_count + 1) * sizeof(char *));
-	if (!data->copy_env)
-		return ;
-
-	current = data->env;
-
-	while (current)
-	{
-		name = ft_strdup(current->name);
-		if (current->value)
-		{
-			value = ft_strdup(current->value);
-		}
-		if (!name || !value)
-		{
-			free(name);
-			free(value);
-			return ;
-		}
-		if (value[0] != '\0')
-		{
-			char *temp = ft_strjoin(equal, quote);
-			temp = ft_strjoin(temp, value);
-			temp = ft_strjoin(temp, quote);
-			data->copy_env[i] = ft_strjoin(name, temp);
-		}
-		else
-		{
-			data->copy_env[i] = ft_strdup(name);
-			free(name);
-			free(value);
-		}
+		free(array[i]);
 		i++;
-		current = current->next;
 	}
-	data->copy_env[i] = NULL;
+	free(array);
 }
-int get_array_length(char **array)
+
+void print_export(t_data *data)
 {
-	int len = 0;
-	while (array[len])
-		len++;
-	return len;
+	lle_to_array(data);
+	sort_words(data->copy_env, lle_size(data->env));
+	print_env_array(data);
+	free_array(data->copy_env);
 }

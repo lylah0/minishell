@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/08 14:56:20 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:10:06 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,48 +15,99 @@
 #define OFF 0
 #define ON 1
 
-int is_n_option(const char *token)
+int n_option(t_input *input)
 {
-	if (ft_strncmp(token, "-n", 2) == 0)
+	int	i;
+
+	if (ft_strncmp(input->next->token, "-n", 2) == TRUE)
 	{
-		int i = 2;
-		while (token[i] && token[i] == 'n')
+		i = 1;
+		while (input->token[i] == 'n')
 			i++;
-		if (token[i] == '\0')
+		if (input->token[i]) // cas "-nnnnnnnnnnnx" (il y a encore qqch apres "-n" qui nest pas un "n")
+			return OFF;
+		else // cas "-n" ou "-nnnnnnnnnnnnnnnnn"
 			return ON;
 	}
-	return OFF;
+	else
+		return OFF;
 }
 
-void b_echo(t_input *input)
+void	b_echo(t_data *data)
 {
-	int flag_newline = OFF;
+	t_input *current;
 
-	input = input->next;
-	while (input && input->token)
+	current = data->input->next;
+	while (current && current->type != T_PIPE)
 	{
-		if (input->type == T_SKIP)
+		ft_printf("%s", current->token);
+		if (current->next)
 		{
-			input = input->next;
-			continue;
+			if (current->next->type != T_WORD || current)// $USE moi "moi" " moi"
+				ft_printf(" ");
+			current = current->next;
 		}
-		if (input->type == T_OP && input->next)
-		{
-			input = input->next->next;
-			continue;
-		}
-		if (is_n_option(input->token) == ON)
-		{
-			flag_newline = ON;
-			input = input->next;
-			continue;
-		}
-		ft_printf("%s", input->token);
-		if (input->next && (input->next->type == T_WORD || input->next->type == T_ARG))
-			ft_printf(" ");
-		input = input->next;
+		else
+			break ;
 	}
-	if (flag_newline == OFF)
+	if (n_option(data->input) == OFF)
 		ft_printf("\n");
+	exit_code = 0;
 }
 
+/*
+TESTS
+	minishell> echo hello        world           !
+	hello world !
+	minishell> echo            hello
+	minishell> echo "              " pisselit
+				   pisselit
+	hello
+	minishell> echo
+
+	minishell> echo 1
+	1
+	minishell> echo 1 3 33
+	1 3 33
+	minishell> echo $
+	$
+	minishell> echo $?
+	0
+	minishell> echo $?$
+	0$
+[ ]	minishell> echo $7USER		--> USER
+
+	minishell> echo $USER
+	moni
+	minishell> echo $USER$PWD
+	moni/home/moni/Desktop/CODE/mini_moni_restart (1)/minishell_ly_mo-214359c22ccd6bac686e576e8b6cc662fdacc6e7/mini/sh
+
+	minishell> echo $U
+
+[ ] minishell> echo $U ee		--> ee (pas d'espace au debut)
+	 ee
+	minishell> echo   eee
+	eee
+	minishell> echo hello
+	hello
+-n	minishell> echo -n hello
+	hellominishell> echo -nnnn hello
+	hellominishell> echo -nnnnx hello
+	-nnnnx hello
+	minishell> echo hello -n
+	hello -n
+	minishell> echo -n -n
+	minishell> echo -n tulipe -n
+	tulipe -nminishell>
+	minishell> echo -nhello
+	-nhello
+	minishell> echo ---------n
+	---------n
+	minishell> echo -n -nnn pamplemousse -n
+	pamplemousse -nminishell>
+
+
+
+[ ]	minishell> echo \n hello
+	\n hello					--> n hello
+*/

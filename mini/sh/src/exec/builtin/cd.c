@@ -6,21 +6,24 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/05 22:28:31 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:16:33 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
+t_env	*update_env_value(t_env *env, char *env_to_update, char *new_value)
 {
 	t_env	*current;
 
-	current = search_env_name(env, env_to_update);// [ ] (+) verification : je pourrais ne pas trouver l'env_var
-	if (current == NULL)
+	if (!env_to_update || !new_value)
+		return (NULL);
+	current = search_env_name(env, env_to_update);
+	if (!current)
 	{
-		perror("minishell: cd: env_var not found");
-		return NULL;
+		ft_printf_stderr("cd: %s not set\n", env_to_update);
+		exit_code = 1;
+		return (NULL);
 	}
 	free (current->value);
 	current->value = ft_strdup(new_value);
@@ -29,149 +32,165 @@ t_env	*update_env(t_env *env, char *env_to_update, char *new_value)
 	return (current);
 }
 
-void cd_home(t_env *env)
+void	cd_home(t_data *data)
 {
-	char *old_pwd;
-	char *new_pwd;
+	char *home_value;
+	char *new_oldpwd_value;
 
-	old_pwd = getcwd(NULL, 0);
-	update_env(env, "OLDPWD", old_pwd);
-	new_pwd = getenv("HOME");
-
-	if (new_pwd && search_env_value_safe(env, "HOME") == NULL)// getenv(HOME) ??
-	{
-		perror("minishell: cd HOME not set");
-		return ;
-	}
-	update_env(env, "PWD", new_pwd);
+	home_value = ft_strdup(search_env_value(data->env, "HOME"));
+	new_oldpwd_value = ft_strdup(search_env_value(data->env, "PWD"));
+	update_env_value(data->env, "OLDPWD", new_oldpwd_value);
+	update_env_value(data->env, "PWD", home_value);
+	free(new_oldpwd_value);
+	free(home_value);
 }
-// [x] HOME non defini message derreur / cd: HOME not set
-// [x] voir utilisation correcte de perror
-
-
-void cd_return(t_data *data)
+void	cd_return(t_data *data)
 {
-	char	*old_pwd;
-	char	*new_pwd;
+	char	*new_pwd_value;
+	char	*new_oldpwd_value;
 
-	new_pwd = strdup((search_env_name(data->env, "OLDPWD"))->value);
-	// if (new_pwd == NULL) // doublon avec verif dans cd main
-	// {
-	// 	perror("OLDPWD");
-	// 	exit_code = 1;
-	// 	return ;
-	// }
-
-	old_pwd = strdup((search_env_name(data->env, "PWD"))->value);
-	if (old_pwd == NULL)
-	{
-		perror("PWD");
-		exit_code = 1;
-		return ;
-	}
-
-	if (chdir(new_pwd) == -1)
+	new_oldpwd_value = getcwd(NULL, 0);
+	new_pwd_value = ft_strdup(search_env_value(data->env, "OLDPWD"));
+	if (chdir(new_oldpwd_value) == -1)
 	{
 		perror("cd -");
-		free(new_pwd);
+		free (new_oldpwd_value);
+		free (new_pwd_value);
 		exit_code = 1;
 		return ;
 	}
-	update_env(data->env, "OLDPWD", old_pwd);
-	update_env(data->env, "PWD", new_pwd);
-	free(new_pwd);
-	free(old_pwd);
-	exit_code = 0;
+	update_env_value(data->env, "OLDPWD", new_oldpwd_value);
+	update_env_value(data->env, "PWD", new_pwd_value);
+	free(new_oldpwd_value);
+	free(new_pwd_value);
 }
-// lylah [x] commande invalide ajouter message dans terminal
-
-
 void	cd_path(t_data *data)
 {
-	char	*old_pwd = getcwd(NULL, 0);
-	char	*new_pwd;
+	char	*new_pwd_value;
+	char	*new_oldpwd_value;
 
-	// old_pwd = getcwd(NULL, 0);
-	// old_pwd = (search_env_name(data->env, "PWD"))->value;
-	if (old_pwd == NULL)
-	{
-		perror("getcwd");
-		// perror("PWD");
-		exit_code = 1;
-		return ;
-	}
+	new_oldpwd_value = getcwd(NULL, 0);
 	if (chdir(data->input->next->token) == -1)
 	{
-		perror("cd <path>");
-		free(old_pwd);
+		ft_printf_stderr("bash: cd: %s: ", data->input->next->token);
+		perror("");
+		free(new_oldpwd_value);
 		exit_code = 1;
 		return ;
 	}
-	update_env(data->env, "OLDPWD", old_pwd);
-	free(old_pwd);//
+	new_pwd_value = getcwd(NULL, 0);
+	update_env_value(data->env, "OLDPWD", new_oldpwd_value);
+	update_env_value(data->env, "PWD", new_pwd_value);
+	free(new_oldpwd_value);
+	free(new_pwd_value);
+}
 
-	new_pwd = getcwd(NULL, 0);
-	if (new_pwd == NULL)
-	{
-		perror("getcwd");
-		exit_code = 1;
-		return ;
-	}
-	update_env(data->env, "PWD", new_pwd);
-	free(new_pwd);//
-	exit_code = 0;
-}
-#define OK 0
-#define ERR 1
-int check_opening_dir(char *directory)
-{
-	if (opendir(directory) == NULL)
-	{
-		perror("opendir");
-		return (ERR);
-	}
-	return (OK);
-}
 
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
 /// @param data Pointer to the shell data structure containing environment variables
 /// @param arg Path to change the current working directory to
 void b_cd(t_data *data)
 {
-	struct stat	st;
-	char		*path;
-	char		*oldpwd;
+	t_input		*arg;
 
-	if (data->input->next && data->input->next->next)
+	arg = data->input->next;
+	if (!arg)
+		cd_home(data);
+	else if (arg && ft_strncmp_end(arg->token, "-", 1) == 0)
 	{
-		ft_putendl_fd("cd: too many arguments", 2);
-		exit_code = 1;
-		return;
-	}
-	else if (data->input->type == T_CMD)
-		cd_home(data->env);
-	else if (ft_strncmp(data->input->next->token, "-", 1) == 0 && !data->input->next->next)
-	{
-		oldpwd = ft_strdup((char *)search_env_name(data->env, "OLDPWD"));
-		if (oldpwd == NULL)
-		{
-			perror("OLDPWD");
-			exit_code = 1;
-			return ;
-		}
-		cd_return(data);
-		b_pwd(data);// need to stay to be like bash --posix
-		free (oldpwd);
-	}
-	else
-	{
-		path = data->input->next->token;
-		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode) && !data->input->next->next)
-			cd_path(data);
+		if (ft_strlen(arg->token)>1)
+			ft_printf_stderr("option not needed for minishell\n"); //seulement cd - est géré, pas d'options -*
 		else
 		{
-			ft_putendl_fd("cd: No such file or directory", 2);
-			exit_code = 1;
+			cd_return(data);
+			b_pwd(data);
 		}
 	}
+	else if (arg && !arg->next)
+		cd_path(data);
+	else
+	{
+		ft_printf_stderr("bash: cd: too many arguments\n");
+		exit_code = 1;
+	}
 }
+
+/*
+TESTScd
+OK	cd .
+OK	cd ./
+OK	cd ./././.
+OK	cd ././././
+OK	cd ..
+OK	cd ../
+OK	cd ../..
+OK	cd ../.
+OK	cd .././././.
+OK	cd srcs
+OK	cd srcs objs		bash: cd: too many arguments
+OK	cd 'srcs'
+OK	cd "srcs"
+OK	cd /etc				bash: cd: /mini: No such file or directory
+OK	cd sr
+[OK]	cd Makefile			cd: Makefile: No such file or directory
+OK	cd /
+OK	cd '/'
+[ ]	cd //				pwd = / --> pwd = //
+OK	cd ////////
+[ ]	cd /minishell		?
+OK	cd _
+OK	cd -
+[ ]	cd --				like cd_return --> bash: cd: --: invalid option
+							cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
+[ ]	cd ---				like cd_return --> bash: cd: --: invalid option (exactement pareil !!)
+							cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
+
+OK	cd $HOME
+OK	cd $HOME $HOME
+OK	cd $HOME/42_works
+a tester	[ ]	1 unset HOME
+				2 cd $HOME
+			[ ]	1 unset HOME
+				2 export HOME=
+				3 cd
+			[ ]	1 unset HOME
+				2 export HOME
+				3 cd
+$> cd minishell Docs crashtest.c
+"$>    cd / | echo $?
+$> pwd"
+$> cd ~
+$> cd ~/
+"$> cd ~/ | echo $?
+$> pwd"
+$> cd *
+$> cd *
+$> cd *
+"$> mkdir a
+$> mkdir a/b
+$> cd a/b
+$> rm -r ../../a
+$> cd .."
+"$> mkdir a
+$> mkdir a/b
+$> cd a/b
+$> rm -r ../../a
+$> pwd"
+"$> mkdir a
+$> mkdir a/b
+$> cd a/b
+$> rm -r ../../a
+$> echo $PWD
+$> echo $OLDPWD"
+"$> mkdir a
+$> mkdir a/b
+$> cd a/b
+$> rm -r ../../a
+$> cd
+$> echo $PWD
+$> echo $OLDPWD"
+"$> mkdir a
+$> cd a
+$> rm -r ../a
+$> echo $PWD
+$> echo $OLDPWD"*/

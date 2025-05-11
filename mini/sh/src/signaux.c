@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 15:25:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:20:49 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ __sighandler_t	handler_sigint(void)
 //	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	// rl_redisplay();
-	// maj exit_status
 	return (SIG_IGN);
 }
 
@@ -44,4 +42,3 @@ void	restore_terminal(void)
 {
 	tcsetattr(0, 0, &g_term_backup);
 }
-

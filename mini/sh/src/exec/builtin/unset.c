@@ -6,44 +6,23 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/01 16:26:40 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:16:13 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief built-in `unset` `unset VAR1` `unset VAR1 VAR2`
-/// @param data
-void	b_unset(t_data *data)
+void b_unset(t_data *data)
 {
-	t_env	*current;
-	t_env	*prev;
-	char	*arg;
+	t_input *current;
 
-	if (!data || !data->input || !data->input->next)
+	if (!data || !data->input)
 		return;
 
-	arg = (char *)data->input->next->token;
-	if (!arg)
-		return;
-
-	current = data->env;
-	prev = NULL;
-
+	current = data->input->next;
 	while (current)
 	{
-		if (ft_strncmp(arg, current->name, ft_strlen(current->name)) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				data->env = current->next;
-			free(current->name);
-			free(current->value);
-			free(current);
-			return;
-		}
-		prev = current;
+		lle_del_one(&data->env, current->token);
 		current = current->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/08 15:31:25 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:45:30 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ t_input	*tokenize(char **input, t_data *data)
 	i = 1;
 	tail = malloc(sizeof(t_input));
 	if (!tail)
+	{
+		perror("tokenize");
 		exit(1);
+	}
+
 	tail->token = ft_strdup(input[0]);
 	tail->prev = NULL;
 	tail->next = NULL;

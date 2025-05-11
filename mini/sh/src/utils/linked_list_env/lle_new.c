@@ -3,26 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   lle_new.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 15:59:17 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 12:35:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:18:36 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief Creates a new environment variable node with the given name.
-/// @param name The name to be assigned to the new environment variable node.
-/// @return A pointer to the newly created t_env node, or NULL if allocation fails.
-t_env	*lle_new(void *name)
+t_env *lle_new(char *name, char *value)
 {
-	t_env	*new_list;
-
-	new_list = (t_env *) malloc(sizeof(t_env));
+	t_env *new_list = malloc(sizeof(t_env));
 	if (!new_list)
-		return (0);
-	new_list->name = name;
-	new_list->next = 0;
-	return (new_list);
+		return NULL;
+
+	// Attribution de name
+	new_list->name = strdup(name);
+	if (!new_list->name)
+	{
+		free(new_list);
+		return NULL;
+	}
+
+	// Si value est NULL (export sans =), attribuer NULL à value
+	if (value == NULL)  // Cas de export NAME
+	{
+		new_list->value = NULL;
+	}
+	else  // Cas de export NAME="" ou export NAME="valeur"
+	{
+		new_list->value = strdup(value);  // Copie de la valeur
+		if (!new_list->value)
+		{
+			free(new_list->name);
+			free(new_list);
+			return NULL;
+		}
+	}
+
+	new_list->next = NULL;
+	return new_list;
 }

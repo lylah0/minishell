@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 14:47:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:10:48 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ void	cleanup_memory(char *line, char **splited_line)
 	free(splited_line);
 }
 
-/// @brief
-/// @param s1
-/// @param s2
-/// @param n
-/// @return
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -112,19 +107,15 @@ int	ft_strncmp_end(char *s1, char *s2, size_t n)
 	i = 0;
 	if (n == 0)
 		return (0);
-	if (ft_strlen(s1) == n)
+	while (i < n && s1[i] && s2[i])
 	{
-		while (s1[i] && s2[i] && n > 1)
-		{
-			if (s1[i] != s2[i])
-				return ((char)s1[i] - (char)s2[i]);
-			i++;
-			n--;
-		}
-		return (0);
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	else
-		return (-1);
+	if (i < n && (s1[i] || s2[i]))
+		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	return (0);
 }
 
 // copie colle avec malloc
@@ -145,6 +136,63 @@ char	*ft_strdup(const char *src)
 		i++;
 	}
 	dest[i] = 0;
+	if (dest == NULL)
+	{
+		free(dest);
+		exit_code = 1;
+	}
+	return (dest);
+}
+
+char	*ft_strndup(const char *src, int n)
+{
+	int		i;
+	int		len;
+	char	*dest;
+
+	i = 0;
+	len = ft_strlen(src);
+	dest = (char *)malloc((len + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (i < n)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = 0;
+	if (dest == NULL)
+	{
+		free(dest);
+		exit_code = 1;
+	}
+	return (dest);
+}
+
+
+char	*ft_equal_strdup(const char *src)
+{
+	int		i;
+	int		len;
+	char	*dest;
+
+	i = 0;
+	len = ft_strlen(src);
+	dest = (char *)malloc((len + 2) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	dest[i] = '=';
+	while (src[i] != 0)
+	{
+		dest[i + 1] = src[i];
+		i++;
+	}
+	dest[i + 1] = 0;
+	if (dest == NULL)
+	{
+		free(dest);
+		exit_code = 1;
+	}
 	return (dest);
 }
 
@@ -202,4 +250,3 @@ t_input	*cat_token(t_input *token, char *value, int len)
 	new_token->token[j] = '\0';
 	return (new_token);
 }
-

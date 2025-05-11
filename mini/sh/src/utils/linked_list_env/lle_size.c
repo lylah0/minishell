@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lle_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 15:59:28 by afloras           #+#    #+#             */
-/*   Updated: 2025/04/04 12:35:54 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:18:58 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
