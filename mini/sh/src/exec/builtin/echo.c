@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 19:10:06 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:12:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,53 @@
 
 int n_option(t_input *input)
 {
-	int	i;
+    t_input *current = input->next;
+    int found = 0;
 
-	if (ft_strncmp(input->next->token, "-n", 2) == TRUE)
-	{
-		i = 1;
-		while (input->token[i] == 'n')
-			i++;
-		if (input->token[i]) // cas "-nnnnnnnnnnnx" (il y a encore qqch apres "-n" qui nest pas un "n")
-			return OFF;
-		else // cas "-n" ou "-nnnnnnnnnnnnnnnnn"
-			return ON;
-	}
+    while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
+    {
+        int i = 2;
+        while (current->token[i] == 'n')
+            i++;
+        if (current->token[i] != '\0')
+            break;
+        found = 1;
+        current = current->next;
+    }
+	if (found)
+		return ON;
 	else
 		return OFF;
 }
 
 void	b_echo(t_data *data)
 {
-	t_input *current;
+    t_input *current = data->input->next;
+    int n_flag = OFF;
 
-	current = data->input->next;
-	while (current && current->type != T_PIPE)
-	{
-		ft_printf("%s", current->token);
-		if (current->next)
-		{
-			if (current->next->type != T_WORD || current)// $USE moi "moi" " moi"
-				ft_printf(" ");
-			current = current->next;
-		}
-		else
-			break ;
-	}
-	if (n_option(data->input) == OFF)
-		ft_printf("\n");
-	exit_code = 0;
+    // Gérer les -n au début
+    while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
+    {
+        int i = 2;
+        while (current->token[i] == 'n')
+            i++;
+        if (current->token[i] != '\0')
+            break;
+        n_flag = ON;
+        current = current->next;
+    }
+
+    // Afficher les arguments restants
+    while (current && current->type != T_PIPE)
+    {
+        ft_printf("%s", current->token);
+        if (current->next && current->next->type != T_PIPE)
+            ft_printf(" ");
+        current = current->next;
+    }
+    if (n_flag == OFF)
+        ft_printf("\n");
+    exit_code = 0;
 }
 
 /*
