@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:49:06 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:25:20 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 {
 	//print_tokens(splited_input);
 	head = tokenize(splited_input, data);
-	print_all_token_types(head);
+	// print_all_token_types(head);
 	is_env_var(head, data);
-	print_token_list(head);
+	// print_token_list(head);
 	return (head);
 }
 

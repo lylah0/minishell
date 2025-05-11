@@ -1,0 +1,120 @@
+
+=== 🚀 Tests ECHO (minishell) ===
+
+[Test 01] echo hello        world           !
+  ✅ OK → minishell> echo hello        world           !
+hello world !
+minishell> exit
+exit
+[Test 02] echo            hello
+  ✅ OK → minishell> echo            hello
+hello
+minishell> exit
+exit
+[Test 03] echo "              " pisselit
+  ✅ OK → minishell> echo "              " pisselit
+               pisselit
+minishell> exit
+exit
+[Test 04] echo
+  ✅ OK → minishell> echo
+
+minishell> exit
+exit
+[Test 05] echo 1
+  ✅ OK → minishell> echo 1
+1
+minishell> exit
+exit
+[Test 06] echo 1 3 33
+  ✅ OK → minishell> echo 1 3 33
+1 3 33
+minishell> exit
+exit
+[Test 07] echo $
+  ✅ OK → minishell> echo $
+$
+minishell> exit
+exit
+[Test 08] echo $?
+  ✅ OK → minishell> echo $?
+0
+minishell> exit
+exit
+[Test 09] echo $?$
+  ✅ OK → minishell> echo $?$
+0$
+minishell> exit
+exit
+[Test 10] echo $7USER
+  ❌ ECHEC → status=0
+[Test 11] echo $USER
+  ✅ OK → minishell> echo $USER
+moni
+minishell> exit
+exit
+[Test 12] echo $USER$PWD
+  ✅ OK → minishell> echo $USER$PWD
+moni/home/moni/Desktop/CODE/minilylah/minishell_ly_mo/mini/sh/my_tester
+minishell> exit
+exit
+[Test 13] echo $U
+  ❌ ECHEC → status=0
+[Test 14] echo $U ee
+  ✅ OK → minishell> echo $U ee
+ ee
+minishell> exit
+exit
+[Test 15] echo   eee
+  ✅ OK → minishell> echo   eee
+eee
+minishell> exit
+exit
+[Test 16] echo -n hello
+  ✅ OK → minishell> echo -n hello
+hellominishell> exit
+exit
+[Test 17] echo -nnnn hello
+  ✅ OK → minishell> echo -nnnn hello
+hellominishell> exit
+exit
+[Test 18] echo -nnnnx hello
+  ✅ OK → minishell> echo -nnnnx hello
+-nnnnx hello
+minishell> exit
+exit
+[Test 19] echo hello -n
+  ✅ OK → minishell> echo hello -n
+hello -n
+minishell> exit
+exit
+[Test 20] echo -n -n
+  ✅ OK → minishell> echo -n -n
+minishell> exit
+exit
+[Test 21] echo -n tulipe -n
+  ✅ OK → minishell> echo -n tulipe -n
+tulipe -nminishell> exit
+exit
+[Test 22] echo -nhello
+  ✅ OK → minishell> echo -nhello
+-nhello
+minishell> exit
+exit
+[Test 23] echo ---------n
+  ✅ OK → minishell> echo ---------n
+---------n
+minishell> exit
+exit
+[Test 24] echo -n -nnn pamplemousse -n
+  ✅ OK → minishell> echo -n -nnn pamplemousse -n
+pamplemousse -nminishell> exit
+exit
+
+=== Résumé des échecs ===
+❌ [Test 10] echo $7USER
+❌ [Test 13] echo $U
+
+📊 22/24 tests réussis
+=== ✅ Fin des tests ECHO ===
+

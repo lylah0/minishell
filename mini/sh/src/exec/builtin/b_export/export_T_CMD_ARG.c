@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:16:36 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:36:32 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool is_valid_env_var_syntax(char *s)
 		}
 		return (TRUE);
 	}
-	ft_printf_stderr("bash: export: '%s': not a valid identifier\n", s);
+	ft_printf_stderr("bash: export: `%s': not a valid identifier\n", s);
 	return (FALSE);
 }
 

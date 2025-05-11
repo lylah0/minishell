@@ -1,0 +1,14 @@
+❌ [Test 10] export 23=45
+❌ [Test 12] export ""
+❌ [Test 13] export =
+❌ [Test 14] export %
+❌ [Test 15] export $?
+❌ [Test 16] export ?=2
+❌ [Test 20] export dep@rt=newyork
+❌ [Test 21] export -vacances=ausoleil
+❌ [Test 22] export ala-=plage
+❌ [Test 23] export avec.un=mojito 
+❌ [Test 24] export +estce=unbonus
+❌ [Test 25] export moni = lily
+❌ [Test 26] export moni =lily
+📊 19/32 tests réussis

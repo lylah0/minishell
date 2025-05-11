@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 20:12:52 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/11 20:18:50 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@
 
 int n_option(t_input *input)
 {
-    t_input *current = input->next;
-    int found = 0;
+	t_input *current = input->next;
+	int found = 0;
 
-    while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
-    {
-        int i = 2;
-        while (current->token[i] == 'n')
-            i++;
-        if (current->token[i] != '\0')
-            break;
-        found = 1;
-        current = current->next;
-    }
+	while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
+	{
+		int i = 2;
+		while (current->token[i] == 'n')
+			i++;
+		if (current->token[i] != '\0')
+			break;
+		found = 1;
+		current = current->next;
+	}
 	if (found)
 		return ON;
 	else
@@ -38,32 +38,32 @@ int n_option(t_input *input)
 
 void	b_echo(t_data *data)
 {
-    t_input *current = data->input->next;
-    int n_flag = OFF;
+	t_input *current = data->input->next;
+	int n_flag = OFF;
 
-    // Gérer les -n au début
-    while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
-    {
-        int i = 2;
-        while (current->token[i] == 'n')
-            i++;
-        if (current->token[i] != '\0')
-            break;
-        n_flag = ON;
-        current = current->next;
-    }
+	// Gérer les -n au début
+	while (current && current->token && current->token[0] == '-' && current->token[1] == 'n')
+	{
+		int i = 2;
+		while (current->token[i] == 'n')
+			i++;
+		if (current->token[i] != '\0')
+			break;
+		n_flag = ON;
+		current = current->next;
+	}
 
-    // Afficher les arguments restants
-    while (current && current->type != T_PIPE)
-    {
-        ft_printf("%s", current->token);
-        if (current->next && current->next->type != T_PIPE)
-            ft_printf(" ");
-        current = current->next;
-    }
-    if (n_flag == OFF)
-        ft_printf("\n");
-    exit_code = 0;
+	// Afficher les arguments restants
+	while (current && current->type != T_PIPE)
+	{
+		ft_printf("%s", current->token);
+		if (current->next && current->next->type != T_PIPE)
+			ft_printf(" ");
+		current = current->next;
+	}
+	if (n_flag == OFF)
+		ft_printf("\n");
+	exit_code = 0;
 }
 
 /*

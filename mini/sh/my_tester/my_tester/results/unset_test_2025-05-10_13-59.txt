@@ -1,0 +1,27 @@
+=== TESTS UNSET ===
+
+[Test 1] export VAR1=42; unset VAR1; echo $VAR1
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+[Test 2] export VAR2=bonjour; unset VAR2; env | grep VAR2
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+[Test 3] unset NOEXIST
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+[Test 4] export TEST=salut; unset TEST; export | grep TEST
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+[Test 5] unset PWD; pwd
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+[Test 6] unset OLDPWD; cd -
+unset.sh: line 26: ./minishell: No such file or directory
+✅ OK
+
+=== Résultat : 6/6 tests réussis ===
