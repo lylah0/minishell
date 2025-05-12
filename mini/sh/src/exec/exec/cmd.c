@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/12 16:15:12 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:45:28 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	has_next_cmd(t_input *node)
 	return (0);
 }
 
+/// @brief 
+/// @param node 
+/// @return 
 t_input	*get_next_command(t_input *node)
 {
 	while (node && node->type != T_PIPE)
@@ -44,6 +47,12 @@ t_input	*get_next_command(t_input *node)
 	return (NULL);
 }
 
+/// @brief Fonction qui exécute une commande dans un processus enfant.
+/// @param prev_pipe Descripteur de fichier du pipe précédent (entrée).
+/// @param current Pointeur vers le nœud actuel de la liste chaînée des commandes.
+/// @param fd Tableau contenant les descripteurs de fichier pour le pipe actuel.
+/// @param env_path Chemin vers les variables d'environnement.
+/// @param data Structure contenant les données globales du programme.
 void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
 	if (prev_pipe != 0 && !data->stdin_redir)
@@ -80,6 +89,10 @@ void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
 	*current = get_next_command(*current);
 }
 
+/// @brief Fonction principale pour exécuter une série de commandes connectées par des pipes.
+/// @param head Pointeur vers le premier nœud de la liste chaînée des commandes.
+/// @param env_path Chemin vers les variables d'environnement.
+/// @param data Structure contenant les données globales du programme.
 void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {
 	int		fd[2];

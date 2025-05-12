@@ -6,15 +6,24 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/12 16:29:17 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:55:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <termios.h>
-// #include <asm-generic/termbits.h>
+#include <asm-generic/termbits.h>
+#include <asm-generic/siginfo.h>
+#include <asm/signal.h>
 
 struct termios g_term_backup;
+struct sigaction {
+    void     (*sa_handler) (int);
+    void     (*sa_sigaction) (int, siginfo_t *, void *);
+    sigset_t   sa_mask;
+    int        sa_flags;
+    void     (*sa_restorer) (void);
+};
 
 //SIGINT signal interrupt ctrl + c interrompt/termine le processus courant.
 __sighandler_t	handler_sigint(void)
@@ -32,9 +41,6 @@ void	handler_sigint2(int sig)
 	rl_replace_line("", 0); // Efface la ligne actuelle dans le prompt
 	rl_on_new_line(); // Prépare une nouvelle ligne pour l'affichage
 	rl_redisplay(); // Réaffiche le prompt
-	// rl_replace_line("", 0);
-	// rl_on_new_line();
-	// rl_redisplay();
 	sig++;
 	return;
 }
@@ -44,14 +50,19 @@ void	init_signals(void)
 	struct termios term;
 	
 	signal(SIGPIPE, SIG_IGN);//(13, 1)
-	// signal(SIGQUIT, SIG_IGN);//ctrl+\ core dump quit proc chil en cours
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);//ctrl+\ core dump quit proc chil en cours
+	struct sigaction sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = ft_sigquit_handler;
+	sigaction(SIGQUIT, &sa, NULL);
 	signal(SIGINT, handler_sigint2);
 	if (tcgetattr(0, &g_term_backup) == 0)
 	{
 		term = g_term_backup;
 		term.c_lflag &= ~ECHOE;// pour ignorer lecho genre ^/
-		// term.c_lflag &= ~ECHOCTL; // pour ignorer l'affichage de ^\ pour SIGQUIT
+		term.c_lflag &= ~ECHOCTL; // pour ignorer l'affichage de ^\ pour SIGQUIT
 		tcsetattr(0, 0, &term);// mod attribut term
 	}
 }
