@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 16:26:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:15:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		}
 		pid = fork();
 		if (pid == 0)
-			child(prev_pipe, current, fd, env_path, data);
+			child(prev_pipe, current, fd, env_path, data);// ici cest une enfant
 		else
 			parent(&prev_pipe, &current, fd, &data);
 	}

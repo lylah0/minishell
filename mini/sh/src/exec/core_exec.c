@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 21:01:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:33:23 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	kind_of_token(t_data *data, t_input *input)
 		b_unset(data);
 		return (0);
 	}
-	else if (ft_strncmp_end(input_str, "export", 7) == 0)// a tester, si besoin de faire +1
+	else if (ft_strncmp_end(input_str, "export", 7) == 0)
 	{
 		b_export(data);
 		return (0);

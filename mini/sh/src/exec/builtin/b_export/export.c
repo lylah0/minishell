@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:16:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:26:15 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	b_export(t_data *data)
 	char	*new_value;
 
 	arg = data->input;
-	if (!arg->next)
+	if (!arg->next || arg->next->type == T_PIPE)
 		print_export(data);
 	else
 	{

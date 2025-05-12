@@ -1,0 +1,203 @@
+Introduction : la gestion des signaux dans un shell
+Dans un shell (interpréteur de commandes) comme Minishell (projet de l’école 42), il est essentiel de gérer correctement certains signaux afin de reproduire le comportement de Bash. Les principaux signaux/commandes clavier à considérer sont Ctrl+C (SIGINT), Ctrl+⧵ (SIGQUIT) et Ctrl+D (EOF). Ce guide explique d’abord la théorie des signaux en C et leur rôle dans un shell, puis donne des conseils pratiques pour implémenter leur gestion conformément aux attentes (Norme 42 et comportement de Bash).
+Qu’est-ce qu’un signal en C ?
+Un signal est un mécanisme de communication asynchrone fourni par le système d’exploitation. Il s’agit d’un message envoyé à un processus pour lui notifier qu’un événement est survenu (par exemple, une erreur, une demande d’interruption via le clavier, la fin d’un enfant, etc.)​
+CODEQUOI.COM
+. Lorsqu’un signal est délivré, le système interrompt temporairement l’exécution normale du processus pour traiter ce signal – par défaut cela peut entraîner la terminaison du programme, mais le programme peut aussi intercepter le signal et définir une action personnalisée. En ce sens, un signal est une forme limitée de communication inter-processus​
+CODEQUOI.COM
+.Exemples courants de signaux :
+SIGINT (Interrupt) – envoyé lorsque l’utilisateur tape Ctrl+C dans le terminal. Par défaut, il interrompt/termine le processus courant.
+SIGQUIT (Quit) – envoyé par Ctrl+⧵. Par défaut, il provoque la fin du processus et génère un core dump (dump mémoire).
+SIGTERM (Terminate) – signal de terminaison gracieuse (par exemple envoyé par la commande kill par défaut).
+SIGKILL – signal de terminaison forcée (le processus ne peut pas le capturer ou l’ignorer).
+SIGSEGV – signal envoyé lorsqu’une erreur de segmentation se produit (ex: accès mémoire invalide), provoquant l’arrêt du programme.
+Lorsque votre programme reçoit un signal, trois comportements sont possibles : ignorer le signal, exécuter l’action par défaut, ou intercepter le signal (définir un handler personnalisé). Intercepter un signal permet de définir une fonction de rappel (handler) qui sera exécutée automatiquement dès que le signal est reçu, vous donnant la possibilité de changer le comportement (par exemple, éviter que le programme ne se termine).
+signal() vs sigaction() pour intercepter un signal
+En C, la librairie <signal.h> offre deux façons principales d’établir un gestionnaire de signaux : la fonction classique signal() et la fonction plus moderne sigaction().
+signal(int signum, handler) : méthode simple pour assigner un handler à un signal. Cependant, cette fonction est considérée comme moins portable et moins fiable sur certains systèmes​
+CODEQUOI.COM
+. Historiquement, l’appel à signal pouvait réinitialiser le handler au comportement par défaut après une interception, et son comportement varie selon les implémentations. En somme, signal() est facile à utiliser mais comporte des risques (par exemple, moins de contrôle sur les options, compatibilité moindre POSIX)​
+CODEQUOI.COM
+.
+sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) : méthode recommandée pour une gestion fine des signaux. Elle prend une structure sigaction permettant de spécifier le handler (sa_handler ou sa_sigaction), de définir des flags de comportement (sa_flags comme SA_RESTART, SA_NOCLDSTOP, etc.), et de définir une masque de signaux à bloquer pendant l’exécution du handler (sa_mask). C’est l’approche POSIX portable. Par exemple, avec sigaction, on peut empêcher que le handler interrompe certaines appels système ou s’assurer que le handler reste en place après exécution. La fonction sigaction est un peu plus complexe à utiliser, mais elle est plus robuste et flexible que signal()​
+CODEQUOI.COM
+​
+CODEQUOI.COM
+.
+En résumé, il est conseillé d’utiliser sigaction pour les nouveaux programmes pour un contrôle précis. Néanmoins, pour des projets simples (comme Minishell), signal() peut suffire si on connaît son comportement sur la plateforme cible. Dans la suite, nous verrons une implémentation avec l’une ou l’autre.Remarque : L’un des flags utiles avec sigaction est SA_RESTART, qui demande à réessayer certains appels système interrompus par un signal. Par exemple, un read() bloquant interrompu par un signal reprendra automatiquement si SA_RESTART est activé. Sans ce flag, l’appel peut échouer avec errno = EINTR, ce qui nécessite de gérer cette interruption manuellement. Dans le cas de la fonction readline (utilisée pour lire l’entrée utilisateur), il est généralement préférable de ne pas redémarrer la lecture après SIGINT afin de revenir au prompt rapidement – c’est pourquoi on peut laisser SA_RESTART par défaut à 0 pour que readline soit interrompue.
+Gestion des signaux dans un shell interactif
+Dans un shell interactif, les signaux clavier ont des effets particuliers sur l’expérience utilisateur. Le shell doit gérer différemment ces signaux selon le contexte : soit le shell est en train d’attendre une commande (à l’affichage du prompt), soit il est en train d’exécuter une commande utilisateur (processus fils).Les comportements à reproduire (comme Bash) sont les suivants 
+GITHUB.COM
+​
+GITHUB.COM
+:
+Ctrl+C (SIGINT) :
+Au prompt (aucune commande en cours) : Ignorer l’entrée en cours, afficher une nouvelle ligne vide et réafficher le prompt sur la ligne suivante, sans quitter le shell. En d’autres termes, un Ctrl+C à vide annule ce que l’utilisateur tapait et redonne la main proprement sur un nouveau prompt​
+GITHUB.COM
+.
+Pendant qu’une commande s’exécute : Envoyer SIGINT au processus en cours (ce qui interrompt/termine ce processus la plupart du temps). Le shell parent ne doit pas se fermer. Après l’arrêt du processus interrompu, le shell affiche de nouveau un prompt prêt à recevoir une commande.
+Dans les deux cas, la valeur de retour $? (dernier code d’exit) doit être mise à jour. Par convention, lorsqu’un processus est interrompu par SIGINT, son code d’exit vaut 130 (128 + numéro du signal 2)​
+GITHUB.COM
+. Bash fixe également $? = 130 si l’utilisateur a juste fait Ctrl+C sans lancer de commande, afin que ce comportement reste cohérent.
+Ctrl+⧵ (SIGQUIT) :
+Au prompt (rien en cours) : Ne rien faire du tout (le shell ignore ce signal). En appuyant sur Ctrl+⧵ dans Bash, on n’observe aucune sortie ni effet – le prompt reste tel quel​
+GITHUB.COM
+.
+Pendant qu’une commande s’exécute : Envoyer SIGQUIT au processus fils en cours. Par défaut, ce signal provoque l’arrêt brutal du processus avec un core dump. Dans le terminal, on voit généralement le message Quit (core dumped) émis par le programme interrompu. Le shell, lui, doit survivre et reprendre la main. Le code de sortie $? du processus tué par SIGQUIT est 131 (128 + 3)​
+GITHUB.COM
+. Le shell peut détecter que le processus s’est terminé sur ce signal et éventuellement afficher un message ou simplement ne rien faire de spécial à part mettre à jour $?. (Bash, par exemple, affiche ce message Quit (core dumped) automatiquement via le terminal/OS sans intervention manuelle.)
+En résumé, le shell doit ignorer SIGQUIT pour lui-même, afin de ne pas se fermer si l’utilisateur tape Ctrl+⧵ par inadvertance. On veut seulement que les processus exécutés soient affectés par SIGQUIT, pas le shell interactif.
+Ctrl+D (EOF – End Of File) :
+Au prompt (ligne vide) : Indique une fin de fichier sur l’entrée standard. Cela signifie que l’utilisateur souhaite fermer le shell (comme une “déconnexion”). Bash réagit en fermant proprement le shell interactif. Il est d’usage d’afficher un message de sortie (par exemple exit) puis de terminer le programme avec un code de sortie 0 (succès)​
+GITHUB.COM
+.
+Au prompt (ligne déjà entamée) : Si l’utilisateur a commencé à taper une commande et presse Ctrl+D, le shell ne doit pas quitter. En effet, EOF ne s’applique généralement que si aucune entrée n’a été saisie. Dans Bash, un Ctrl+D sur une ligne non vide est généralement ignoré (souvent, le terminal émet un son “bell” pour signaler qu’il n’y a rien à faire). Concrètement, si du texte est présent, readline ne retourne pas NULL mais gère l’EOT comme un caractère d’entrée vide ignoré. Le shell reste donc en attente de la suite de la commande. 
+VELOG.IO
+​
+VELOG.IO
+Pendant qu’une commande s’exécute : Ctrl+D n’est pas vraiment capté dans ce contexte – ce n’est pas un signal. Si un programme comme cat attend une entrée utilisateur, envoyer un EOF via Ctrl+D termine l’entrée pour ce programme (ce qui peut faire sortir cat de sa lecture). Dans le shell, ce n’est pas une action asynchrone mais juste la fin du flux d’entrée si applicable.
+Important : Ctrl+D n’est pas un signal. Contrairement à Ctrl+C ou Ctrl+⧵, appuyer sur Ctrl+D ne génère pas de signal vers le processus​
+FORUM.HARDWARE.FR
+. C’est en fait une indication au niveau du terminal qu’il n’y a plus de données à lire (EOF). En pratique, lorsqu’on utilise des fonctions de lecture comme read() ou readline(), celles-ci retournent 0 ou NULL pour indiquer l’EOF lorsque Ctrl+D est pressé sur une ligne vide​
+GITHUB.COM
+. Ainsi, la gestion de Ctrl+D se fait en vérifiant si la lecture renvoie une fin de fichier, et non via un handler de signal.En résumé, notre shell Minishell devra :
+Installer un handler pour SIGINT (Ctrl+C) afin de stopper proprement les commandes en cours ou simplement interrompre l’édition de la ligne, sans fermer le shell.
+Ignorer SIGQUIT (Ctrl+⧵) dans le shell principal.
+Détecter la condition d’EOF (Ctrl+D) pour quitter proprement le programme.
+S’assurer que lors de l’exécution d’une commande externe (un processus fils), ces signaux affectent le processus fils et non le shell parent.
+Voyons maintenant comment implémenter cela concrètement en C.
+Mise à jour du prompt après SIGINT (librairie Readline)
+Pour gérer l’entrée utilisateur interactive, on utilise souvent la librairie GNU Readline (fonctions readline(), add_history(), etc.). Cette librairie facilite l’édition de la ligne de commande et l’historique, mais lorsqu’un signal asynchrone survient, il faut appeler certaines de ses fonctions pour nettoyer/redessiner le prompt correctement.Lorsqu’un utilisateur presse Ctrl+C pendant que readline() attend une entrée, le but est de revenir à une nouvelle ligne de prompt, en abandonnant la ligne en cours d’édition. Pour cela, un handler de signal SIGINT personnalisé doit effectuer les opérations suivantes :
+Imprimer un retour à la ligne – pour que le curseur passe à la ligne suivante (sinon le prompt pourrait réapparaître à la suite du texte courant). On peut utiliser write(2, "\n", 1) pour écrire un saut de ligne sur la sortie d’erreur ou standard. Écrire sur STDERR est courant ici pour éviter les conflits de buffer avec readline​
+STACKOVERFLOW.COM
+.
+Notifier à Readline que la ligne courante est abandonnée – via rl_replace_line("", 0). Cette fonction de la libreadline efface le contenu actuel de la ligne d’édition (elle remplace le buffer courant par une chaîne vide)​
+STACKOVERFLOW.COM
+. Le second argument 0 indique qu’on ne souhaite pas enregistrer cette action dans l’historique d’annulation (inutile ici).
+Notifier Readline qu’on est sur une nouvelle ligne – via rl_on_new_line(). Cette fonction informe la bibliothèque que l’affichage est passé à une nouvelle ligne (après notre \n)​
+TISWWW.CASE.EDU
+. Cela permet de réinitialiser correctement l’état interne pour le nouveau prompt.
+Redessiner le prompt – via rl_redisplay(). Cette fonction force la réactualisation du prompt et de la ligne d’édition (désormais vide) à l’écran​
+STACKOVERFLOW.COM
+. Résultat : l’utilisateur voit un nouveau prompt prêt à recevoir une commande, comme si rien n’avait été saisi sur l’ancienne ligne (qui a été ignorée).
+En combinant ces appels, on obtient un handler de SIGINT efficace. Par exemple :
+c
+Copier
+void	handle_sigint(int sig)
+{
+    (void)sig;
+    write(STDERR_FILENO, "\n", 1);      // Passe à la ligne suivante
+    rl_replace_line("", 0);            // Efface la ligne courante
+    rl_on_new_line();                  // Indique à readline qu'on est en ligne neuve
+    rl_redisplay();                    // Ré-affiche le prompt
+}
+Cette approche est recommandée et couramment utilisée dans les mini-shells​
+STACKOVERFLOW.COM
+. Elle évite que le prompt soit affiché deux fois ou que des morceaux de l’ancienne saisie restent à l’écran. Il ne faut pas utiliser printf pour réafficher le prompt dans le handler, car readline le fait déjà lors de rl_redisplay() – si on faisait un printf("minishell> ") manuellement, on se retrouverait avec un double affichage du prompt (effet de bord classique à éviter).Remarque sur l’écho des caractères Ctrl : Par défaut, le terminal peut afficher les caractères de contrôle sous forme visible (par exemple ^C lorsqu’on appuie sur Ctrl+C). Pour reproduire le comportement de Bash (qui n’affiche pas ^C au prompt), on doit désactiver cet écho des caractères de contrôle. Cela se fait en configurant le terminal via termios. Concrètement, il faut retirer le flag ECHOCTL des local flags du terminal (tcgetattr, modifier term.c_lflag et tcsetattr). Une fois ECHOCTL désactivé, ni Ctrl+C ni Ctrl+⧵ ne produiront de caractères ^C/^\\ à l’écran lorsque le shell est en attente au prompt. On peut faire cette configuration au démarrage du shell.
+Implémentation pratique des signaux dans Minishell (guide)
+Maintenant que la théorie est posée, voici un guide pas-à-pas pour implémenter la gestion de SIGINT, SIGQUIT et EOF dans un Minishell en C, en respectant la Norme 42 et le comportement attendu :
+1. Installer les gestionnaires de signaux dans le shell parent (au prompt) – Dès le début du programme (avant la boucle de lecture du prompt), configurez:
+SIGINT (Ctrl+C) pour qu’il soit capturé par un handler (comme handle_sigint ci-dessus). Par exemple avec signal(SIGINT, handle_sigint); (ou l’équivalent avec sigaction).
+SIGQUIT (Ctrl+⧵) pour qu’il soit ignoré. On peut utiliser signal(SIGQUIT, SIG_IGN); pour indiquer d’ignorer ce signal​
+VELOG.IO
+​
+VELOG.IO
+. Ainsi, un Ctrl+⧵ n’aura aucun effet sur le shell interactif.
+(Optionnellement, SIGTERM peut aussi être ignoré ou géré si on veut empêcher une fermeture involontaire du shell, mais ce n’est pas explicitement demandé dans le projet Minishell de 42.)
+2. Désactiver l’écho des caractères de contrôle (ECHOCTL) – Comme mentionné, utilisez les appels tcgetattr/tcsetattr sur STDIN_FILENO pour enlever le flag ECHOCTL. Cela évitera l’affichage de ^C/^\\ lorsque l’utilisateur presse ces touches. Ce réglage est à faire une fois au démarrage du shell.
+3. Boucle de lecture du prompt – Utilisez readline pour afficher un prompt personnalisé et lire l’entrée utilisateur:
+c
+Copier
+while (1) {
+    char *line = readline("minishell> ");
+    if (line == NULL) {
+        // readline renvoie NULL : c'est l'EOF (Ctrl+D)
+        write(1, "exit\n", 5);
+        break;              // sortir de la boucle pour terminer le shell
+    }
+    if (*line != '\0')
+        add_history(line);  // Ajoute la commande non vide à l'historique
+    // TODO: analyser et exécuter la commande stockée dans line
+    free(line);
+}
+Ici, lorsque Ctrl+D est détecté (readline renvoie NULL), on affiche "exit" puis on sort de la boucle, ce qui terminera le programme proprement (code 0). S’il y a du texte non vide dans line, on l’ajoute à l’historique (facultatif mais c’est le comportement de Bash). Ensuite viendrait la logique d’exécution de la commande (non détaillée ici).
+4. Avant d’exécuter une commande (fork/exec) – Lorsqu’une commande externe doit être exécutée, on crée un processus fils via fork(). Dans le processus fils, il est important de rétablir le comportement par défaut des signaux : par exemple, appeler signal(SIGINT, SIG_DFL); signal(SIGQUIT, SIG_DFL); dans le fils avant d’appeler execve() pour lancer la nouvelle commande. Ainsi, le processus fils ne hérite pas du handler du shell (qui, par exemple, ignore SIGQUIT) mais reçoit bien SIGINT et SIGQUIT selon le comportement normal. Cela permet que Ctrl+C ou Ctrl+⧵ puissent effectivement interrompre le programme en cours d’exécution. Dans le processus père (le shell), on peut temporairement ignorer ces signaux pendant qu’il attend le fils (via waitpid), afin de ne pas perturber le shell lui-même pendant l’exécution de la commande​
+VELOG.IO
+​
+VELOG.IO
+. Par exemple, juste avant le waitpid, on peut faire signal(SIGINT, SIG_IGN); signal(SIGQUIT, SIG_IGN);, puis rétablir les handlers custom après le retour de waitpid. (Une autre méthode plus évoluée consiste à manipuler les process groups et le terminal contrôlé, mais cela dépasse le cadre d’une introduction ; la solution d’ignorer dans le parent et laisser défaut dans le fils est suffisante pour Minishell.)
+5. Gérer le retour du processus fils – Après waitpid, si le processus a été tué par un signal, il faut mettre à jour la variable d’environnement $? (code de sortie). Par exemple, si WIFSIGNALED(status) est vrai, on peut obtenir le numéro du signal avec WTERMSIG(status). S’il vaut 2 (SIGINT), on fixera le code de sortie à 130. S’il vaut 3 (SIGQUIT), on le fixera à 131. Vous pouvez stocker ce code dans une variable globale ou dans l’environnement du shell (selon votre architecture). Ainsi, la commande builtin echo $? pourra l’afficher correctement. Dans le cas d’un Ctrl+C tapé sans commande en cours (juste au prompt), on peut directement définir $? = 130 dans le handler pour conserver ce comportement.
+6. Rester dans la boucle – Après avoir géré tout cela, le shell retourne à l’étape de lecture du prompt (readline) pour la commande suivante, jusqu’à ce qu’un EOF survienne ou qu’on appelle la commande exit.
+Exemple de code minimal
+Voici un exemple simplifié et commenté illustrant une implémentation correcte de la gestion des signaux dans un Minishell. Ce code utilise signal() pour définir les handlers et la librairie Readline pour l’interface utilisateur. Il est écrit de manière à respecter la Norme 42 (pas de fonctions interdites, utilisation de write au lieu de printf dans un handler, etc.) :
+c
+Copier
+#include <stdio.h>      // printf
+#include <stdlib.h>     // free, exit
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h>     // signal, SIGINT, SIGQUIT, SIG_IGN
+#include <termios.h>    // termios, tcgetattr, tcsetattr
+#include <unistd.h>     // STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO, write
+#include <sys/wait.h>   // waitpid, WIFSIGNALED, WTERMSIG
+
+// Handler pour SIGINT (Ctrl+C)
+void	handle_sigint(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();
+    // Optionnel: mettre à jour un statut global pour $? à 130
+}
+
+// Initialisation des handlers de signaux pour le shell parent
+void    init_signals(void)
+{
+    // Ignorer Ctrl-\ (SIGQUIT) pour ne pas quitter le shell
+    signal(SIGQUIT, SIG_IGN);
+    // Intercepter Ctrl-C (SIGINT) avec notre handler
+    signal(SIGINT, handle_sigint);
+
+    // Désactiver l'écho des ^C/^\
+    struct termios term;
+    if (tcgetattr(STDIN_FILENO, &term) == 0)
+    {
+        term.c_lflag &= ~ECHOCTL;
+        tcsetattr(STDIN_FILENO, TCSANOW, &term);
+    }
+}
+
+int main(void)
+{
+    char *input;
+    int  exit_status = 0;
+
+    init_signals();
+    while (1)
+    {
+        input = readline("minishell> ");
+        if (!input) {                   // Ctrl+D (EOF) détecté
+            write(STDOUT_FILENO, "exit\n", 5);
+            break;                      // sortir de la boucle -> fin du shell
+        }
+        if (*input != '\0')
+            add_history(input);
+        // Ici, on traiterait la commande (parsing + execution).
+        // ... (code d'exécution non montré)
+        free(input);
+    }
+    // Optionnel: nettoyer l'historique readline si besoin, etc.
+    return exit_status;
+}
+Explications du code :
+init_signals() configure le shell pour ignorer SIGQUIT et pour appeler handle_sigint en cas de SIGINT. Il désactive aussi l’affichage des caractères de contrôle sur le terminal (ECHOCTL).
+Le handler handle_sigint est simple : il écrit un saut de ligne puis utilise les fonctions de Readline (rl_replace_line, rl_on_new_line, rl_redisplay) pour nettoyer et réafficher le prompt​
+STACKOVERFLOW.COM
+. Ainsi, si l’utilisateur tape Ctrl+C pendant qu’il est en train d’écrire une commande, la commande en cours de saisie est annulée et le prompt réapparaît sur une nouvelle ligne, prêt à recevoir une nouvelle saisie.
+Dans la boucle principale, readline("minishell> ") affiche le prompt et attend une entrée. Si l’utilisateur envoie un EOF (Ctrl+D) sur une ligne vide, readline retourne NULL, ce qui nous fait sortir de la boucle. On affiche "exit" pour informer de la fermeture (comme Bash) et on quitte proprement le programme. Si readline retourne une ligne non nulle, on ajoute la ligne à l’historique (sauf si elle est vide) et on la traiterait comme une commande (la partie parsing/exécution est à implémenter séparément).
+En suivant ce guide, vous serez en mesure de gérer les signaux clés dans votre Minishell de manière propre et conforme au comportement attendu. En résumé, souvenez-vous que Ctrl+C et Ctrl+⧵ ne doivent pas fermer le shell parent, mais seulement interrompre les tâches en cours (ou rien, si aucune commande n’est lancée), alors que Ctrl+D sert à terminer le shell. La bonne utilisation des fonctions de la librairie Readline et la configuration adéquate des signaux vous permettront d’obtenir un shell robuste et agréable à utiliser. Bonne programmation !​
+GITHUB.COM
+​
+GITHUB.COM
