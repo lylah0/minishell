@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 20:53:54 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:33:03 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,83 +122,3 @@ void b_cd(t_data *data)
 		exit_code = 1;
 	}
 }
-
-/*
-TESTScd
-OK	cd .
-OK	cd ./
-OK	cd ./././.
-OK	cd ././././
-OK	cd ..
-OK	cd ../
-OK	cd ../..
-OK	cd ../.
-OK	cd .././././.
-OK	cd srcs
-OK	cd srcs objs		bash: cd: too many arguments
-OK	cd 'srcs'
-OK	cd "srcs"
-OK	cd /etc				bash: cd: /mini: No such file or directory
-OK	cd sr
-[OK]	cd Makefile			cd: Makefile: No such file or directory
-OK	cd /
-OK	cd '/'
-[ ]	cd //				pwd = / --> pwd = //
-OK	cd ////////
-[ ]	cd /minishell		?
-OK	cd _
-OK	cd -
-[ ]	cd --				like cd_return --> bash: cd: --: invalid option
-							cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
-[ ]	cd ---				like cd_return --> bash: cd: --: invalid option (exactement pareil !!)
-							cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
-
-OK	cd $HOME
-OK	cd $HOME $HOME
-OK	cd $HOME/42_works
-a tester	[ ]	1 unset HOME
-				2 cd $HOME
-			[ ]	1 unset HOME
-				2 export HOME=
-				3 cd
-			[ ]	1 unset HOME
-				2 export HOME
-				3 cd
-$> cd minishell Docs crashtest.c
-"$>    cd / | echo $?
-$> pwd"
-$> cd ~
-$> cd ~/
-"$> cd ~/ | echo $?
-$> pwd"
-$> cd *
-$> cd *
-$> cd *
-"$> mkdir a
-$> mkdir a/b
-$> cd a/b
-$> rm -r ../../a
-$> cd .."
-"$> mkdir a
-$> mkdir a/b
-$> cd a/b
-$> rm -r ../../a
-$> pwd"
-"$> mkdir a
-$> mkdir a/b
-$> cd a/b
-$> rm -r ../../a
-$> echo $PWD
-$> echo $OLDPWD"
-"$> mkdir a
-$> mkdir a/b
-$> cd a/b
-$> rm -r ../../a
-$> cd
-$> echo $PWD
-$> echo $OLDPWD"
-"$> mkdir a
-$> cd a
-$> rm -r ../a
-$> echo $PWD
-$> echo $OLDPWD"*/

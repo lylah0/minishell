@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:15:32 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:56:03 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
-void				b_echo(t_data *data);
+void				b_echo(t_input *cmd);
 void				b_env(t_data *data);
 void				b_exit(t_data *data);
 void				b_export(t_data *data);

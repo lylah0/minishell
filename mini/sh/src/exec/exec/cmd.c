@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/12 16:15:12 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:55:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_input	*get_next_command(t_input *node)
 
 void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
+
 	if (prev_pipe != 0 && !data->stdin_redir)
 	{
 		dup2(prev_pipe, 0);
@@ -62,23 +63,28 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		validate_redirections(current);
 		redir(current, data);
 	}
+	if (fd[1] != -1)
+		close(fd[1]);
+	if (fd[0] != -1)
+		close(fd[0]);
 	exec(current, data, env_path);
 }
 
 void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
 {
 	(void)data;
+
 	if (*prev_pipe != 0)
 		close(*prev_pipe);
-	if (has_next_cmd(*current))
-	{
+	if (fd[1] != -1)
 		close(fd[1]);
+	if (fd[0] != -1)
 		*prev_pipe = fd[0];
-	}
-	else if (fd[0])
-		close(fd[0]);
+	else
+		*prev_pipe = 0;
 	*current = get_next_command(*current);
 }
+
 
 void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {
@@ -89,13 +95,18 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 
 	prev_pipe = 0;
 	current = head;
-	fd[0] = 0;
-	fd[1] = 0;
 	while (current)
 	{
+		data->stdin_redir = 0;
+		data->stdout_redir = 0;
 		if (has_next_cmd(current))
 			pipe(fd);
-		if (is_builtin(current->token) && is_parent_builtin(current->token) && is_safe_to_exec_in_parent(current))
+		else
+		{
+			fd[0] = -1;
+			fd[1] = -1;
+		}
+		if (is_builtin(current->token) && is_parent_builtin(current->token) && !prev_pipe && !has_next_cmd(current))
 		{
 			kind_of_token(data, current);
 			current = get_next_command(current);
@@ -103,9 +114,10 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		}
 		pid = fork();
 		if (pid == 0)
-			child(prev_pipe, current, fd, env_path, data);// ici cest une enfant
+			child(prev_pipe, current, fd, env_path, data);
 		else
 			parent(&prev_pipe, &current, fd, &data);
 	}
 	wait_all();
 }
+

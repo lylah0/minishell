@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/12 15:33:23 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:00:47 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	kind_of_token(t_data *data, t_input *input)
 	input_str = input->token;
 	if (ft_strncmp_end(input_str, "echo", 5) == 0)
 	{
-		b_echo(data);
+		b_echo(input);
 		return (0);
 	}
 	if (ft_strncmp_end(input_str, "exit", 5) == 0)

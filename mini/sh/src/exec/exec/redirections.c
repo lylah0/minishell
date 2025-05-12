@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 17:10:15 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:59:21 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,14 @@ void	validate_redirections(t_input *current)
 {
 	int	fd;
 
-	while (current)
+	while (current && current->type != T_PIPE)
 	{
 		if (current->type == T_OP && current->next)
 		{
-			if (!ft_strncmp(current->token, ">>", 3)
-				|| !ft_strncmp(current->token, ">", 2))
-				fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND,
-						0644);
+			if (!ft_strncmp(current->token, ">>", 3))
+				fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else if (!ft_strncmp(current->token, ">", 2))
+				fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			else if (!ft_strncmp(current->token, "<", 2))
 				fd = open(current->next->token, O_RDONLY);
 			else if (!ft_strncmp(current->token, "<<", 3))
@@ -121,3 +121,9 @@ void	validate_redirections(t_input *current)
 		current = current->next;
 	}
 }
+
+
+
+// test qui ne fonctionne pas : echo a | cat > file.txt
+//								cat file.txt
+//								--> prompt au lieu d'afficher a

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:16:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:33:22 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,3 @@ void	b_env(t_data* data)
 	}
 	print_lle(data);
 }
-
-/*
-tests
-	env
-	print env ok
-
-	env env
-	print 1x env.
-
-	env hola
-	"env: ʻhola’: No such file or directory
-*/

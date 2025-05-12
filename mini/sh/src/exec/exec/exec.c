@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 19:34:50 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:30:22 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 char	**build_cmd_arg(t_input *token)
 {
 	t_input	*tmp;
-	int		i = 0;
+	int		i;
 	char	**cmd;
 
-	tmp = token;
+	i = 1;
+	tmp = token->next;
 	while (tmp && tmp->type != T_PIPE)
 	{
 		if (tmp->type != T_OP && (tmp->prev == NULL || tmp->prev->type != T_OP))
@@ -28,8 +29,9 @@ char	**build_cmd_arg(t_input *token)
 	cmd = malloc(sizeof(char *) * (i + 1));
 	if (!cmd)
 		return (NULL);
-	tmp = token;
-	i = 0;
+	cmd[0] = ft_strdup(token->token);
+	tmp = token->next;
+	i = 1;
 	while (tmp && tmp->type != T_PIPE)
 	{
 		if (tmp->type != T_OP && (tmp->prev == NULL || tmp->prev->type != T_OP))
@@ -44,6 +46,7 @@ char	**build_cmd_arg(t_input *token)
 }
 
 
+
 void	exec(t_input *current, t_data *data, char *env_path)
 {
 	char	**cmd;
@@ -54,13 +57,7 @@ void	exec(t_input *current, t_data *data, char *env_path)
 	if (is_builtin(current->token))
 	{
 		kind_of_token(data, current);
-		if (current && current->next && current->next->next && current->next->next->type == T_PIPE)
-		{
-			current = current->next;
-			exec(current, data, env_path);
-		}
-		else
-			exit(0);
+		exit(0);
 	}
 	cmd = build_cmd_arg(current);
 	cmd_path = get_path(env_path, cmd[0]);
