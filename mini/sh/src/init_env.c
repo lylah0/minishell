@@ -89,9 +89,4 @@ t_env	*create_lle(char **envp)
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_lle(envp);
-	//print_lle(data);
-	// create_env_copy_array(data);
-	// sort_words(data->copy_env, get_array_length(data->copy_env));
-	//print_copy_env(data);
-	// free_lle(data);
 }
