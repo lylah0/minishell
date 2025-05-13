@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:15:32 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:53:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,15 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-
+# include <signal.h>
 # include <string.h>
+# include <termios.h>
+
 
 # define TRUE 1
 # define FALSE 0
 
 extern int			exit_code;
-
-// signals.c
-__sighandler_t		handler_sigint(void);
-void				init_signals(void);
-void				restore_terminal(void);
 
 typedef enum s_token_type
 {
@@ -51,6 +48,12 @@ typedef enum s_token_type
 	T_SKIP,
 	T_WORD
 }					t_token_type;
+
+typedef enum e_signal_state
+{
+	OFF = 0,
+	ON = 1
+}	t_signal_state;
 
 typedef struct s_input
 {
@@ -68,15 +71,31 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+typedef struct s_signal
+{
+	t_signal_state	sigint;
+	t_signal_state	sigquit;
+}	t_signal;
+
 typedef struct s_data
 {
-	t_input *input; // ligne de commande
-	t_env *env;     // tableau envp
+	t_input 		*input; // ligne de commande
+	t_env 			*env;     // tableau envp
+	t_signal		*signal;
 	char			**copy_env;
 	int				should_exit;
 	int				stdout_redir;
 	int				stdin_redir;
+	pid_t			child_pid;
 }					t_data;
+
+
+
+t_data	*get_data_ptr(t_data *new_data);
+void	init_signals(t_data *data);
+void	handler_sigint(int signum);
+void	handler_sigquit(int signum);
+
 
 // FONCTIONS LYLAH
 // fonctions parsing
@@ -221,16 +240,12 @@ char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
 
 // signals.c
-__sighandler_t		handler_sigint(void);
-void				init_signals(void);
 void				restore_terminal(void);
 
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
-void				lle_add_front(t_env **env, t_env *new1);
 void				lle_del_one(t_env **env, char *env_to_del);
-void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
 t_env 				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);

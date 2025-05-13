@@ -6,12 +6,25 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/12 16:45:28 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:49:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
+// void wait_all(void)
+// {
+// 	int status;
+// 	pid_t pid;
+
+// 	while ((pid = wait(&status)) > 0)
+// 	{
+// 		if (WIFEXITED(status))
+// 			exit_code = WEXITSTATUS(status);
+// 	}
+// }
+
+// version gpt
 void wait_all(void)
 {
 	int status;
@@ -19,10 +32,20 @@ void wait_all(void)
 
 	while ((pid = wait(&status)) > 0)
 	{
-		if (WIFEXITED(status))
+		if (WIFSIGNALED(status))
+		{
+			int sig = WTERMSIG(status);
+			if (sig == SIGINT)
+			{
+				exit_code = 130; // bash: code pour interruption Ctrl+C
+				write(1, "\n", 1); // propre
+			}
+		}
+		else if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 	}
 }
+
 
 int	has_next_cmd(t_input *node)
 {
@@ -71,7 +94,26 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		validate_redirections(current);
 		redir(current, data);
 	}
+	// Erreur : → execve() remplace le process courant. 
+	// Si tu l'appelles dans une boucle, il ne revient jamais,
+	//  mais si jamais exec() échoue, tu entres dans une boucle infinie.
+	// while (data->signal->sigquit == OFF)
+	// 	exec(current, data, env_path);
+/*
+execve() remplace entièrement le process enfant.
+Donc :
+
+Si exec() réussit → le process devient le programme externe
+
+Si exec() échoue → tu passes à perror() et exit(1)
+
+✅ Pas besoin de boucle
+*/
 	exec(current, data, env_path);
+
+	// Si exec échoue :
+	perror("minishell: exec failed");
+	exit(1);
 }
 
 void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
@@ -116,9 +158,16 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		}
 		pid = fork();
 		if (pid == 0)
+		{
+			data->child_pid = 0;// pour l'enfant, ne rien faire
 			child(prev_pipe, current, fd, env_path, data);// ici cest une enfant
+		}
 		else
+		{
+			data->child_pid = pid;// memorisation du processus enfant pour que sigint puisse cibler le child
 			parent(&prev_pipe, &current, fd, &data);
+		}
 	}
 	wait_all();
+	data->child_pid = -1;// 💡 Ça évite de renvoyer un signal à un ancien pid non valide plus tard.
 }
