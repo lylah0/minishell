@@ -1,0 +1,31 @@
+=== TESTS PWD ===
+
+[Test 1] pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 2] cd / && pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 3] cd .. && pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 4] cd . && pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 5] cd /tmp && pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 6] cd $HOME && pwd
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+[Test 7] cd -
+pwd.sh: line 27: ./minishell: No such file or directory
+✅ OK
+
+=== Résultat : 7/7 tests réussis ===
