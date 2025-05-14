@@ -12,23 +12,26 @@
 
 #include "../minishell.h"
 
+static struct termios g_termios_backup;
+
 /// @brief EOF (Ctrl+D)
 /// At the prompt: if the input is empty, exits the shell gracefully with cleanup.
 /// Mimics the shell behavior to exit on end-of-input when no text is typed.
 /// This is triggered when readline returns NULL.
-char *get_user_input(const char *prompt)
+char *get_user_input(t_data *data, const char *prompt)
 {
 	char *line;
-
+	(void)data;
 	line = readline(prompt);
 	if (!line)
 	{
-		fprintf(stderr, "Error reading line\n");
+		restore_terminal();
+		// cleanup_memory
+		exit(exit_code);
 		return (NULL);
 	}
 	return (line);
 }
-
 static struct termios g_termios_backup;
 
 /// @brief Stores or retrieves a persistent pointer to the global data structure.
@@ -55,11 +58,13 @@ void handler_sigint(int signum)
 
 	if (data && data->child_pid > 0)
 		kill(data->child_pid, SIGINT);
-
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	else
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 /// @brief SIGQUIT (Ctrl+\)
@@ -74,17 +79,23 @@ void handler_sigquit(int signum)
 	if (data && data->signal)
 		data->signal->sigint = ON;
 
-	if (data && data->child_pid > 0)
+	if (data && data->child_pid <= 0)
 	{
+		rl_on_new_line();
+		rl_redisplay();
+		return;
+	}
+	else
+	{
+		restore_terminal();
 		kill(data->child_pid, SIGQUIT);
 		
 		ft_printf_stderr("Quit (core dumped)\n");
-		// restore_terminal();
 		exit_code = 131;
 		exit(exit_code);
 	}
-	else
-		return ;
+
+	return ;
 }
 
 /// @brief Sets up signal handlers and disables echoing of control characters like ^C and ^\.
@@ -94,13 +105,15 @@ void init_signals(t_data *data)
 	struct termios term;
 
 	get_data_ptr(data);
-	// signal(SIGINT, handler_sigint);
-	signal(SIGQUIT, handler_sigquit);
+	signal(SIGINT, handler_sigint);
+
+	// if (data && data->child_pid > 0)
+		signal(SIGQUIT, handler_sigquit);
 
 	tcgetattr(STDIN_FILENO, &term);
 	g_termios_backup = term;
 
-	term.c_lflag &= ~ECHOCTL;
+	// term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
@@ -109,5 +122,3 @@ void restore_terminal(void)
 {
 	tcsetattr(STDIN_FILENO, TCSANOW, &g_termios_backup);
 }
-
-
