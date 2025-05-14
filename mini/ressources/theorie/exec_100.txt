@@ -1,0 +1,164 @@
+
+## 4. Implémentation des built-ins (`echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`)  
+
+Les *built-ins* sont des commandes **interprétées directement par le shell**, sans passer par un 
+exécutable externe. On les implémente donc en C dans notre programme, et on les appelle de 
+manière spécifique lorsqu’elles sont invoquées. Les built-ins à coder sont : **`echo`**, 
+**`cd`**, **`pwd`**, **`export`**, **`unset`**, **`env`**, **`exit`**.  
+
+**Pourquoi des built-ins ?** Certaines de ces commandes doivent pouvoir modifier l’état interne 
+du shell (par ex `cd` change le répertoire courant du processus shell lui-même, `export` modifie 
+les variables d’environnement du shell). On ne peut pas toujours les lancer dans un `execve` 
+séparé, sinon ces modifications seraient perdues une fois le processus child terminé. C’est 
+pourquoi le shell les implémente en interne. D’autres (comme `echo` ou `env`) pourraient 
+techniquement être des externes, mais on les implémente quand même pour être fidèle au projet 
+ou pour accélérer l’exécution.  
+
+En règle générale, on exécutera une built-in **dans le processus parent** shell, sauf si elle 
+fait partie d’un pipeline. Par exemple, pour `echo` seul, on peut éviter de fork et juste 
+imprimer; mais pour `echo` dans un pipeline (`echo hello | grep h`), on devra la lancer dans un 
+child comme un externe pour ne pas bloquer le shell (c’est un choix d’implémentation pour 
+coller au comportement concurrent). Un compromis est de toujours forker les pipelines y compris les 
+built-ins, mais de ne pas forker quand une built-in est seule (optimisation).  
+
+Passons en revue chaque built-in avec son comportement et une implémentation minimaliste :  
+
+### 4.1 Built-in `echo`  
+**Fonction** : Affiche ses arguments séparés par des espaces, suivi par un saut de ligne, sur la 
+sortie standard. Supporte l’option `-n` pour *ne pas* ajouter de saut de ligne final.  
+
+- Sans option, `echo arg1 arg2` affichera `arg1 arg2` suivi d’un retour à la ligne.  
+- Avec `-n`, ex: `echo -n "Hello"` affichera `Hello` **sans** retour à la ligne (le prompt viendra 
+à la suite sur la même ligne). On peut avoir plusieurs `-n` consécutifs, Bash les traite tous 
+comme l’option (tous sauf `-n` sont considérés texte à afficher).  
+
+### 4.2 Built-in `cd` (change directory)  
+**Fonction** : Change le répertoire de travail courant du shell. En Bash, `cd` a plusieurs règles 
+:  
+- `cd <path>` : change vers le chemin indiqué (relatif ou absolu).  
+- `cd` sans argument : doit changer vers le **HOME** de l’utilisateur (variable d’env `HOME`). 
+Si `HOME` n’est pas défini, Bash affiche une erreur : `bash: cd: HOME not set`.  
+- `cd -` : option non requise dans le projet minishell (retour au répertoire précédent). Souvent 
+non demandé, on peut ignorer.  
+
+Notre implémentation utilisera l’appel système **`chdir()`** (man 2 chdir) pour effectuer le 
+changement. `chdir(path)` retourne 0 si succès, -1 si erreur (ex : chemin inexistant, pas des 
+droits, etc.). On doit alors gérer les erreurs : par ex, si le dossier n’existe pas, afficher 
+`minishell: cd: <path>: No such file or directory`. Si c’est un fichier et pas un dossier : `Not 
+a directory`.  
+
+Aussi, beaucoup de shells mettent à jour les variables d’environnement `OLDPWD` et `PWD`. Dans 
+Minishell, ce n’est généralement pas obligatoire de gérer `OLDPWD`, mais il faut au moins 
+mettre à jour `PWD` pour refléter le nouveau répertoire courant (pour que l’environnement soit 
+cohérent avec `getcwd`). Facultatif mais conseillé.  
+
+### 4.3 Built-in `pwd` (print working directory)  
+**Fonction** : Affiche le chemin absolu du répertoire courant. En C, on peut utiliser 
+`getcwd(NULL, 0)` (ou `getcwd(buf, size)`). 
+- Si succès, afficher le chemin suivi d’un saut de ligne.  
+- Si échec (rare, par ex. répertoire courant supprimé – cas pathologique), afficher une erreur 
+via `perror("minishell: pwd")` ou un message fixe.  
+
+### 4.4 Built-in `export`  
+**Fonction** : En Bash, `export` sert à **marquer des variables d’environnement** pour 
+qu’elles soient disponibles aux processus enfants, ou à définir de nouvelles variables. Dans 
+Minishell, on va gérer une liste (ou tableau) de variables d’environnement qu’on transporte.  
+
+Usages :  
+- `export` sans argument : afficher l’ensemble des variables d’environnement **triées par 
+ordre alphabétique**, dans un format spécifique. Bash affiche avec la syntaxe `declare -x 
+VAR="value"`. Le projet 42 attend généralement cet affichage formaté. Par exemple, `export` seul 
+pourrait afficher:  
+  ```  
+  declare -x HOME="/home/user"  
+  declare -x PATH="/usr/bin:/bin"  
+  declare -x VAR1="foo"  
+  declare -x VAR2  
+  ```  
+  (Note : les variables sans valeur sont affichées avec juste le nom et pas de `=` ou avec `=""` 
+selon interprétation – Bash montre `declare -x VAR2=""` si la variable est présente mais vide, 
+et `declare -x VAR` sans rien si juste exporté sans valeur *et* pas présent dans env? Les 
+subtilités de Bash peuvent être complexes, mais l’important est d’imiter l’exemple du sujet 
+ou des tests).  
+- `export VAR=value` : ajoute ou modifie la variable d’environnement `VAR` avec `value`. Cette 
+variable devient “exportée” (disponible aux futurs execve).  
+- `export VAR` : sans `=`, Bash crée la variable avec valeur vide si elle n’existait pas, ou ne 
+fait rien de plus si elle existe déjà. C’est quand même considéré succès (on peut la 
+lister).  
+- `export VAR+=value` : (bonus) ajouter à la valeur existante (concatenation) – possiblement 
+hors scope du projet.  
+- **Erreurs** : si le nom de variable est invalide (ne commence pas par lettre ou `_`, ou contient 
+des caractères non autorisés comme `?` ou `+` hors usage spécial), Bash affiche `bash: export: 
+'X': not a valid identifier` et ne change rien pour cet item, retourne code d’erreur 1. (Le 
+projet demande de gérer ces cas).  
+
+Plan :  
+- Si `args[1]` n’existe pas : afficher la liste triée. Pour trier, on peut récupérer toutes 
+les var dans un tableau, qsort par name, puis imprimer chaque avec `declare -x NAME="VALUE"` (en 
+mettant des guillemets autour de la valeur et en échappant les éventuels guillemets spéciaux si 
+besoin).  
+- Sinon, pour chaque argument à partir de 1 :  
+  - Valider le format du nom de variable. Créer une fonction `is_valid_identifier(name)` qui check 
+: premier caractère alpha ou `_`, suivants alphanum ou `_`. Ne pas autoriser `=` dans le nom (le 
+`=` sépare nom/valeur).  
+  - Découper l’argument en nom et valeur : rechercher le premier `=` dans la string. Si 
+présent, séparer le nom et la valeur (valeur = chaîne après `=`). Si `=` absent, c’est un 
+export sans valeur.  
+  - Si nom invalide : afficher `minishell: export: 'ARG': not a valid identifier` (bien mettre les 
+quotes autour de l’argument incriminé comme Bash) et marquer un status d’erreur (on continue 
+à traiter les autres arguments toutefois).  
+  - Si valide : mettre à jour la liste d’environnement :  
+    - Si la variable n’existe pas, l’ajouter avec la valeur donnée (ou valeur vide si pas de 
+`=`).  
+    - Si elle existe déjà : si un `=` est présent, mettre à jour la valeur. Si c’est 
+`VAR+=value`, additionner. (Le cas `+=` est possiblement bonus). Si pas de `=` (juste `export 
+VAR`), on ne modifie pas la valeur existante mais on s’assure que la variable est marquée 
+exportée (dans notre shell, par simplicité, toute variable dans la liste *est* exportée de 
+base).  
+- Retourner 0 si tous les args sont valides, sinon 1 si au moins un était invalide (Bash retourne 
+1 s’il y a eu une erreur sur un identifiant).  
+
+### 4.5 Built-in `unset`  
+**Fonction** : Supprime une ou plusieurs variables d’environnement. Syntaxe : `unset VAR1 VAR2 
+...`.  
+
+- Pour chaque nom donné, si la variable existe dans la liste d’env, on la retire (libérer la 
+mémoire associée).  
+- Si le nom est invalide (mêmes règles que export pour un identifiant), Bash affiche `bash: 
+unset: 'X': not a valid identifier` – on fera de même (`minishell: unset: 'X': not a valid 
+identifier`).  
+- Retours : 0 si succès total, 1 si au moins une erreur.  
+
+### 4.6 Built-in `env`  
+**Fonction** : Affiche toutes les variables d’environnement **actuelles** (celles avec une 
+valeur, traditionnellement). Dans Bash, `env` sans argument liste l’environnement complet (chaque 
+ligne `VAR=VALUE`).  
+
+Dans Minishell, on peut l’implémenter en affichant toutes les variables stockées dans notre 
+liste d’env *qui ont une valeur*. Par exemple, une variable juste exportée sans valeur ne 
+devrait peut-être pas s’afficher (Bash n’affiche pas les variables sans valeur dans `env`). On 
+peut choisir de n’afficher que celles dont `value` n’est pas vide, ou décider d’afficher 
+toutes (mais alors comment formater sans valeur ? Possiblement juste ne rien mettre après `=`). La 
+manière courante : **n’afficher que les var ayant une valeur non vide** (exactement comme Bash 
+`env` se base sur l’environnement du processus, qui ne contient pas de var sans valeur).  
+
+### 4.7 Built-in `exit`  
+**Fonction** : Ferme le shell. En Bash, `exit [n]` permet de quitter avec le code de retour `n` (0 
+par défaut). Dans un shell interactif, Bash affiche `exit` sur la console lorsqu’on quitte via 
+la commande (pas via Ctrl+D).  
+
+Cas à gérer absolument d’après le projet :  
+- `exit` sans argument -> quitter avec code 0. (Et probablement afficher `exit` suivi d’un 
+newline avant de quitter, comme le fait bash interactif).  
+- `exit N` avec N un nombre (dans la limite d’un `long long` éventuellement) -> convertir en 
+entier 8-bit (Bash prend le code modulo 256), quitter avec ce code.  
+- `exit arg` où arg n’est pas purement numérique (par exemple `exit 42abc`) -> Bash affiche une 
+erreur : `bash: exit: 42abc: numeric argument required`, et quitte le shell avec le code **255**. 
+Donc on doit détecter si l’argument n’est pas un nombre valide.  
+- `exit arg1 arg2` (plus d’un argument) -> Bash : ne quitte pas ! Il affiche `bash: exit: too 
+many arguments`, retourne code 1, et reste dans le shell (donc on ne fait rien d’autre). Ce cas 
+est un peu spécial car exit ne exit pas réellement.  
+Ici, `interactive` est un booléen indiquant si on est dans le shell principal interactif (pour 
+savoir si on doit imprimer "exit"). Dans 42, ils veulent généralement qu’on imprime "exit" 
+quand on quitte via la commande exit, pour faire comme Bash en mode interactif. On l’envoie sur 
+stderr ou stdout ? Bash semble l’afficher sur stdout. On peut mettre sur stdout aussi.  

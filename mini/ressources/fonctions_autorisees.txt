@@ -1,0 +1,51 @@
+| Fonction         | Description                                      | Return            | Usage dans MS                                  | Errors                | #includes                     |
+| ---------------- | ------------------------------------------------ | ----------------- | ---------------------------------------------- | --------------------- | ----------------------------- |
+| readline         | Lit une ligne entrée par l'utilisateur           | `char *`          | Pour lire l'input de l'utilisateur             | NULL si erreur ou EOF | `                             |
+| rl_clear_history | Efface l'historique des lignes                   | `void`            | Pour réinitialiser l'historique                | N/A                   | `<readline/readline.h>`       |
+| rl_on_new_line   | Repositionne le curseur sur une nouvelle ligne   | `int`             | Pour rafraîchir la ligne après modification    | Retourne -1 si erreur | `<readline/readline.h>`       |
+| rl_replace_line  | Remplace la ligne courante                       | `void`            | Modifier la ligne sans écriture immédiate      | N/A                   | `<readline/readline.h>`       |
+| rl_redisplay     | Redessine la ligne courante                      | `void`            | Afficher la ligne mise à jour                  | N/A                   | `<readline/readline.h>`       |
+| add_history      | Ajoute la ligne à l'historique                   | `void`            | Pour stocker les commandes passées             | N/A                   | `<readline/history.h>`        |
+| printf           | Affiche un format spécifique                     | `int`             | Pour afficher des messages                     | Retourne -1 si erreur | `<stdio.h>`                   |
+| malloc           | Alloue de la mémoire dynamiquement               | `void *`          | Allouer de la mémoire pour des variables       | NULL si échec         | `<stdlib.h>`                  |
+| free             | Libère la mémoire allouée                        | `void`            | Libérer la mémoire après utilisation           | N/A                   | `<stdlib.h>`                  |
+| write            | Écrit des données dans un descripteur de fichier | `ssize_t`         | Pour écrire dans les pipes ou des fichiers     | -1 si erreur          | `<unistd.h>`                  |
+| access           | Vérifie l'accessibilité d'un fichier             | `int`             | Vérifier les permissions d'exécution           | Retourne -1 si erreur | `<unistd.h>`                  |
+| open             | Ouvre un fichier                                 | `int`             | Ouvrir des fichiers pour redirections          | -1 si erreur          | `<fcntl.h>`                   |
+| read             | Lit des données depuis un descripteur            | `ssize_t`         | Lire les entrées ou fichiers                   | -1 si erreur          | `<unistd.h>`                  |
+| close            | Ferme un descripteur de fichier                  | `int`             | Fermer des fichiers ou des pipes               | -1 si erreur          | `<unistd.h>`                  |
+| fork             | Crée un processus fils                           | `pid_t`           | Lancer des processus séparés                   | -1 si erreur          | `<unistd.h>`                  |
+| wait             | Attend la fin d'un processus                     | `pid_t`           | Synchroniser les processus                     | -1 si erreur          | `<sys/wait.h>`                |
+| waitpid          | Attend un processus spécifique                   | `pid_t`           | Utilisé pour gérer les processus enfants       | -1 si erreur          | `<sys/wait.h>`                |
+| wait3            | Attend n'importe quel processus et collecte      | `pid_t`           | Optionnel pour des détails supplémentaires     | -1 si erreur          | `<sys/wait.h>`                |
+| wait4            | Attend et retourne des informations              | `pid_t`           | Similaire à `wait3`                            | -1 si erreur          | `<sys/wait.h>`                |
+| signal           | Définit un gestionnaire de signal                | `void (*)(int)`   | Gérer des interruptions                        | `SIG_ERR` si échec    | `<signal.h>`                  |
+| sigaction        | Modifie l'action associée à un signal            | `int`             | Pour des gestions de signaux avancées          | -1 si erreur          | `<signal.h>`                  |
+| sigemptyset      | Initialise un ensemble de signaux vide           | `int`             | Pour définir un masque de signaux              | -1 si erreur          | `<signal.h>`                  |
+| sigaddset        | Ajoute un signal à un ensemble                   | `int`             | Compléter le masque de signaux                 | -1 si erreur          | `<signal.h>`                  |
+| kill             | Envoie un signal à un processus                  | `int`             | Terminer ou contrôler des processus            | -1 si erreur          | `<signal.h>`                  |
+| exit             | Termine le programme                             | `void`            | Quitter le shell                               | N/A                   | `<stdlib.h>`                  |
+| getcwd           | Obtient le répertoire de travail actuel          | `char *`          | Afficher l'emplacement courant                 | NULL si erreur        | `<unistd.h>`                  |
+| chdir            | Change le répertoire de travail                  | `int`             | Pour la commande `cd`                          | -1 si erreur          | `<unistd.h>`                  |
+| stat             | Récupère le statut d'un fichier                  | `int`             | Pour obtenir des infos sur les fichiers        | -1 si erreur          | `<sys/stat.h>`                |
+| lstat            | Récupère le statut d'un lien symbolique          | `int`             | Pour les liens symboliques                     | -1 si erreur          | `<sys/stat.h>`                |
+| fstat            | Récupère le statut d'un fichier via fd           | `int`             | Utilisé pour vérifier les détails des fichiers | -1 si erreur          | `<sys/stat.h>`                |
+| unlink           | Supprime un fichier                              | `int`             | Supprimer des fichiers temporaires             | -1 si erreur          | `<unistd.h>`                  |
+| execve           | Exécute un programme                             | `int`             | Exécuter des commandes                         | -1 si échec           | `<unistd.h>`                  |
+| dup              | Duplique un descripteur de fichier               | `int`             | Pour rediriger des entrées/sorties             | -1 si erreur          | `<unistd.h>`                  |
+| dup2             | Duplique un fd en spécifiant le numéro           | `int`             | Redirection de descripteurs spécifiques        | -1 si erreur          | `<unistd.h>`                  |
+| pipe             | Crée un canal de communication                   | `int`             | Communication entre processus                  | -1 si erreur          | `<unistd.h>`                  |
+| opendir          | Ouvre un dossier                                 | `DIR *`           | Vérifier si un chemin est un répertoire        | NULL si erreur        | `<dirent.h>`                  |
+| readdir          | Lit une entrée de répertoire                     | `struct dirent *` | Lister le contenu d'un dossier                 | NULL si fin ou erreur | `<dirent.h>`                  |
+| closedir         | Ferme un répertoire                              | `int`             | Libérer les ressources du répertoire           | -1 si erreur          | `<dirent.h>`                  |
+| strerror         | Retourne le message d'erreur                     | `char *`          | Afficher des messages d'erreur                 | N/A                   | `<string.h>`                  |
+| perror           | Affiche un message d'erreur                      | `void`            | Messages d'erreur pour débogage                | N/A                   | `<stdio.h>`                   |
+| isatty           | Vérifie si fd est un terminal                    | `int`             | Pour des vérifications de terminal             | 0 si faux             | `<unistd.h>`                  |
+| ttyname          | Retourne le nom du terminal associé au fd        | `char *`          | Pour informations sur le terminal              | NULL si erreur        | `<unistd.h>`                  |
+| ttyslot          | Retourne l'index de tty                          | `int`             | Peu utilisé dans un shell simple               | -1 si erreur          | `<unistd.h>`                  |
+| ioctl            | Contrôle des périphériques                       | `int`             | Pour des ajustements de terminal               | -1 si erreur          | `<sys/ioctl.h>`               |
+| getenv           | Récupère la valeur d'une variable d'env          | `char *`          | Pour récupérer des variables d'environnement   | NULL si non trouvée   | `<stdlib.h>`                  |
+| tcsetattr        | Modifie les attributs du terminal                | `int`             | Pour configurer le terminal                    | -1 si erreur          | `<termios.h>`                 |
+| tcgetattr        | Récupère les attributs du terminal               | `int`             | Pour lire la config actuelle du terminal       | -1 si erreur          | `<termios.h>`                 |
+| tgetent          | Initialise le terminal                           | `int`             | Pour initialiser des options spécifiques       | -1 si erreur          | `<curses.h>` ou `<termcap.h>` |
+| tgetflag         | Récupère le drapeau du terminal                  | `int`             | Pour des tests de capacité                     | 0 si non défini       | `<curses.h                    |

@@ -1,0 +1,288 @@
+Merci pour ces précisions ! Je vais maintenant te fournir un guide détaillé avec analogies pour comprendre la théorie derrière :
+
+1. **Exécution de commandes simples avec chemin absolu/relatif** (ex: `/bin/ls`, `../bin/ls`).
+2. **Exécution de commandes sans chemin** (ex: `ls`, `cat`, `grep`, etc.), en utilisant `$PATH`.
+3. **Gestion des variables d’environnement** (ex: `$HOME`, `$USER`, etc.).
+
+Ce guide contiendra :
+- **Une analogie pour bien comprendre la logique**.
+- **Un guide d’implémentation détaillé étape par étape**.
+- **Un code minimaliste bien structuré** avec `execve()`, `fork()`, `env`, et `getenv()`.
+- **Gestion des erreurs POSIX** pour simuler le comportement d’un shell.
+
+Je reviens vers toi dès que tout est prêt !
+
+# Implémentation d’un mini-shell en C 
+
+Créer un mini-shell (interpréteur de commandes) en C est un excellent exercice pour comprendre le fonctionnement d'un shell Unix comme Bash. Nous allons d’abord expliquer la théorie avec des analogies simples, puis guider pas à pas l’implémentation d’un shell minimaliste capable d’exécuter des commandes de différentes manières, y compris la gestion du `$PATH` et des variables d’environnement.
+
+### Théorie (principes de base du shell)
+
+#### Recherche et exécution d’une commande (analogie)  
+Quand vous tapez une commande dans un shell, celui-ci doit **trouver où se trouve le programme** correspondant et l’exécuter. On peut faire l’analogie avec la recherche d’une personne ou d’un lieu : si vous fournissez l’adresse exacte, on s’y rend directement. Sinon, il faut chercher dans un carnet d’adresses ou une liste de lieux connus. De même, **si la commande contient un chemin (path) complet**, le shell utilise directement ce chemin. **Si la commande est donnée sans chemin**, le shell va la rechercher dans une liste de dossiers prédéfinis indiqués par la variable d’environnement `$PATH`.  
+
+En pratique, voilà ce qui se passe dans un shell :  
+- **Commande avec chemin fourni** : Le shell vérifie si le fichier indiqué existe et peut être exécuté, puis l’exécute directement. Par exemple `**/bin/ls**` ou `**./mon_programme**` sont des chemins spécifiques, donc le shell n’a pas besoin de chercher ailleurs.  
+- **Commande sans chemin** : Le shell va parcourir chaque dossier listé dans `$PATH` pour voir si le programme y existe. C’est comme parcourir un annuaire : `$PATH` contient la “liste des répertoires” où chercher les exécutables ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=PATH%20%20%20The%20sequence,The%20prefixes%20are%20separated%20by)). Si le programme est trouvé dans l’un de ces dossiers, le shell l’exécute. Sinon, après avoir tout cherché sans succès, il conclut que la commande n’existe pas (erreur **« command not found »**).  
+
+Cette logique permet de ne pas avoir à taper le chemin complet pour chaque commande. Par exemple, lorsqu’on tape `ls`, le shell essaie en fait `/bin/ls`, `/usr/bin/ls`, etc., selon les dossiers listés dans `$PATH`. Sans `$PATH`, il faudrait toujours indiquer le chemin complet de chaque programme, ce qui serait peu pratique.
+
+#### Chemin absolu vs chemin relatif  
+Un **chemin absolu** est un chemin complet qui commence à la racine du système de fichiers. Par exemple `**/usr/bin/python**` est un chemin absolu : il commence par `/` et indique exactement où se trouve `python` dans l’arborescence. À l’inverse, un **chemin relatif** indique un emplacement par rapport au répertoire courant. Par exemple `**../bin/ls**` signifie « dans le dossier `bin` situé au **niveau supérieur** (parent) par rapport au répertoire courant ». De même, `**./mon_script.sh**` fait référence à un fichier `mon_script.sh` dans le répertoire courant (`.` représente le répertoire actuel).  
+
+Dans un shell, la différence est importante :  
+- Si l’utilisateur fournit un chemin absolu ou relatif (c’est-à-dire que la commande contient un `/`), le shell **n’utilise pas $PATH** pour trouver le programme – il essaie juste d’exécuter le fichier à l’endroit indiqué.  
+- Si aucun `/` n’est présent dans le nom de la commande (ex. `ls`, `echo`), alors le shell comprend que c’est un nom de programme sans chemin, et il ira chercher dans les dossiers de `$PATH`. (Techniquement, la spécification POSIX dit qu’un nom sans `/` est recherché dans `$PATH` ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=PATH%20%20%20The%20sequence,The%20prefixes%20are%20separated%20by)).)
+
+#### Rôle de la variable d’environnement `$PATH`  
+`$PATH` est l’une des variables d’environnement les plus importantes d’un shell. Elle contient la liste des répertoires dans lesquels le shell va **automatiquement chercher les programmes exécutables** lorsqu’on tape une commande sans préciser de chemin ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=PATH%20%20%20The%20sequence,The%20prefixes%20are%20separated%20by)). Les différents dossiers dans `$PATH` sont séparés par `:` (deux-points). Par exemple, un `$PATH` standard peut ressembler à :  
+
+```
+/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+```  
+
+Avec ce `$PATH`, si on tape `maCommande`, le shell va successivement vérifier l’existence de `**/usr/local/bin/maCommande**`, puis `**/usr/bin/maCommande**`, puis `**/bin/maCommande**`, etc., jusqu’à ce qu’il trouve un fichier exécutable. S’il le trouve, il l’exécute. Sinon, il signale que la commande est introuvable.  
+
+Le `$PATH` est nécessaire pour éviter d’écrire des chemins absolus longs à chaque fois. C’est un peu comme une liste de “lieux connus” où le shell peut trouver ce qu’on lui demande. On peut personnaliser `$PATH` en y ajoutant des dossiers (par exemple, pour que le shell trouve aussi des programmes installés dans un dossier spécifique).  
+
+*Note :* En interne, les fonctions de la famille `exec` ont des variantes (comme `execvp`) qui utilisent directement `$PATH`. Cependant, dans notre mini-shell, nous implémenterons nous-mêmes la recherche dans `$PATH` pour bien comprendre le mécanisme. 
+
+#### Appels système `fork()`, `execve()` et `waitpid()`  
+Pour exécuter une nouvelle commande, un shell utilise typiquement une séquence **fork -> exec -> wait**. Voici ce que fait chacune de ces fonctions système :  
+
+- **`fork()`** : duplique le processus courant. Le processus appelant (le shell) est le **parent**, et la copie créée est le **processus enfant**. Après un `fork()`, on a donc deux processus qui s’exécutent en parallèle : le parent et l’enfant. Ils continuent à partir de l’instruction suivante, mais `fork()` renvoie une valeur différente dans chacun : `0` dans le processus enfant, et le PID du nouvel enfant dans le processus parent. (Si `fork()` échoue, il renvoie `-1` et aucun enfant n’est créé.) En simplifiant, **`fork()` crée un nouveau processus quasi identique au shell** ([
+Processes (CS 4410, Summer 2015)
+](https://www.cs.cornell.edu/courses/cs4410/2015su/lectures/lec03-processes.html#:~:text=,with%20a%20new%20process%20created)).  
+
+- **`execve()`** : remplace le code du processus courant par un **nouveau programme**. Concrètement, `execve(path, argv, envp)` charge le programme situé à l’emplacement `path` (un fichier exécutable) et le lance, en lui passant la liste d’arguments `argv` et un tableau de variables d’environnement `envp`. Si l’appel réussit, le nouveau programme s’exécute **à la place** du code qui appelait `execve` (on ne revient pas en arrière). Si `execve` échoue, il retourne `-1` et indique une erreur. On utilise `execve` dans le **processus enfant** créé par `fork()`. Ainsi, le shell *parent* continue de tourner, tandis que le processus enfant est transformé en la commande demandée. En résumé, **`execve()` charge un nouveau programme dans un processus** (généralement l’enfant) ([c - Differences between fork and exec - Stack Overflow](https://stackoverflow.com/questions/1653340/differences-between-fork-and-exec#:~:text=The%20,it%20from%20the%20entry%20point)).  
+
+- **`waitpid()`** : fait attendre le processus parent jusqu’à ce qu’un processus enfant se termine. Le shell utilise `waitpid(pid, &status, 0)` pour attendre la fin de la commande qu’il a lancée (sauf si on souhaite l’exécuter en arrière-plan). Cela permet au shell de ne pas imprimer le prompt suivant ou de ne pas terminer avant que la commande soit finie. Une fois l’enfant terminé, `waitpid` remplit la variable `status` avec le code de sortie ou les informations sur l’arrêt du processus enfant. Le shell peut alors continuer son exécution (afficher un nouveau prompt, etc.). 
+
+En combinant ces appels : **le shell parent lance un `fork()`. L’enfant obtenu fait `execve()` pour exécuter la nouvelle commande, pendant que le parent `waitpid()` attend la fin de l’enfant** ([c - Differences between fork and exec - Stack Overflow](https://stackoverflow.com/questions/1653340/differences-between-fork-and-exec#:~:text=a%20child%20of%20a%20current,standard%20I%2FO%20and%20so%20forth)). C’est le schéma classique suivi par les shells Unix pour chaque commande externe exécutée.  
+
+#### Variables d’environnement et `getenv()`  
+Les **variables d’environnement** sont des paires nom-valeur stockées dans l’environnement du processus. Par exemple, `$HOME` est généralement le chemin du dossier personnel de l’utilisateur, `$USER` son nom d’utilisateur, `$PWD` le répertoire courant, etc. Ces variables sont héritées du processus parent : quand on lance un shell, il hérite de l’environnement de l’invite de connexion ou du terminal qui l’a lancé. De même, tout processus créé avec `fork()` **copie l’environnement** de son parent ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=The%20variable%20environ%20points%20to,copy%20of%20its%20parent%27s%20environment)), et un `execve()` transfère ce tableau de variables d’environnement au nouveau programme lancé.  
+
+Dans un programme C, on peut accéder aux variables d’environnement de plusieurs façons :  
+- En récupérant le troisième argument `envp` de la fonction `main(int argc, char *argv[], char *envp[])` (s’il est disponible) qui est un tableau de `char*` listant les variables.  
+- En utilisant la variable externe `**environ**` (déclarée comme `extern char **environ;`), qui pointe vers le tableau des variables d’environnement du processus ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=The%20variable%20environ%20points%20to,copy%20of%20its%20parent%27s%20environment)).  
+- En utilisant la fonction de bibliothèque **`getenv("NOM")`** (déclarée dans `<stdlib.h>`). `getenv` cherche dans la liste des variables d’environnement et renvoie une chaîne de caractères correspondant à la valeur de la variable demandée, ou `NULL` si elle n’existe pas ([getenv ()-Recherche de variables d'environnement - IBM](https://www.ibm.com/docs/fr/i/7.5?topic=functions-getenv-search-environment-variables#:~:text=La%20fonction%20getenv,Si%20getenv%28%29%20ne)). Par exemple, `getenv("HOME")` retourne le chemin du dossier home, et `getenv("PATH")` retourne la liste des chemins de recherche des commandes.  
+
+Dans notre mini-shell, on utilisera `getenv` pour accéder aux variables comme `$PATH`, et on pourra utiliser le tableau `environ` pour des fonctionnalités comme la commande interne `env` (qui affiche toutes les variables d’environnement). **Modifier** une variable d’environnement peut se faire via `setenv()` ou en manipulant `environ` (mais attention à la gestion mémoire). Pour un shell minimal, on peut se contenter de lire ces variables et de les transmettre à `execve()`.  
+
+#### Gestion des erreurs (messages comme dans Bash)  
+Un shell robuste doit gérer les erreurs d’exécution de manière informative, un peu comme Bash le fait. Plusieurs situations d’erreur peuvent se présenter lorsque l’on tente d’exécuter une commande :  
+
+- **Commande introuvable** : ni un exécutable à l’emplacement donné, ni dans les dossiers du `$PATH`. Dans ce cas, le shell affiche typiquement `"command not found"` ou un message similaire, et retourne un code d’erreur spécifique (127 dans Bash ([42-minishell/README.md at master · jdecorte-be/42-minishell · GitHub](https://github.com/jdecorte-be/42-minishell/blob/master/README.md#:~:text=Exit_status%20depands%20of%20multiple%20things%2C,the%20commande%20127%20%2B%20signal))). Cela correspond généralement à l’erreur système `ENOENT` (No such file or directory).  
+
+- **Permission refusée** : le fichier existe bien, mais n’est pas exécutable par l’utilisateur (par exemple, droits insuffisants, ou c’est un dossier au lieu d’un fichier exécutable). Là, le message d’erreur sera du type `"permission denied"`, et Bash utilise le code de sortie 126 ([42-minishell/README.md at master · jdecorte-be/42-minishell · GitHub](https://github.com/jdecorte-be/42-minishell/blob/master/README.md#:~:text=If%20the%20commande%20work%2C%200,the%20commande%20127%20%2B%20signal)). Cette erreur correspond souvent à `EACCES` (Permission denied) ou à `EISDIR` (tentative d’exécuter un dossier).  
+
+- **Erreur d’exécution générale** : par exemple, le fichier n’est pas un exécutable valide (pas le bon format binaire ou script sans interpréteur), ce qui peut donner un message `"Exec format error"` (erreur `ENOEXEC`).  
+
+- **Échec du fork** : si `fork()` retourne `-1`, le shell ne peut pas créer de nouveau processus (typiquement faute de ressources). Dans ce cas, on affiche un message d’erreur (par exemple `"fork: Resource temporarily unavailable"`) via `perror()` pour laisser le système décrire la cause.  
+
+Pour gérer ces erreurs en C, on utilise généralement la variable globale `errno` (définie dans `<errno.h>`) qui est définie par les appels système en cas d’erreur. Après un appel qui échoue (comme `execve` qui retourne `-1`), `errno` indique le code de l’erreur. On peut alors soit comparer `errno` à des constantes (`ENOENT`, `EACCES`, etc.) pour afficher un message personnalisé, soit utiliser **`perror("minishell")`** qui affiche un message préfixé (ici "minishell") suivi de la description par défaut de l’erreur correspondante. Par exemple, si `execve` échoue avec `errno == ENOENT`, `perror("minishell")` affichera quelque chose comme `minishell: No such file or directory`. On peut améliorer l’ergonomie en détectant `errno == ENOENT` après une recherche dans `$PATH` pour afficher `"minishell: command not found"` (plus clair pour l’utilisateur final).  
+
+**Résumé des codes d’erreur dans un shell** : Par convention, un code de sortie `0` signifie succès, et un code non zéro indique une erreur. Bash utilise 127 pour “command not found”, 126 pour “permission denied” ou commande non exécutable ([42-minishell/README.md at master · jdecorte-be/42-minishell · GitHub](https://github.com/jdecorte-be/42-minishell/blob/master/README.md#:~:text=Exit_status%20depands%20of%20multiple%20things%2C,the%20commande%20127%20%2B%20signal)). Notre mini-shell peut suivre ces conventions pour être cohérent.
+
+---
+
+### Implémentation guidée d’un mini-shell minimaliste
+
+Maintenant que les concepts sont clairs, passons à l’implémentation en C étape par étape. L’objectif est de réaliser un shell minimal capable de : (1) reconnaître et exécuter une commande donnée avec un chemin absolu ou relatif, (2) chercher une commande dans `$PATH` si le chemin n’est pas spécifié, et (3) gérer l’environnement (lecture des variables, transmission à `execve`, etc.), le tout avec une gestion d’erreurs soignée. Nous respecterons la Norme 42 (code decoupé, lisible) et utiliserons des fonctions de `libft` pour nous simplifier le traitement des chaînes (par ex. `ft_split`, `ft_strjoin`, etc.).
+
+Voici les grandes étapes de l’exécution d’une commande dans notre mini-shell : 
+
+1. **Forker le processus shell** – *Créer un processus enfant pour la nouvelle commande.*  
+   Lorsqu’on reçoit une commande (par exemple après avoir lu une ligne de l’utilisateur et l’avoir parsée en nom de programme + arguments), on commence par appeler `fork()`. Cela crée un **processus enfant** identique au shell. Le code suivant montre le schéma de base :  
+
+   ```c
+   pid_t pid = fork();
+   if (pid < 0) {
+       // Erreur : échec du fork
+       perror("minishell");
+   }
+   else if (pid == 0) {
+       // ---- Fils ----
+       // (On effectuera execve ici plus tard)
+   }
+   else {
+       // ---- Père (shell) ----
+       int status;
+       waitpid(pid, &status, 0);
+       // Optionnel: analyser status pour récupérer le code de sortie ou le signal
+   }
+   ```  
+
+   Dans l’enfant (`pid == 0`), nous ferons l’exécution de la commande. Le parent se contente d’attendre que le fils se termine avec `waitpid`. À ce stade, on n’a pas encore appelé `execve` – cela vient juste après, une fois que le fork a réussi dans le processus enfant.
+
+2. **Exécuter la commande (dans le processus enfant)** – *Utiliser `execve()` avec ou sans recherche dans `$PATH`.*  
+   Dans le bloc du **processus enfant** issu du fork, on doit remplacer son image par le programme à exécuter. On va donc appeler `execve()` différemment selon que la commande contient un chemin ou non :  
+
+   - **Cas chemin absolu ou relatif fourni** : Si le nom de commande fourni contient un `/` (par exemple `/bin/ls` ou `./a.out` ou `../script.sh`), on considère qu’il s’agit d’un chemin direct. On tente alors `execve(cmd, argv, envp)` directement avec ce chemin. L’array `argv` représente la liste des arguments (y compris le nom de la commande en position 0, comme en `main()` classique), et `envp` représente le tableau des variables d’environnement à passer (on peut réutiliser celui du shell tel quel).  
+     
+     Exemple de code dans le processus enfant :  
+     ```c
+     if (strchr(command, '/') != NULL) {
+         // La commande contient un slash => exécution directe
+         execve(command, args, envp);
+         // Si on revient ici, c'est que execve a échoué
+         if (errno == ENOENT)
+             fprintf(stderr, "%s: command not found\n", command);
+         else
+             perror("minishell");
+         exit(errno); // On quitte le processus enfant avec un code d’erreur
+     }
+     ```  
+     Ici, `strchr(command, '/')` sert à détecter la présence d’un `/` dans la chaîne de la commande. Si `execve` réussit, **il ne revient pas**. S’il échoue, on gère l’erreur : dans l’exemple, on distingue le cas fichier non trouvé pour un chemin inexistant (message personnalisé) sinon on utilise `perror` pour les autres erreurs. On termine ensuite le processus enfant avec `exit()` en renvoyant `errno` (ou une valeur appropriée comme 126/127 selon le type d’erreur).  
+
+   - **Cas commande sans chemin (recherche dans `$PATH`)** : Si la commande ne contient pas de `/`, on doit la chercher dans les dossiers listés dans `$PATH`. On récupère d’abord la valeur de `$PATH` avec `getenv("PATH")`. Il faut ensuite **séparer cette chaîne** par le caractère `:` pour obtenir chaque répertoire. Avec la libft, on peut utiliser `ft_split(path_env, ':')` pour obtenir un tableau de chaînes. Par exemple, `$PATH="/bin:/usr/bin:/usr/local/bin"`, on obtiendra un tableau `{"\bin", "/usr/bin", "/usr/local/bin", NULL}`.  
+
+     Ensuite, on parcourt chacun de ces dossiers et on construit un chemin complet en y concaténant le nom de la commande. Par exemple, si la commande est `"ls"` et le dossier courant du loop est `"/bin"`, on forme la chaîne `"/bin/ls"`. En C, on peut faire cela avec `sprintf` ou en utilisant `ft_strjoin` de libft :  
+     ```c
+     char *path_env = getenv("PATH");
+     char **paths = ft_split(path_env, ':');
+     int i = 0;
+     char *fullpath = NULL;
+     while (paths && paths[i]) {
+         fullpath = ft_strjoin(paths[i], "/");          // ex: "/bin" + "/" = "/bin/"
+         fullpath = ft_strjoin_free(fullpath, command); // ex: "/bin/" + "ls" = "/bin/ls"
+         if (access(fullpath, X_OK) == 0) {
+             // Trouvé un exécutable accessible
+             execve(fullpath, args, envp);
+             // Si execve réussit, on ne passe pas ici. Donc échec si on est ici :
+             perror("minishell");
+             free(fullpath);
+             // Libérer éventuellement paths[i] etc.
+             exit(errno);
+         }
+         free(fullpath);
+         i++;
+     }
+     ```  
+     Dans ce code, on utilise `access(fullpath, X_OK)` pour vérifier *a priori* que le fichier existe et est exécutable par le processus. `X_OK` demande la permission d’exécution. Si `access` renvoie 0, cela signifie que le fichier pointé par `fullpath` existe et est exécutable, donc on tente `execve(fullpath, args, envp)`. Si `execve` échoue malgré tout (ce qui pourrait arriver si, par exemple, le fichier n’est pas un vrai exécutable), on sort avec une erreur. S’il réussit, le programme externe est lancé et remplace le code du processus enfant.  
+
+     Si la boucle se termine sans trouver d’exécutable (`access` n’a jamais retourné 0), cela veut dire que la commande n’a été trouvée dans aucun des dossiers de `$PATH`. On gère alors l’erreur en conséquence :  
+     ```c
+     fprintf(stderr, "%s: command not found\n", command);
+     exit(127);  // code d'erreur 127 pour commande introuvable
+     ```  
+     N’oubliez pas de libérer le tableau `paths` alloué par `ft_split`. Le processus enfant sort avec 127, que le parent pourra récupérer si besoin.  
+
+     *Remarque:* On pourrait utiliser `execvp(command, args)` qui effectue automatiquement cette recherche dans `$PATH`. Cependant, pour bien contrôler le processus (et dans l’esprit du projet 42), on réalise nous-même la recherche avec `execve`. 
+
+3. **Gérer les variables d’environnement** – *Transmission et utilisation dans le shell.*  
+   Au lancement du mini-shell (par la fonction `main`), on reçoit généralement un tableau `envp` contenant l’environnement. Il faut le conserver, car :  
+   - On le transmet tel quel à `execve` pour que les programmes lancés héritent des mêmes variables (sinon, avec un `envp` NULL, les programmes n’auraient pas de variables d’environnement).  
+   - On peut avoir besoin de lire des variables pour le fonctionnement du shell. Par exemple, pour implémenter la commande interne `cd`, on pourrait utiliser `getenv("HOME")`. Pour afficher l’invite, on utilise souvent `getenv("USER")` ou `getenv("PWD")`, etc.  
+   - Si on implémente la commande interne `env`, on parcourra le tableau global `environ` ou celui passé en argument de `main` pour afficher chaque variable. Par exemple :  
+     ```c
+     #include <stdio.h>
+     extern char **environ;
+     // ...
+     for (int j = 0; environ[j] != NULL; j++) {
+         printf("%s\n", environ[j]);
+     }
+     ```  
+     Ceci affichera toutes les variables sous la forme `NOM=valeur`.  
+
+   Dans notre mini-shell minimal, la gestion des variables d’environnement consiste surtout à **les conserver et les utiliser**. Si l’utilisateur tape par exemple `echo $HOME`, il faut détecter `$HOME` et le remplacer par sa valeur via `getenv("HOME")`. Cette partie s’implémente au niveau du parsing de la commande (avant l’exécution). Il s’agit de détecter le symbole `$` suivi d'un nom et de faire la substitution. On peut utiliser des fonctions de libft pour reconstruire la chaîne substituée. Par simplicité, on peut supposer qu’on n’a au plus qu’une variable par argument à substituer.  
+
+   *Conseil:* Stockez votre environnement dans une structure (par exemple un `char **env`) globale ou gérée tout au long de la vie du shell, afin de pouvoir le modifier plus tard (avec `setenv`, `unsetenv` ou équivalent) si vous implémentez ces built-ins. Pour l’instant, lire avec `getenv` suffit.  
+
+4. **Gestion des erreurs et vérifications** – *Utiliser `errno`, `perror()` et `access()`.*  
+   Nous avons déjà évoqué la stratégie pour les erreurs du point de vue de l’utilisateur. Concrètement, dans le code, voici quelques bonnes pratiques :  
+   - Après un `fork()`, toujours tester `pid < 0` pour détecter un échec de création de processus. En cas d’erreur, utilisez `perror("minishell")` pour afficher le message système approprié, puis éventuellement continuez le loop principal (sans exécuter la commande car pas de processus enfant).  
+   - Dans le processus enfant, après un `execve` qui échoue, utilisez `errno` pour distinguer le cas *fichier non trouvé* (`ENOENT`). Si la commande contenait un slash (chemin explicite), affichez par exemple `"minishell: /chemin/vers/program: No such file or directory"` via `perror` (le message contiendra le chemin fautif). Si la commande ne contenait pas de slash (càd recherche dans PATH épuisée sans succès), affichez `"minishell: command not found"` manuellement.  
+   - Utilisez `access(filename, F_OK)` pour vérifier qu’un fichier existe, et `access(filename, X_OK)` pour vérifier qu’il est exécutable. Cela peut vous aider à décider entre un message “not found” (s’il n’existe pas du tout) et “permission denied” (s’il existe mais non exécutable). Par exemple, si `access(file, F_OK) == 0` (fichier existe) mais `access(file, X_OK) != 0`, alors le fichier est présent mais non exécutable par l’utilisateur : affichez `"permission denied"` et sortez avec code 126.  
+   - N’oubliez pas de fermer correctement les processus enfants terminés. Normalement, `waitpid` s’en occupe et évite les *zombies*. Si vous exécutez en arrière-plan (pas requis pour un shell minimal de base), il faudrait gérer différemment (`waitpid` non bloquant ou capture de signal SIGCHLD).  
+
+   Enfin, soignez la valeur de retour du shell lui-même et des commandes exécutées. Si `execve` réussit, le code de retour du processus enfant sera celui du programme lancé. Si `execve` échoue, assurez-vous de `exit()` le processus enfant avec une valeur conventionnelle (par exemple `exit(127)` pour “command not found”, `exit(126)` pour “permission denied”, ou `exit(1)` par défaut pour d’autres erreurs). Le parent pourra récupérer ce code via `waitpid` et l’utiliser pour `$?` si on implémente cette variable spéciale.
+
+5. **Exemple de code minimaliste** – *Assembler le tout dans une fonction.*  
+   Pour illustrer l’ensemble, voici un **exemple simplifié** d’une fonction C qui exécute une commande externe avec les points ci-dessus. Cette fonction suppose que la ligne de commande a déjà été découpée en `command` (le nom ou chemin de la commande) et un tableau `args` (les arguments, `args[0]` devant être le nom de la commande par convention). Elle utilise des fonctions de `libft` pour la manipulation de chaînes (on supposera `ft_split`, `ft_strjoin` et une variante `ft_strjoin_free` qui libère son premier argument, par exemple).  
+
+   ```c
+   #include <unistd.h>
+   #include <stdlib.h>
+   #include <stdio.h>
+   #include <string.h>
+   #include <sys/wait.h>
+   #include <errno.h>
+   #include "libft.h"    // votre libft avec ft_split, ft_strjoin, etc.
+
+   int execute_command(char *command, char **args, char **envp) {
+       pid_t pid = fork();
+       int status;
+
+       if (pid < 0) {
+           // Échec du fork
+           perror("minishell");
+           return (1); // code d’erreur arbitraire pour le shell
+       }
+       if (pid == 0) {
+           // Processus enfant
+           if (strchr(command, '/') != NULL) {
+               // Chemin absolu ou relatif fourni
+               execve(command, args, envp);
+               // Si on arrive ici, erreur à l'execve
+               if (errno == ENOENT) {
+                   fprintf(stderr, "%s: command not found\n", command);
+                   exit(127);
+               } else if (errno == EACCES) {
+                   fprintf(stderr, "%s: permission denied\n", command);
+                   exit(126);
+               } else {
+                   perror("minishell");
+                   exit(1);
+               }
+           } else {
+               // Pas de slash -> recherche dans PATH
+               char *path_env = getenv("PATH");
+               char **paths = ft_split(path_env ? path_env : "", ':');
+               char *fullpath = NULL;
+               int i = 0;
+               while (paths && paths[i]) {
+                   fullpath = ft_strjoin(paths[i], "/");
+                   char *tmp = fullpath;
+                   fullpath = ft_strjoin(fullpath, command);
+                   free(tmp);
+                   if (access(fullpath, X_OK) == 0) {
+                       execve(fullpath, args, envp);
+                       // Si execve échoue, on gère l'erreur et quitte
+                       if (errno == EACCES) {
+                           fprintf(stderr, "%s: permission denied\n", fullpath);
+                           exit(126);
+                       } else {
+                           perror("minishell");
+                           exit(1);
+                       }
+                   }
+                   free(fullpath);
+                   i++;
+               }
+               // Aucune occurrence trouvée dans PATH
+               fprintf(stderr, "%s: command not found\n", command);
+               exit(127);
+           }
+       }
+       // Processus parent
+       waitpid(pid, &status, 0);
+       // Optionnel: on peut récupérer et traiter status ici
+       return (0);
+   }
+   ```  
+
+   **Explication du code :**  
+   - On fait le `fork()` et on gère l’erreur éventuelle immédiatement.  
+   - Dans le fils (`pid == 0`), on distingue deux cas selon la présence d’un `/` dans `command`.  
+     - Si la commande a un chemin, on appelle directement `execve`. En cas d’échec, on teste `errno` pour distinguer les cas courants : fichier non trouvé (`ENOENT` -> message *command not found*, code 127), pas la permission (`EACCES` -> *permission denied*, code 126), ou autre erreur (`perror` générique, code 1). Puis `exit` termine le fils.  
+     - Si la commande n’a pas de chemin, on récupère `$PATH`. On split cette variable en utilisant `:` comme séparateur. Ensuite, on boucle sur chaque chemin possible, on construit `fullpath` en concaténant le dossier + "/" + nom de commande. On utilise `access(..., X_OK)` pour vérifier si le fichier est exécutable.  
+       - Si oui, on tente `execve(fullpath, args, envp)`. Si `execve` échoue, on traite l’erreur : si c’est un problème de permission (`EACCES`), on affiche *permission denied* et quitte avec 126, sinon on fait un `perror` générique et quitte avec 1. (Ici, on ne traite pas `ENOENT` après `access == 0` car normalement si `access` a réussi, `ENOENT` ne devrait pas arriver sauf cas particulier comme fichier supprimé entre-temps.)  
+       - Si `access` échoue ou le fichier n’est pas exécutable, on passe au dossier suivant.  
+       - Après la boucle, si aucune exécution n’a réussi, on affiche *command not found* et on quitte avec 127.  
+   - Le parent attend le fils avec `waitpid`. Le code de retour de `execute_command` ici est 0 pour indiquer que le shell continue (on pourrait aussi transmettre le code d’exit du fils si on veut l’exploiter).  
+
+   Ce code est minimaliste et serait affiné dans une vraie implémentation (libération de toute la mémoire allouée, gestion de cas particuliers, etc.), mais il illustre la mécanique de base. En suivant la Norme 42, veillez à découper en fonctions courtes : par exemple une fonction pour trouver le bon chemin d’exécutable (recherche dans `$PATH`), une fonction pour lancer le fork+execve et gérer l’erreur dans l’enfant, etc. Utilisez votre libft pour toutes les opérations sur les chaînes (split, join, free, etc.) afin d’avoir un code propre et lisible.  
+
+**En conclusion**, un mini-shell se résume à lire les commandes de l’utilisateur, déterminer **quel programme lancer** (chemin direct ou recherche dans `$PATH`), puis utiliser le mécanisme **fork/execve/wait** pour exécuter ce programme dans un processus enfant tout en gérant les erreurs et l’environnement. En maîtrisant ces étapes, vous construirez progressivement un shell de plus en plus complet, en ajoutant ensuite les *built-ins* (commandes internes), la gestion des pipes, redirections, etc. Mais déjà, avec les bases ci-dessus, vous avez un shell capable de lancer des programmes comme `/bin/ls` ou `grep` simplement en tapant leur nom, tout comme Bash le ferait ! Bonne programmation 😊 ([42-minishell/README.md at master · jdecorte-be/42-minishell · GitHub](https://github.com/jdecorte-be/42-minishell/blob/master/README.md#:~:text=Exit_status%20depands%20of%20multiple%20things%2C,the%20commande%20127%20%2B%20signal)) ([environ(7) - Linux manual page](https://man7.org/linux/man-pages/man7/environ.7.html#:~:text=PATH%20%20%20The%20sequence,The%20prefixes%20are%20separated%20by))】

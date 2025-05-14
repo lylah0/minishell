@@ -1,0 +1,56 @@
+Version basique :
+
+1. Reads its input from the user’s terminal.
+	[ ] readline
+2. Breaks the input into words and operators, obeying the quoting rules described in [Quoting](https://www.gnu.org/software/bash/manual/bash.html#Quoting). These tokens are separated by `metacharacters`. Alias expansion is performed by this step (see [Aliases](https://www.gnu.org/software/bash/manual/bash.html#Aliases)).
+	[ ] split command line
+3. Parses the tokens into simple and compound commands (see [Shell Commands](https://www.gnu.org/software/bash/manual/bash.html#Shell-Commands)).
+	[ ] fonction print "echo" : cmd, "bla bla bla" : arg
+4. Performs the various shell expansions (see [Shell Expansions](https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions)), breaking the expanded tokens into lists of filenames (see [Filename Expansion](https://www.gnu.org/software/bash/manual/bash.html#Filename-Expansion)) and commands and arguments.
+	priorite des operations
+5. *Performs any necessary redirections (see [Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections)) and removes the redirection operators and their operands from the argument list.*
+	redirections
+6. Executes the command (see [Executing Commands](https://www.gnu.org/software/bash/manual/bash.html#Executing-Commands)).
+	[ ] fonction echo
+7. Optionally waits for the command to complete and collects its exit status (see [Exit Status](https://www.gnu.org/software/bash/manual/bash.html#Exit-Status)).
+	[ ] print : exit status
+
+___To do :___
+	[Lylah] Run simple commands with absolute, relative path (e.g. /bin/ls, ../bin/ls)
+	[Lylah] Run simple commands without a path (e.g. ls, cat, grep, etc…)
+	[Lylah] Handle environment variables ($ followed by a sequence of characters).
+OK	[Moni] Have a working history (you can navigate through commands with up/down arrows)
+	[ ] Implement pipes (|)
+	[ ] Implement redirections (<, >, >>)
+	[ ] Implement the here-doc (<<)
+	[Moni] environ, env, name=variable
+	[Lylah] Handle double quotes ("") and single quotes (''), which should escape special characters, beside $ for double quotes.
+Mon	[ ] Handle signals like in bash (ctrl + C, ctrl + \, ctrl + D).
+	[ ] Implement the following built-ins:
+		[...] — echo (option -n only)
+		[...] — exit
+		[ x ] — env (with no options or arguments)
+FUCK	[.  ] — export (with no options)
+		[   ] — unset (with no options)  	--> lle_del_one
+		[ x ] — cd							--> [ ]	maj OLDPWD
+		[...] — pwd (a mod apres env)		--> me semble ok
+
+
+_________MONI___________
+
+[x] faire de l'ordre
+[x] commenter mes fonctions
+[keep_on_trying] etre gentille avec Moni du futur
+[ ] avancer dans les builtins
+	[ ] export
+		[x] tri alphabetique
+		[ ] structure
+		[ ] ajout variable
+		[ ] modifier variable
+	[ ] unset
+		[ ] supprimer variable
+	[ ]	cd
+		[ ] verifier path
+	[x] echo
+	[ ]	exit
+

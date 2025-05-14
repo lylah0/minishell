@@ -1,0 +1,7 @@
+Opérateur	Explication simplifiée								Exemple binaire
+& (ET)		Garde les parts communes entre 2 pizzas				1010 & 1100 = 1000
+`	` (OU)	Garde toutes les parts des 2 pizzas		
+^ (XOR)		Garde les parts uniques de chaque pizza				1010 ^ 1100 = 0110
+~ (NOT)		Inverse les parts pleines et vides					~1010 = 0101
+<< (Gauche)	Pousse les parts vers la gauche (multiplie par 2)	00001101 << 1 = 00011010
+>> (Droite)	Pousse les parts vers la droite (divise par 2)		00001101 >> 1 = 00000110
