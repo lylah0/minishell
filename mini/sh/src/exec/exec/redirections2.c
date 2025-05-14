@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:18:44 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 16:26:36 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:21:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	has_redirection(t_input *current)
 {
-	while (current)
+	while (current && current->type != T_PIPE)
 	{
 		if (current->type == T_OP)
 			return true;

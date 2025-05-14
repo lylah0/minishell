@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/12 19:30:22 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:07:23 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ char	**build_cmd_arg(t_input *token)
 	cmd[i] = NULL;
 	return (cmd);
 }
-
-
 
 void	exec(t_input *current, t_data *data, char *env_path)
 {

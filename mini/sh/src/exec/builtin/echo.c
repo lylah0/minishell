@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/12 19:32:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:16:38 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ void	b_echo(t_input *cmd)
 	}
 	while (current && (current->type != T_PIPE && current->type != T_OP)) // ajout de t_op pour ne pas print ">/<"
 	{
-		ft_printf("%s", current->token);
+		write(STDOUT_FILENO, current->token, strlen(current->token));
 		if (current->next && current->next->type != T_PIPE)
-			ft_printf(" ");
+			write(STDOUT_FILENO, " ", 1);
 		current = current->next;
 	}
 	if (n_flag == OFF)
-		ft_printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	exit_code = 0;
 }

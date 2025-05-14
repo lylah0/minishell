@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/12 17:13:49 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:47:22 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 	head = tokenize(splited_input, data);
 	// print_all_token_types(head);
 	is_env_var(head, data);
-	//print_token_list(head);
+	print_token_list(head);
 	return (head);
 }
 

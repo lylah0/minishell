@@ -1,1 +1,1 @@
-hello
+/home/lylrandr/42/minishell_ly_mo/mini/sh
