@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/14 19:57:12 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/14 20:37:51 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(int ac, char **av, char **envp)
 		data->should_exit = 0;
 		data->child_pid = -1;// handler ne tente rien de foireux avant fork
 		if (data->signal->sigquit == OFF)
-			input = get_user_input(data, "minishell> ");
+			input = get_user_input("minishell> ");
 		else 
 			continue;
 		if (!input)

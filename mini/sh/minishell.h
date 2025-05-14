@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/14 19:57:30 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/14 20:38:03 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct s_data
 }					t_data;
 
 
-char *get_user_input(t_data *data, const char *prompt);
+char *get_user_input(const char *prompt);
 t_data	*get_data_ptr(t_data *new_data);
 void	init_signals(t_data *data);
 void	handler_sigint(int signum);
