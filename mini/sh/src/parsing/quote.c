@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/09 15:50:46 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:32:30 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,34 @@
 
 void	parse_and_expand_token(t_input *token, t_data *data)
 {
-	int		i = 0;
-	char	*input = token->token;
-	char	*result = ft_calloc(1, sizeof(char));
+	int		i;
+	char	*input;
+	char	*result;
 	char	*temp;
-	char	*joined;
 
+	i = 0;
+	input = token->token;
+	result = ft_calloc(1, sizeof(char));
 	while (input[i])
 	{
-		if (input[i] == '\'')
-			temp = handle_single_quote(input, &i);
-		else if (input[i] == '"')
-			temp = handle_double_quote(input, &i, data);
-		else if (input[i] == '$')
-			temp = handle_env_variable(input, &i);
-		else
-			temp = extract_plain_text(input, &i);
-		if (!temp)
-			break;
-		joined = ft_strjoin(result, temp);
-		free(result);
-
-		result = joined;
-		free(temp);
+		temp = expand_token_part(input, &i, data);
+		if (!temp || !append_to_result(&result, temp))
+			break ;
 	}
 	if (!result)
 		result = ft_strdup("");
 	free(token->token);
 	token->token = result;
-	if (token->token[0] == '\0')
+	if (result[0] == '\0')
 		token->type = T_SKIP;
 	else
 		token->type = T_WORD;
 }
 
-
-char *handle_single_quote(char *str, int *i)
+char	*handle_single_quote(char *str, int *i)
 {
-	int		start;
-	int		len;
+	int	start;
+	int	len;
 
 	start = ++(*i);
 	len = 0;
@@ -96,30 +85,32 @@ char	*handle_env_variable(char *str, int *i)
 	if (str[*i + 1] == '?')
 	{
 		*i += 2;
-		return ft_itoa(exit_code);
+		return (ft_itoa(exit_code));
 	}
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
-		return ft_strdup("$");
+		return (ft_strdup("$"));
 	var_name = extract_var_name(str, i);
 	if (!var_name)
-		return ft_strdup("");
+		return (ft_strdup(""));
 	var_value = getenv(var_name);
 	free(var_name);
 	if (!var_value)
-		return ft_strdup("");
-	return ft_strdup(var_value);
+		return (ft_strdup(""));
+	return (ft_strdup(var_value));
 }
 
-char *extract_plain_text(char *str, int *i)
+char	*extract_plain_text(char *str, int *i)
 {
-	int start = *i;
-	int len = 0;
+	int	start;
+	int	len;
 
+	start = *i;
+	len = 0;
 	while (str[*i] && str[*i] != '\'' && str[*i] != '"' && str[*i] != '$')
 	{
 		(*i)++;
 		len++;
 	}
-	return ft_substr(str, start, len);
+	return (ft_substr(str, start, len));
 }

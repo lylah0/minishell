@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by                   #+#    #+#             */
-/*   Updated: 2025/05/15 14:22:53 by lylrandr         ###   ########.fr       */
+/*   Created: 2025/05/15 17:09:08 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/15 18:32:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,17 @@
 
 char	**second_parsing(char **array)
 {
-	int		i;
-	int		j;
-	int		len;
 	char	**result;
+	int		len;
 
 	if (!array)
 		return (NULL);
-	i = 0;
-	len = 0;
-	while (array[i])
-	{
-		j = 0;
-		if (!array[i])
-			break;
-		if (array[i][0] == '\0')
-		{
-			i++;
-			continue;
-		}
-		if (array[i][0] == '\'' || array[i][0] == '"')// faudrait pas verifier que i++ existe bien avant dincrementer ?
-		{
-			len++;
-			i++;
-			continue ;
-		}
-		if (!array[i])
-			break;
-		while (array[i][j])
-		{
-			if (array[i][j] == ' ')
-				len++;
-			j++;
-		}
-		i++;
-		len++;
-	}
+	len = count_second_parsing_len(array);
 	result = malloc_second_parsing(len);
 	if (!result)
 		return (NULL);
 	return (fill_second_tab(array, result));
 }
-
 
 void	handle_operator(char **tab_token, char **array, int *index, int i)
 {

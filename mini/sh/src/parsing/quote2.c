@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/14 18:53:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:39:26 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*handle_quoted_token(char *quoted_str)
 {
-	int	len;
-	int	j;
-	int	i;
+	int		len;
+	int		j;
+	int		i;
 	char	*result;
 
 	len = ft_strlen(quoted_str);
@@ -30,7 +30,7 @@ char	*handle_quoted_token(char *quoted_str)
 		if (quoted_str[i] == quoted_str[0])
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		result[j++] = quoted_str[i++];
 	}
@@ -51,13 +51,11 @@ char	**malloc_second_parsing(int len)
 	return (tab_token);
 }
 
-
 void	if_quotes(char *input, char **array, int *k, int *i)
 {
 	char	quote;
 	int		start;
 	int		len;
-	int		j;
 
 	quote = input[*k];
 	start = *k;
@@ -69,26 +67,17 @@ void	if_quotes(char *input, char **array, int *k, int *i)
 	else
 	{
 		printf("missing one quote\n");
-		return;
+		return ;
 	}
 	while (input[*k] && input[*k] != ' ' && input[*k] != '|' && input[*k] != '<'
 		&& input[*k] != '>' && input[*k] != ';' && input[*k] != '&'
 		&& input[*k] != '(' && input[*k] != ')')
 		(*k)++;
 	len = *k - start;
-	array[*i] = malloc(sizeof(char) * (len + 1));
-	if (!array[*i])
-		return ;
-	j = 0;
-	while (j < len)
-	{
-		array[*i][j] = input[start + j];
-		j++;
-	}
-	array[*i][j] = '\0';
+	copy_substring(input, &array[*i], start, len);
 }
 
-int	while_quotes(char *input, int i)
+int	while_quotes(const char *input, int i)
 {
 	if (input[i - 1] != ' ' || input[i - 1] != '\t')
 		i++;

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 15:27:45 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:51:40 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,8 @@ void	validate_redirections(t_input *current)
 	{
 		if (current->type == T_OP && current->next)
 		{
-			if (!ft_strncmp(current->token, ">>", 3))
-				fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			else if (!ft_strncmp(current->token, ">", 2))
-				fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else if (!ft_strncmp(current->token, "<", 2))
-				fd = open(current->next->token, O_RDONLY);
-			else if (!ft_strncmp(current->token, "<<", 3))
+			fd = open_redirection_file(current);
+			if (fd == -2)
 			{
 				current = current->next;
 				continue ;
@@ -121,3 +116,4 @@ void	validate_redirections(t_input *current)
 		current = current->next;
 	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:18:44 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/13 17:21:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:51:52 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,15 @@ bool	is_safe_to_exec_in_parent(t_input *current)
 		tmp = tmp->next;
 	}
 	return (true);
+}
+
+int	open_redirection_file(t_input *current)
+{
+	if (!ft_strncmp(current->token, ">>", 3))
+		return (open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644));
+	else if (!ft_strncmp(current->token, ">", 2))
+		return (open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+	else if (!ft_strncmp(current->token, "<", 2))
+		return (open(current->next->token, O_RDONLY));
+	return (-2);
 }

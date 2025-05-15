@@ -6,23 +6,25 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/14 19:22:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:32:17 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_input *filter_args(t_input *args)
+t_input	*filter_args(t_input *args)
 {
-	t_input *filtered = NULL;
-	t_input **tail = &filtered;
+	t_input	*filtered;
+	t_input	**tail;
 
+	filtered = NULL;
+	tail = &filtered;
 	while (args)
 	{
 		if (args->type == T_OP && args->next)
 		{
 			args = args->next->next;
-			continue;
+			continue ;
 		}
 		if (args->type == T_ARG || args->type == T_WORD)
 		{
@@ -32,10 +34,8 @@ t_input *filter_args(t_input *args)
 		args = args->next;
 	}
 	*tail = NULL;
-	return filtered;
+	return (filtered);
 }
-
-
 
 int	is_cmd(char *token, char **env)
 {
@@ -77,8 +77,9 @@ int	is_builtin(char *cmd)
 
 char	*my_getenv(t_data *data, char *var_name)
 {
-	while (data->env->next && !(ft_strncmp(data->env->name, var_name, ft_strlen(var_name)) == 0
-		&& data->env->name[ft_strlen(var_name)] == '\0'))
+	while (data->env->next && !(ft_strncmp(data->env->name, var_name,
+				ft_strlen(var_name)) == 0
+			&& data->env->name[ft_strlen(var_name)] == '\0'))
 		data->env = data->env->next;
 	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
 		return (data->env->value);
@@ -103,5 +104,5 @@ bool	in_quotes(char *str, int index)
 			in_double = !in_double;
 		i++;
 	}
-	return in_double;
+	return (in_double);
 }

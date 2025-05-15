@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 16:24:00 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:25:03 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,15 @@
 
 char	**build_cmd_arg(t_input *token)
 {
-	t_input	*tmp;
-	int		i;
 	char	**cmd;
+	int		count;
 
-	i = 1;
-	tmp = token->next;
-	while (tmp && tmp->type != T_PIPE)
-	{
-		if (tmp->type != T_OP && tmp->type != T_PIPE &&(tmp->prev == NULL || tmp->prev->type != T_OP))
-			i++;
-		tmp = tmp->next;
-	}
-	cmd = malloc(sizeof(char *) * (i + 1));
+	count = count_args(token);
+	cmd = malloc(sizeof(char *) * (count + 1));
 	if (!cmd)
 		return (NULL);
 	cmd[0] = ft_strdup(token->token);
-	tmp = token->next;
-	i = 1;
-	while (tmp && tmp->type != T_PIPE)
-	{
-		if (tmp->type != T_OP && tmp->type != T_PIPE && (tmp->prev == NULL || tmp->prev->type != T_OP))
-		{
-			cmd[i] = ft_strdup(tmp->token);
-			i++;
-		}
-		tmp = tmp->next;
-	}
-	cmd[i] = NULL;
+	fill_cmd_args(cmd, token);
 	return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 16:24:16 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:41:44 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-
-# include <string.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -93,7 +92,7 @@ int					handle_non_operator(char **tab_token, char *array,
 void				handle_operator(char **tab_token, char **array, int *index,
 						int i);
 void				if_quotes(char *input, char **array, int *k, int *i);
-int					while_quotes(char *input, int i);
+int					while_quotes(const char *input, int i);
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
 void				is_env_var(t_input *input, t_data *data);
@@ -105,6 +104,21 @@ char				*extract_plain_text(char *str, int *i);
 char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
 bool				in_quotes(char *str, int index);
+void				append_char_to_result(char **result, char c);
+void				append_str_to_result(char **result, const char *str);
+int					handle_special_cases(const char *src, int *i,
+						char **result);
+int					handle_normal_word(char *input, char **array, int *k,
+						int i);
+int					count_tokens(const char *input);
+int					quotes(char *input, int *k, int *in_quote,
+						char *quote_char);
+int					copy_substring(char *input, char **array_ptr, int start, int len);
+
+int					count_second_parsing_len(char **array);
+int					append_to_result(char **result, char *temp);
+char				*expand_token_part(char *input, int *i, t_data *data);
+void				expand_env_var_into_array(char *input, char **array_ptr, int *k, int *j);
 
 // fonctions execution
 
@@ -112,16 +126,24 @@ int					is_builtin(char *cmd);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
-void				parent(int *prev_pipe, t_input **current, int fd[2],
-						t_data **data);
+void				parent(int *prev_pipe, t_input **current, int fd[2]);
 void				child(int prev_pipe, t_input *current, int fd[2],
-char				*env_path, t_data *data);
+						char *env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
-void				exec(t_input *current, t_data *data, char *env_path, int in_pipe);
+void				exec(t_input *current, t_data *data, char *env_path,
+						int in_pipe);
 int					is_parent_builtin(char *token);
 bool				is_safe_to_exec_in_parent(t_input *current);
 t_input				*filter_args(t_input *input);
+
+// utils exec
+
+int					handle_parent_builtin(t_input *current, t_data *data);
+void				handle_fork(int *prev_pipe, t_input **current, int *fd,
+						t_data *data, char *env_path);
+int					count_args(t_input *token);
+void				fill_cmd_args(char **cmd, t_input *token);
 
 // fonctions redirection
 
@@ -131,6 +153,7 @@ void				heredoc_append(t_input *current, t_data *data);
 void				heredoc(t_input *current);
 void				validate_redirections(t_input *current);
 bool				has_redirection(t_input *current);
+int					open_redirection_file(t_input *current);
 
 // fonctions token
 
@@ -168,7 +191,8 @@ void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input, int in_pipe);
-t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
+t_env				*update_env_value(t_env *env, char *env_to_update,
+						char *new_value);
 
 // init_environment // b_export
 void				free_lle(t_data *data);
@@ -186,12 +210,13 @@ void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
 void				print_export(t_data *data);
 void				add_env_name(t_data *data, char *env_name);
-void				add_new_env_var_and_value(t_data *data, char *env_name, char *env_value);
+void				add_new_env_var_and_value(t_data *data, char *env_name,
+						char *env_value);
 
 // t_env	*add_env_var(t_data *data, char *input);
 
 t_env				*exist_already_in_env(t_env *env, char *name_var);
-void lle_del_one(t_env **env, char *env_to_del);
+void				lle_del_one(t_env **env, char *env_to_del);
 
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
@@ -232,13 +257,12 @@ void				lle_add_front(t_env **env, t_env *new1);
 void				lle_del_one(t_env **env, char *env_to_del);
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
-t_env 				*lle_new(char *name, char *value);
+t_env				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);
 char				*search_env_value(t_env *env, char *name);
 void				ft_printf_stderr(const char *s, ...);
 
 char				*ft_strndup(const char *src, int n);
-
 
 // content devient name par defaut, a adapter si beosin
 

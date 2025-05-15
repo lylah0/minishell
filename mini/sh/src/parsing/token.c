@@ -6,19 +6,50 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:45:30 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:32:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+t_input	*add_token(t_input *tail, char *token_str)
+{
+	t_input	*new_node;
+
+	new_node = malloc(sizeof(t_input));
+	if (!new_node)
+		exit(1);
+	new_node->token = ft_strdup(token_str);
+	new_node->prev = tail;
+	new_node->next = NULL;
+	tail->next = new_node;
+	return (new_node);
+}
+
+void	assign_token_types(t_input *head, t_data *data)
+{
+	t_input	*current;
+
+	current = head;
+	while (current)
+	{
+		current->type = get_token_type(current, current->token, data);
+		current = current->next;
+	}
+	current = head;
+	while (current)
+	{
+		if (current->token && current->token[0] == '\0')
+			current->type = T_SKIP;
+		current = current->next;
+	}
+}
 
 t_input	*tokenize(char **input, t_data *data)
 {
 	int		i;
 	t_input	*tail;
 	t_input	*head;
-	t_input	*new_node;
-	t_input	*current;
 
 	i = 1;
 	tail = malloc(sizeof(t_input));
@@ -27,29 +58,16 @@ t_input	*tokenize(char **input, t_data *data)
 		perror("tokenize");
 		exit(1);
 	}
-
 	tail->token = ft_strdup(input[0]);
 	tail->prev = NULL;
 	tail->next = NULL;
 	head = tail;
 	while (input[i])
 	{
-		new_node = malloc(sizeof(t_input));
-		if (!new_node)
-			exit(1);
-		new_node->token = ft_strdup(input[i]);
-		new_node->prev = tail;
-		new_node->next = NULL;
-		tail->next = new_node;
-		tail = new_node;
+		tail = add_token(tail, input[i]);
 		i++;
 	}
-	current = head;
-	while (current)
-	{
-		current->type = get_token_type(current, current->token, data);
-		current = current->next;
-	}
+	assign_token_types(head, data);
 	is_cmd_arg(head);
 	return (head);
 }
