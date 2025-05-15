@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/13 16:07:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:45:02 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**build_cmd_arg(t_input *token)
 	tmp = token->next;
 	while (tmp && tmp->type != T_PIPE)
 	{
-		if (tmp->type != T_OP && (tmp->prev == NULL || tmp->prev->type != T_OP))
+		if (tmp->type != T_OP && tmp->type != T_PIPE &&(tmp->prev == NULL || tmp->prev->type != T_OP))
 			i++;
 		tmp = tmp->next;
 	}
@@ -34,7 +34,7 @@ char	**build_cmd_arg(t_input *token)
 	i = 1;
 	while (tmp && tmp->type != T_PIPE)
 	{
-		if (tmp->type != T_OP && (tmp->prev == NULL || tmp->prev->type != T_OP))
+		if (tmp->type != T_OP && tmp->type != T_PIPE && (tmp->prev == NULL || tmp->prev->type != T_OP))
 		{
 			cmd[i] = ft_strdup(tmp->token);
 			i++;

@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:46:58 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:53:02 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ void	if_quotes(char *input, char **array, int *k, int *i)
 	array[*i][j] = '\0';
 }
 
-
-//Parcours un token depuis un guillemet jusqu'a la fin du meme type de guillemet puis copie la suite
-//jusqu'a un separateur
 int	while_quotes(char *input, int i)
 {
 	if (input[i - 1] != ' ' || input[i - 1] != '\t')
@@ -98,13 +95,13 @@ int	while_quotes(char *input, int i)
 	if (input[i] == '\'')
 	{
 		i++;
-		while (input[i] != '\'')
+		while (input[i] && input[i] != '\'')
 			i++;
 	}
 	else if (input[i] == '"')
 	{
 		i++;
-		while (input[i] != '"')
+		while (input[i] && input[i] != '"')
 			i++;
 	}
 	while (input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'

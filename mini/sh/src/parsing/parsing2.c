@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/11 20:00:54 by monoguei         ###   ########.fr       */
+/*   Created: Invalid Date        by                   #+#    #+#             */
+/*   Updated: 2025/05/15 14:22:53 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,10 @@ void	handle_operator(char **tab_token, char **array, int *index, int i)
 
 int	handle_non_operator(char **tab_token, char *array, int *index)
 {
-	char	**split_tab;
-	int		j;
-
-	split_tab = ft_split(array, ' ');
-	if (!split_tab)
+	tab_token[*index] = ft_strdup(array);
+	if (!tab_token[*index])
 		return (0);
-	j = 0;
-	while (split_tab[j])
-	{
-		tab_token[*index] = ft_strdup(split_tab[j]);
-		(*index)++;
-		j++;
-	}
-	j = 0;
-	while (split_tab[j])
-	{
-		free(split_tab[j]);
-		j++;
-	}
-	free(split_tab);
+	(*index)++;
 	return (1);
 }
 

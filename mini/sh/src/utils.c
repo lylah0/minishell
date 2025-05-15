@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 19:10:48 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:14:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	cleanup_memory(char *line, char **splited_line)
 {
 	int	j;
 
-	free(line);
 	j = 0;
+	free(line);
 	while (splited_line[j])
 	{
 		if (splited_line[j])

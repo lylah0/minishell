@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/12 19:59:21 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:27:45 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,3 @@ void	validate_redirections(t_input *current)
 		current = current->next;
 	}
 }
-
-
-
-// test qui ne fonctionne pas : echo a | cat > file.txt
-//								cat file.txt
-//								--> prompt au lieu d'afficher a

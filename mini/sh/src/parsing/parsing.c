@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/11 20:03:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:30:33 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,32 @@ char	**first_parsing(char *input)
 
 int	word_len(char *input)
 {
-	int		i;
-	char	quote;
+	int		i = 0;
+	int		in_quote = 0;
+	char	quote_char = 0;
 
-	i = 0;
-	while (input[i] == ' ')
-		i++;
-	if (input[i] == '\'' || input[i] == '"')
+	while (input[i])
 	{
-		if (input[i - 1] != ' ' || input[i - 1] != '\t')
+		if (!in_quote && (input[i] == '\'' || input[i] == '"'))
+		{
+			in_quote = 1;
+			quote_char = input[i];
 			i++;
-		quote = input[i];
+			continue;
+		}
+		if (in_quote && input[i] == quote_char)
+		{
+			in_quote = 0;
+			i++;
+			continue;
+		}
+		if (!in_quote && (input[i] == ' ' || input[i] == '|' || input[i] == '<' || input[i] == '>'))
+			break;
 		i++;
-		while (input[i] && input[i] != quote)
-			i++;
-		if (input[i] == quote)
-			i++;
-		return (i);
 	}
-	else
-	{
-		while (input[i] && input[i] != '|' && input[i] != '>' && input[i] != '<'
-			&& input[i] != ' ')
-			i++;
-		return (i);
-	}
+	return (i);
 }
+
 
 void	if_operator(char *input, char **array, int *k, int i)
 {
@@ -103,28 +103,31 @@ void	if_operator(char *input, char **array, int *k, int i)
 void	if_n_op(char *input, char **array, int *k, int *i)
 {
 	int		j = 0;
-	char	quote;
+	int		in_quote = 0;
+	char	quote_char = 0;
 
-	while (input[*k] && input[*k] != ' ' && input[*k] != '|' &&
-		input[*k] != '<' && input[*k] != '>')
+	while (input[*k] && !(input[*k] == ' ' && !in_quote) &&
+			!(input[*k] == '|' && !in_quote) &&
+			!(input[*k] == '<' && !in_quote) &&
+			!(input[*k] == '>' && !in_quote))
 	{
-		if (input[*k] == '\'' || input[*k] == '"')
+		if (!in_quote && (input[*k] == '\'' || input[*k] == '"'))
 		{
-			quote = input[*k];
+			in_quote = 1;
+			quote_char = input[*k];
 			(*k)++;
-			while (input[*k] && input[*k] != quote)
-				array[*i][j++] = input[(*k)++];
-			if (input[*k] == quote)
-				(*k)++;
+			continue;
 		}
-		else
+		if (in_quote && input[*k] == quote_char)
 		{
-			array[*i][j++] = input[(*k)++];
+			in_quote = 0;
+			(*k)++;
+			continue;
 		}
+		array[*i][j++] = input[(*k)++];
 	}
 	array[*i][j] = '\0';
 }
-
 
 char	**fill_tab(char *input, char **array)
 {
@@ -139,6 +142,8 @@ char	**fill_tab(char *input, char **array)
 	{
 		while (input[k] == ' ')
 			k++;
+		if (!input[k])
+			break;
 		len = word_len(&input[k]);
 		if (input[k] == '\'' || input[k] == '"')
 			if_quotes(input, array, &k, &i);
@@ -153,7 +158,6 @@ char	**fill_tab(char *input, char **array)
 		}
 		i++;
 	}
-	// i = 0;
 	array[i] = NULL;
 	return (array);
 }
