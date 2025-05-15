@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/11 18:16:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:24:13 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	exit_multiple_arg(void)
 void	b_exit(t_data *data)
 {
 	// exit_code = 0;// est ce vraiment necessaire de mettre a zero ici, plutot dans la boucle dans l'init du main
+	if (data->child_pid > 0)
+		return ;
 	if (!data->input->next)// aucun argument
 		exit_no_arg();
 	else if (data->input->next)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/14 20:38:03 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:48:31 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@
 # define ECHOCTL 0001000
 
 extern int			exit_code;
+extern int exit_code;
 
+// Types des tokens du parseur
 typedef enum s_token_type
 {
 	T_CMD,
@@ -48,48 +50,67 @@ typedef enum s_token_type
 	T_PIPE,
 	T_SKIP,
 	T_WORD
-}					t_token_type;
+}	t_token_type;
 
+// États des signaux
 typedef enum e_signal_state
 {
 	OFF = 0,
 	ON = 1
 }	t_signal_state;
 
+// État du noeud : soit token (parsing), soit commande (execution)
+typedef enum e_input_state
+{
+	TOKEN,       // Phase parsing (chaque mot/token)
+	COMMAND      // Phase execution (bloc commande entière)
+}	t_input_state;
+
+// Structure d'un noeud input (token ou commande)
 typedef struct s_input
 {
-	char			*token;
-	t_token_type	type;
+	// Commun aux deux phases (parsing & execution)
+	t_input_state	state;      // Indique si le noeud est token ou commande
 	struct s_input	*next;
 	struct s_input	*prev;
 	struct s_data	*data;
-}					t_input;
 
+	// Utilisé pendant le parsing seulement (state == TOKEN)
+	char			*token;
+	t_token_type	type;
+
+	// Utilisé pendant l'exécution seulement (state == COMMAND)
+	char			**argv;      // ex: ["echo", "hello", NULL]
+	int				is_builtin;  // vrai si builtin
+}	t_input;
+
+// Variable d'environnement
 typedef struct s_env
 {
 	char			*name;
 	char			*value;
 	struct s_env	*next;
-}					t_env;
+}	t_env;
 
+// Gestion des signaux
 typedef struct s_signal
 {
 	t_signal_state	sigint;
 	t_signal_state	sigquit;
 }	t_signal;
 
+// Structure globale du programme
 typedef struct s_data
 {
-	t_input 		*input; // ligne de commande
-	t_env 			*env;     // tableau envp
-	t_signal		*signal;
-	char			**copy_env;
+	t_input			*input;       // liste des commandes (phase execution)
+	t_env			*env;         // envp
+	t_signal		*signal;      // gestion signaux
+	char			**copy_env;   // tableau d'env (copie)
 	int				should_exit;
 	int				stdout_redir;
 	int				stdin_redir;
 	pid_t			child_pid;
-}					t_data;
-
+}	t_data;
 
 char *get_user_input(const char *prompt);
 t_data	*get_data_ptr(t_data *new_data);

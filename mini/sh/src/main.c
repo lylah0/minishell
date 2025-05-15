@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/14 20:37:51 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:38:27 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ t_data	*init_data(t_data *data)
 		free(data);
 		return (NULL);
 	}
-	data->input->data = NULL;
+	data->input->data = NULL;// ?
+
 	data->env = NULL;
 	data->env = malloc(sizeof(t_env));
 	if (!data->env)
@@ -64,7 +65,7 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 	head = tokenize(splited_input, data);
 	// print_all_token_types(head);
 	is_env_var(head, data);
-	// print_token_list(head);
+	print_token_list(head);
 	return (head);
 }
 
