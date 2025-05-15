@@ -57,11 +57,6 @@
 
 extern int			exit_code;
 
-// signals.c
-__sighandler_t		handler_sigint(void);
-void				init_signals(void);
-void				restore_terminal(void);
-
 typedef enum s_token_type
 {
 	T_CMD,
