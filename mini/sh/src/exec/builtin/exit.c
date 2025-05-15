@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/12 19:33:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:22:51 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 #define TRUE 1
 #define FALSE 0
 
-int str_isdigit(char *str)
+int	str_isdigit(char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!str || !*str)
 		return (0);
 	if (str[i] == '-' || str[i] == '+')
@@ -32,9 +33,10 @@ int str_isdigit(char *str)
 	return (1);
 }
 
-void	exit_no_arg()
+void	exit_no_arg(int in_pipe)
 {
-	ft_putstr_fd("exit\n", 1);
+	if (!in_pipe)
+		ft_putstr_fd("exit\n", 1); // Only print when not in a pipeline
 	exit(exit_code);
 }
 
@@ -51,30 +53,32 @@ void	exit_n(char *num)
 void	exit_alpha(char *word)
 {
 	ft_putstr_fd("exit\n", 1);
-	ft_printf_stderr("bash: exit: %s: numeric argument required\n", word);
+	ft_printf_stderr("minishell: exit: %s: numeric argument required\n", word);
 	exit_code = 2;
 	exit(exit_code);
 }
 
 void	exit_multiple_arg(void)
 {
-	ft_printf_stderr("bash: exit: too many arguments\n");
-	ft_putstr_fd("exit\n", 1);
+	ft_printf_stderr("minishell: exit: too many arguments\n");
 	exit_code = 1;
 }
 
-void	b_exit(t_data *data)
+void	b_exit(t_data *data, t_input *current, int in_pipe)
 {
-	// exit_code = 0;// est ce vraiment necessaire de mettre a zero ici, plutot dans la boucle dans l'init du main
-	if (!data->input->next)// aucun argument
-		exit_no_arg();
-	else if (data->input->next)
-	{
-		if (str_isdigit(data->input->next->token) == TRUE && !data->input->next->next)// premier arg numerique, pas de suite
-			exit_n(data->input->next->token);
-		else if (str_isdigit(data->input->next->token) == TRUE && data->input->next->next)// premier arg numerique, 2eme argument quelquil soit
-			exit_multiple_arg();
-		else if (str_isdigit(data->input->next->token) == FALSE)
-			exit_alpha(data->input->next->token);
-	}
+	t_input	*next_token;
+
+	(void)data;
+	next_token = current->next;
+	if (!next_token || next_token->type == T_PIPE || next_token->type == T_OP)
+		exit_no_arg(in_pipe);
+	else if (str_isdigit(next_token->token) == TRUE && (!next_token->next
+			|| next_token->next->type == T_PIPE
+			|| next_token->next->type == T_OP))
+		exit_n(next_token->token);
+	else if (str_isdigit(next_token->token) == TRUE && next_token->next
+		&& next_token->next->type != T_PIPE && next_token->next->type != T_OP)
+		exit_multiple_arg();
+	else if (str_isdigit(next_token->token) == FALSE)
+		exit_alpha(next_token->token);
 }

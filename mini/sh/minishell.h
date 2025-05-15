@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 14:44:59 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:24:16 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void				child(int prev_pipe, t_input *current, int fd[2],
 char				*env_path, t_data *data);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
-void				exec(t_input *current, t_data *data, char *env_path);
+void				exec(t_input *current, t_data *data, char *env_path, int in_pipe);
 int					is_parent_builtin(char *token);
 bool				is_safe_to_exec_in_parent(t_input *current);
 t_input				*filter_args(t_input *input);
@@ -161,13 +161,13 @@ void				print_tokens(char **tokens);
 /// built-in
 void				b_echo(t_input *cmd);
 void				b_env(t_data *data);
-void				b_exit(t_data *data);
+void				b_exit(t_data *data, t_input *current, int in_pipe);
 void				b_export(t_data *data);
 char				*extract_name(char *input);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);
-int					kind_of_token(t_data *data, t_input *input);
+int					kind_of_token(t_data *data, t_input *input, int in_pipe);
 t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
 
 // init_environment // b_export

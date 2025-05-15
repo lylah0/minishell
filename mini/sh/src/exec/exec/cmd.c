@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 15:01:51 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:25:16 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ t_input	*get_next_command(t_input *node)
 
 void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
+	int	in_pipe;
+
+	in_pipe = (prev_pipe != 0 || has_next_cmd(current));
 	if (prev_pipe != 0 && !data->stdin_redir)
 	{
 		dup2(prev_pipe, STDIN_FILENO);
@@ -64,7 +67,7 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		close(fd[1]);
 	if (prev_pipe != 0)
 		close(prev_pipe);
-	exec(current, data, env_path);
+	exec(current, data, env_path, in_pipe);
 }
 
 void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
@@ -106,7 +109,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		if (is_builtin(current->token) && is_parent_builtin(current->token)
 			&& !prev_pipe && !has_next_cmd(current))
 		{
-			kind_of_token(data, current);
+			kind_of_token(data, current, 0);
 			current = get_next_command(current);
 			continue ;
 		}

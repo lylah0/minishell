@@ -6,13 +6,13 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/14 19:22:48 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:23:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	kind_of_token(t_data *data, t_input *input)
+int	kind_of_token(t_data *data, t_input *input, int in_pipe)
 {
 	char	*input_str;
 
@@ -24,7 +24,7 @@ int	kind_of_token(t_data *data, t_input *input)
 	}
 	if (ft_strncmp_end(input_str, "exit", 5) == 0)
 	{
-		b_exit(data);
+		b_exit(data, input, in_pipe);
 		return (0);
 	}
 	else if (ft_strncmp_end(input_str, "cd", 3) == 0)

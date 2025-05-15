@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 14:45:02 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:24:00 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**build_cmd_arg(t_input *token)
 	return (cmd);
 }
 
-void	exec(t_input *current, t_data *data, char *env_path)
+void	exec(t_input *current, t_data *data, char *env_path, int in_pipe)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -54,7 +54,7 @@ void	exec(t_input *current, t_data *data, char *env_path)
 		return;
 	if (is_builtin(current->token))
 	{
-		kind_of_token(data, current);
+		kind_of_token(data, current, in_pipe);
 		exit(0);
 	}
 	cmd = build_cmd_arg(current);
