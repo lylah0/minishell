@@ -6,18 +6,17 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/04/08 16:32:41 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:39:26 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//Supprime les '"' ou '\'' qui entourent un token et retourne le contenu sans les quotes
 char	*handle_quoted_token(char *quoted_str)
 {
-	int	len;
-	int	j;
-	int	i;
+	int		len;
+	int		j;
+	int		i;
 	char	*result;
 
 	len = ft_strlen(quoted_str);
@@ -31,7 +30,7 @@ char	*handle_quoted_token(char *quoted_str)
 		if (quoted_str[i] == quoted_str[0])
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		result[j++] = quoted_str[i++];
 	}
@@ -43,20 +42,20 @@ char	**malloc_second_parsing(int len)
 {
 	char	**tab_token;
 
-	tab_token = malloc(sizeof(char *) * (len + 1));
+	tab_token = ft_calloc(len + 1, sizeof(char *));
 	if (!tab_token)
+	{
+		perror("malloc_second_parsing");
 		return (NULL);
-	tab_token[len] = NULL;
+	}
 	return (tab_token);
 }
 
-//Stock un token entre quotes + la suite tant qu'il n'y a pas de separateur
 void	if_quotes(char *input, char **array, int *k, int *i)
 {
 	char	quote;
 	int		start;
 	int		len;
-	int		j;
 
 	quote = input[*k];
 	start = *k;
@@ -65,37 +64,33 @@ void	if_quotes(char *input, char **array, int *k, int *i)
 		(*k)++;
 	if (input[*k] == quote)
 		(*k)++;
+	else
+	{
+		printf("missing one quote\n");
+		return ;
+	}
 	while (input[*k] && input[*k] != ' ' && input[*k] != '|' && input[*k] != '<'
 		&& input[*k] != '>' && input[*k] != ';' && input[*k] != '&'
 		&& input[*k] != '(' && input[*k] != ')')
 		(*k)++;
 	len = *k - start;
-	array[*i] = malloc(sizeof(char) * (len + 1));
-	if (!array[*i])
-		return ;
-	j = 0;
-	while (j < len)
-	{
-		array[*i][j] = input[start + j];
-		j++;
-	}
-	array[*i][j] = '\0';
+	copy_substring(input, &array[*i], start, len);
 }
 
-//Parcours un token depuis un guillemet jusqu'a la fin du meme type de guillemet puis copie la suite
-//jusqu'a un separateur
-int	while_quotes(char *input, int i)
+int	while_quotes(const char *input, int i)
 {
+	if (input[i - 1] != ' ' || input[i - 1] != '\t')
+		i++;
 	if (input[i] == '\'')
 	{
 		i++;
-		while (input[i] != '\'')
+		while (input[i] && input[i] != '\'')
 			i++;
 	}
 	else if (input[i] == '"')
 	{
 		i++;
-		while (input[i] != '"')
+		while (input[i] && input[i] != '"')
 			i++;
 	}
 	while (input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'

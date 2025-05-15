@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 15:35:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:53:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*search_env_name(t_env *env, char *name)
 	t_env	**return_env;
 
 	current = env;
-	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)) != 0)
+	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name) + 1) != 0)
 		current = current->next;
 	if (current == NULL)
 		return (NULL);
@@ -33,7 +33,7 @@ t_env	*search_env_name(t_env *env, char *name)
 /// @param env Pointeur vers la tête de la liste chaînée des variables d'environnement.
 /// @param name Le nom de la variable d'environnement à rechercher.
 /// @return La valeur de la variable d'environnement si elle existe et est définie, NULL sinon.
-char *search_env_value_safe(t_env *env, char *name)
+char *search_env_value(t_env *env, char *name)
 {
 	t_env *var = search_env_name(env, name);
 	if (!var || !var->value)

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:29:49 by moni              #+#    #+#             */
-/*   Updated: 2025/05/06 15:21:26 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:53:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_printf_stderr(const char *s, ...)
 			i++;
 			str = va_arg(ap, char *);
 			if (str)
-				ft_putstr_fd(str, 2); 
+				ft_putstr_fd(str, 2);
 			else
 				ft_putstr_fd("(null)", 2);
 		}
@@ -49,9 +49,3 @@ void	ft_printf_stderr(const char *s, ...)
 	va_end(ap);
 }
 
-
-// int main(void)
-// {
-//     ft_printf_stderr("Test d’erreur : %s\n", "ça marche !");
-//     return 0;
-// }

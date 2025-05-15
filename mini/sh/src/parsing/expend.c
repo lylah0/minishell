@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 15:10:55 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:52:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ char	*safe_strjoin_replace(char **dest, const char *suffix)
 
 char	*extract_var_name(const char *str, int *i)
 {
-	int len = 0;
-	char *name;
+	int		len;
+	char	*name;
 
 	if (str[*i] == '?')
 	{
@@ -52,7 +52,6 @@ char	*extract_var_name(const char *str, int *i)
 
 static void	handle_env_var_expansion(const char *src, int *i, char **result, t_data *data)
 {
-	char	*tmp;
 	char	*var_name;
 	char	*var_value;
 
@@ -74,21 +73,19 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result, t_d
 	var_value = my_getenv(data, var_name);
 	if (!var_value)
 		var_value = "";
-	tmp = ft_strjoin(*result, var_value);
-	free(*result);
-	*result = tmp;
+	append_str_to_result(result, var_value);
 	free(var_name);
 }
 
-
 char	*expand_token_string(const char *src, t_data *data)
 {
-	int		i = 0;
+	int		i;
 	char	*result;
 	char	*tmp;
 	char	tmp_str[2];
 	char	*old;
 
+	i = 0;
 	result = ft_calloc(1, sizeof(char));
 	if (!result)
 		return (NULL);
@@ -115,11 +112,10 @@ char	*expand_token_string(const char *src, t_data *data)
 
 void is_env_var(t_input *input, t_data *data)
 {
-	t_input *curr = input;
+	t_input	*curr;
 	char	*expanded;
 
 	expanded = expand_token_string(curr->token, data);
 	free(input->token);
 	input->token = expanded;
 }
-

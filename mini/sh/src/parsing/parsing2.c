@@ -5,41 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2025/04/08 16:28:18 by lylrandr         ###   ########.fr       */
+/*   Created: 2025/05/15 17:09:08 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/15 18:32:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../minishell.h"
 
 char	**second_parsing(char **array)
 {
-	int	i;
-	int	j;
-	int	len;
+	char	**result;
+	int		len;
 
-	i = 0;
-	len = 0;
-	while (array[i])
-	{
-		j = 0;
-		if (array[i][0] == '\'' || array[i][0] == '"')
-		{
-			len++;
-			i++;
-			continue ;
-		}
-		while (array[i][j])
-		{
-			if (array[i][j] == ' ')
-				len++;
-			j++;
-		}
-		i++;
-		len++;
-	}
-	return (fill_second_tab(array, malloc_second_parsing(len)));
+	if (!array)
+		return (NULL);
+	len = count_second_parsing_len(array);
+	result = malloc_second_parsing(len);
+	if (!result)
+		return (NULL);
+	return (fill_second_tab(array, result));
 }
 
 void	handle_operator(char **tab_token, char **array, int *index, int i)
@@ -50,26 +34,10 @@ void	handle_operator(char **tab_token, char **array, int *index, int i)
 
 int	handle_non_operator(char **tab_token, char *array, int *index)
 {
-	char	**split_tab;
-	int		j;
-
-	split_tab = ft_split(array, ' ');
-	if (!split_tab)
+	tab_token[*index] = ft_strdup(array);
+	if (!tab_token[*index])
 		return (0);
-	j = 0;
-	while (split_tab[j])
-	{
-		tab_token[*index] = ft_strdup(split_tab[j]);
-		(*index)++;
-		j++;
-	}
-	j = 0;
-	while (split_tab[j])
-	{
-		free(split_tab[j]);
-		j++;
-	}
-	free(split_tab);
+	(*index)++;
 	return (1);
 }
 
@@ -106,8 +74,9 @@ char	**parse_input(char *input)
 		return (NULL);
 	if (is_open_quotes(input))
 	{
-		printf("missing one quote\n");
-		exit(0);
+		ft_putendl_fd("minishell: syntax error: unclosed quote", 2);
+		free(input);
+		return (NULL);
 	}
 	first_parse = first_parsing(input);
 	if (!first_parse)

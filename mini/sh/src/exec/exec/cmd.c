@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/06 15:30:29 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:50:41 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 void	wait_all(void)
 {
-	int	status;
+	int		status;
+	pid_t	pid;
 
-	while (wait(&status) > 0)
-		;
+	while ((pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+	}
 }
 
 int	has_next_cmd(t_input *node)
@@ -42,27 +46,31 @@ t_input	*get_next_command(t_input *node)
 
 void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
 {
-	if (prev_pipe != 0)
+	int	in_pipe;
+
+	in_pipe = (prev_pipe != 0 || has_next_cmd(current));
+	if (prev_pipe != 0 && !data->stdin_redir)
 	{
-		dup2(prev_pipe, 0);
+		dup2(prev_pipe, STDIN_FILENO);
 		close(prev_pipe);
 	}
-	if (has_next_cmd(current) && !data->stdout_redir)
+	if (has_redirection(current))
 	{
-		dup2(fd[1], 1);
-		close(fd[0]);
-		close(fd[1]);
-	}
-	if ((current->next && current->next->next) && (current->next->type == T_OP || current->next->next->type == T_OP))
-	{
-		if (!validate_redirections(current))
-			exit(1);
+		validate_redirections(current);
 		redir(current, data);
 	}
-	exec(current, data, env_path);
+	if (has_next_cmd(current) && !data->stdout_redir)
+		dup2(fd[1], STDOUT_FILENO);
+	if (fd[0] != -1)
+		close(fd[0]);
+	if (fd[1] != -1)
+		close(fd[1]);
+	if (prev_pipe != 0)
+		close(prev_pipe);
+	exec(current, data, env_path, in_pipe);
 }
 
-void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
+void	parent(int *prev_pipe, t_input **current, int fd[2])
 {
 	(void)data;
 	if (*prev_pipe != 0)
@@ -72,48 +80,38 @@ void	parent(int *prev_pipe, t_input **current, int fd[2], t_data **data)
 		close(fd[1]);
 		*prev_pipe = fd[0];
 	}
-	else if (fd[0])
+	else if (fd[0] != -1)
 		close(fd[0]);
 	*current = get_next_command(*current);
 }
+
 
 void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {
 	int		fd[2];
 	int		prev_pipe;
-	pid_t	pid;
 	t_input	*current;
 
 	prev_pipe = 0;
 	current = head;
-	fd[0] = 0;
-	fd[1] = 0;
 	while (current)
 	{
+		data->stdin_redir = 0;
+		data->stdout_redir = 0;
 		if (has_next_cmd(current))
 			pipe(fd);
-		if (is_builtin(current->token) && is_parent_builtin(current->token) && prev_pipe == 0)
-		{
-			kind_of_token(data, current);
-			current = get_next_command(current);
-			continue;
-		}
-		pid = fork();
-		if (pid == 0)
-		{
-			int devnull = open("/dev/null", O_WRONLY);
-			if (devnull != -1)
-			{
-				// dup2(devnull, 2);
-				// avant d'exécuter le child…
-				if (data->stdout_redir >= 0)
-					dup2(data->stdout_redir, STDERR_FILENO);
-				close(devnull);
-			}
-			child(prev_pipe, current, fd, env_path, data);
-		}
 		else
-			parent(&prev_pipe, &current, fd, &data);
+		{
+			fd[0] = -1;
+			fd[1] = -1;
+		}
+		if (handle_parent_builtin(current, data))
+		{
+			current = get_next_command(current);
+			continue ;
+		}
+		handle_fork(&prev_pipe, &current, fd, data, env_path);
 	}
 	wait_all();
 }
+

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/06 15:37:11 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:49:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,99 +15,70 @@
 #define OFF 0
 #define ON 1
 
-int n_option(t_input *input)
+int	n_option(t_input *input)
 {
-	int	i;
+	t_input	*current;
+	int		found;
+	int		i;
 
-	if (ft_strncmp(input->next->token, "-n", 2) == TRUE)
+	current = input->next;
+	found = 0;
+	while (current && current->token && current->token[0] == '-'
+		&& current->token[1] == 'n')
 	{
-		i = 1;
-		while (input->token[i] == 'n')
+		i = 2;
+		while (current->token[i] == 'n')
 			i++;
-		if (input->token[i]) // cas "-nnnnnnnnnnnx" (il y a encore qqch apres "-n" qui nest pas un "n")
-			return OFF;
-		else // cas "-n" ou "-nnnnnnnnnnnnnnnnn"
-			return ON;
-	}
-	else	
-		return OFF;
-}
-
-void	b_echo(t_data *data)
-{
-	t_input *current;
-
-	current = data->input->next;
-	while (current && current->token && current->type != T_PIPE)
-	{
-		ft_printf("%s", current->token);
-		if (current->next)
-		{
-			if (current->next->type != T_WORD)
-				ft_printf(" ");
-			current = current->next;
-		}
-		else
+		if (current->token[i] != '\0')
 			break ;
+		found = 1;
+		current = current->next;
 	}
-	if (n_option(data->input) == OFF)
-		ft_printf("\n");
-	exit_code = 0;
+	if (found)
+		return (ON);
+	else
+		return (OFF);
 }
 
-/*
-TESTS
-	minishell> echo hello        world           !
-	hello world !
-	minishell> echo            hello
-	minishell> echo "              " pisselit
-				   pisselit
-	hello
-	minishell> echo
+void	b_echo(t_input *cmd)
+{
+	t_input	*current;
+	int		n_flag;
+	int		first;
+	int		i;
 
-	minishell> echo 1
-	1
-	minishell> echo 1 3 33
-	1 3 33
-	minishell> echo $
-	$
-	minishell> echo $?
-	0
-	minishell> echo $?$
-	0$
-[ ]	minishell> echo $7USER		--> USER
-
-	minishell> echo $USER
-	moni
-	minishell> echo $USER$PWD
-	moni/home/moni/Desktop/CODE/mini_moni_restart (1)/minishell_ly_mo-214359c22ccd6bac686e576e8b6cc662fdacc6e7/mini/sh
-
-	minishell> echo $U 
-
-[ ] minishell> echo $U ee		--> ee (pas d'espace au debut)
-	 ee
-	minishell> echo   eee
-	eee
-	minishell> echo hello
-	hello
--n	minishell> echo -n hello
-	hellominishell> echo -nnnn hello
-	hellominishell> echo -nnnnx hello
-	-nnnnx hello
-	minishell> echo hello -n
-	hello -n
-	minishell> echo -n -n
-	minishell> echo -n tulipe -n
-	tulipe -nminishell> 
-	minishell> echo -nhello
-	-nhello
-	minishell> echo ---------n
-	---------n
-	minishell> echo -n -nnn pamplemousse -n
-	pamplemousse -nminishell> 
-	               
-
-
-[ ]	minishell> echo \n hello
-	\n hello					--> n hello
-*/
+	n_flag = OFF;
+	first = 1;
+	current = cmd->next;
+	while (current && current->token && current->token[0] == '-'
+		&& current->token[1] == 'n')
+	{
+		i = 2;
+		while (current->token[i] == 'n')
+			i++;
+		if (current->token[i] != '\0')
+			break ;
+		n_flag = ON;
+		current = current->next;
+	}
+	while (current && current->type != T_PIPE)
+	{
+		if (current->type == T_OP || current->type == T_SKIP)
+		{
+			current = current->next;
+			continue;
+		}
+		if (current->token != NULL)
+		{
+			if (!first)
+				write(STDOUT_FILENO, " ", 1);
+			write(STDOUT_FILENO, current->token, strlen(current->token));
+			first = 0;
+		}
+		current = current->next;
+	}
+	if (n_flag == OFF)
+		write(STDOUT_FILENO, "\n", 1);
+	exit_code = 0;
+	exit(0);
+}

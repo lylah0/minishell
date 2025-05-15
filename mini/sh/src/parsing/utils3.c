@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lle_size.c                                         :+:      :+:    :+:   */
+/*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:59:28 by monoguei           #+#    #+#             */
-/*   Updated: 2025/05/11 17:18:58 by lylrandr         ###   ########.fr       */
+/*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/15 18:42:31 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "../../minishell.h"
 
-/// @brief Calculates the size of a linked list of environment variables.
-/// @param env Pointer to the head of the linked list.
-/// @return The size of the linked list.
-int	lle_size(t_env *env)
+void	expand_env_var_into_array(char *input, char **array_ptr, int *k, int *j)
 {
-	int		size;
-	t_env	*env_temp;
+	char	*expanded;
+	int		l;
 
-	if (!env)
-		return (0);
-	env_temp = env;
-	size = 0;
-	while (env_temp)
+	expanded = handle_env_variable(input, k);
+	if (expanded && expanded[0] != '\0')
 	{
-		env_temp = env_temp->next;
-		size++;
+		l = 0;
+		while (expanded[l])
+		{
+			(*array_ptr)[*j] = expanded[l];
+			(*j)++;
+			l++;
+		}
 	}
-	return (size);
+	free(expanded);
 }

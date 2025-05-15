@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 15:40:31 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:53:08 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,16 @@
 
 char	**first_parsing(char *input)
 {
-	int		i;
-	int		len;
 	char	**array;
+	int		len;
 
-	i = 0;
-	len = 1;
-	while (input[i])
-	{
-		if (input[i] == '"' || input[i] == '\'')
-		{
-			len++;
-			i = while_quotes(input, i);
-		}
-		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			len++;
-		else if (input[i] == ' ' || input[i] == '\t')
-		{
-			len++;
-			while (ft_iswhitespace(input[i]))
-				i++;
-			i -= 1;
-		}
-		i++;
-	}
-	len++;
+	len = count_tokens(input);
 	array = malloc(sizeof(char *) * (len + 1));
 	if (!array)
+	{
+		perror("first_parsing");
 		return (NULL);
+	}
 	array[len] = NULL;
 	return (fill_tab(input, array));
 }
@@ -49,28 +31,22 @@ char	**first_parsing(char *input)
 int	word_len(char *input)
 {
 	int		i;
-	char	quote;
+	int		in_quote;
+	char	quote_char;
 
 	i = 0;
-	while (input[i] == ' ')
-		i++;
-	if (input[i] == '\'' || input[i] == '"')
+	in_quote = 0;
+	quote_char = 0;
+	while (input[i])
 	{
-		quote = input[i];
+		if (quotes(input, &i, &in_quote, &quote_char))
+			continue ;
+		if (!in_quote && (input[i] == ' ' || input[i] == '|' || input[i] == '<'
+				|| input[i] == '>'))
+			break ;
 		i++;
-		while (input[i] && input[i] != quote)
-			i++;
-		if (input[i] == quote)
-			i++;
-		return (i);
 	}
-	else
-	{
-		while (input[i] && input[i] != '|' && input[i] != '>' && input[i] != '<'
-			&& input[i] != ' ')
-			i++;
-		return (i);
-	}
+	return (i);
 }
 
 void	if_operator(char *input, char **array, int *k, int i)
@@ -81,7 +57,7 @@ void	if_operator(char *input, char **array, int *k, int i)
 	j = 0;
 	len = 0;
 	while (input[*k + len] == '|' || input[*k + len] == '<' || input[*k
-		+ len] == '>')
+			+ len] == '>')
 		len++;
 	array[i] = malloc(sizeof(char) * (len + 1));
 	if (!array[i])
@@ -97,15 +73,27 @@ void	if_operator(char *input, char **array, int *k, int i)
 
 void	if_n_op(char *input, char **array, int *k, int *i)
 {
-	int	j;
+	int		j;
+	int		in_quote;
+	char	quote_char;
 
 	j = 0;
-	while (input[*k] && input[*k] != '|' && input[*k] != '>'
-		&& input[*k] != '<' && input[*k] != ' ')
+	in_quote = 0;
+	quote_char = 0;
+	while (input[*k] && !(input[*k] == ' ' && !in_quote) && !(input[*k] == '|'
+			&& !in_quote) && !(input[*k] == '<' && !in_quote)
+		&& !(input[*k] == '>' && !in_quote))
 	{
-		array[*i][j] = input[*k];
-		(j)++;
-		(*k)++;
+		if (input[*k] == '$')
+			expand_env_var_into_array(input, &array[*i], k, &j);
+		else if (quotes(input, k, &in_quote, &quote_char))
+			continue ;
+		else
+		{
+			array[*i][j] = input[*k];
+			j++;
+			(*k)++;
+		}
 	}
 	array[*i][j] = '\0';
 }
@@ -114,26 +102,22 @@ char	**fill_tab(char *input, char **array)
 {
 	int	i;
 	int	k;
-	int	len;
 
 	i = 0;
 	k = 0;
+	array[i] = NULL;
 	while (input[k])
 	{
-		while(input[k] == ' ')
+		while (input[k] == ' ')
 			k++;
-		len = word_len(&input[k]);
+		if (!input[k])
+			break ;
 		if (input[k] == '\'' || input[k] == '"')
 			if_quotes(input, array, &k, &i);
 		else if (input[k] == '|' || input[k] == '<' || input[k] == '>')
 			if_operator(input, array, &k, i);
-		else
-		{
-			array[i] = malloc(sizeof(char) * (len + 1));
-			if (!array[i])
-				return (NULL);
-			if_n_op(input, array, &k, &i);
-		}
+		else if (!handle_normal_word(input, array, &k, i))
+			return (NULL);
 		i++;
 	}
 	array[i] = NULL;

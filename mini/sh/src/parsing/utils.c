@@ -1,0 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 16:53:51 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/15 18:17:23 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+void	append_char_to_result(char **result, char c)
+{
+	char	tmp_str[2];
+	char	*tmp;
+	char	*old;
+
+	tmp_str[0] = c;
+	tmp_str[1] = '\0';
+	tmp = ft_strjoin(*result, tmp_str);
+	old = *result;
+	*result = tmp;
+	free(old);
+}
+
+int	handle_special_cases(const char *src, int *i, char **result)
+{
+	if (src[*i] == '?')
+	{
+		(*i)++;
+		return (1);
+	}
+	if (!src[*i] || (!ft_isalnum(src[*i]) && src[*i] != '_'))
+	{
+		append_str_to_result(result, "$");
+		return (1);
+	}
+	return (0);
+}
+
+void	append_str_to_result(char **result, const char *str)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(*result, str);
+	free(*result);
+	*result = tmp;
+}
+
+int	handle_normal_word(char *input, char **array, int *k, int i)
+{
+	int	len;
+
+	len = word_len(&input[*k]);
+	array[i] = malloc(sizeof(char) * (len + 1));
+	if (!array[i])
+		return (0);
+	if_n_op(input, array, k, &i);
+	return (1);
+}
+
+int	count_tokens(const char *input)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 1;
+	while (input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+		{
+			len++;
+			i = while_quotes(input, i);
+		}
+		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+			len++;
+		else if (input[i] == ' ' || input[i] == '\t')
+		{
+			len++;
+			while (ft_iswhitespace(input[i]))
+				i++;
+			i--;
+		}
+		i++;
+	}
+	return (len + 1);
+}

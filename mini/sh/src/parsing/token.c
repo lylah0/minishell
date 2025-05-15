@@ -3,49 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/01 14:52:39 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:53:32 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_input	*tokenize(char **input, t_data *data)
+t_input	*add_token(t_input *tail, char *token_str)
 {
-	int		i;
-	t_input	*tail;
-	t_input	*head;
 	t_input	*new_node;
+
+	new_node = malloc(sizeof(t_input));
+	if (!new_node)
+		exit(1);
+	new_node->token = ft_strdup(token_str);
+	new_node->prev = tail;
+	new_node->next = NULL;
+	tail->next = new_node;
+	return (new_node);
+}
+
+void	assign_token_types(t_input *head, t_data *data)
+{
 	t_input	*current;
 
-	i = 1;
-	tail = malloc(sizeof(t_input));
-	if (!tail)
-		exit(1);
-	tail->token = ft_strdup(input[0]);
-	tail->prev = NULL;
-	tail->next = NULL;
-	head = tail;
-	while (input[i])
-	{
-		new_node = malloc(sizeof(t_input));
-		if (!new_node)
-			exit(1);
-		new_node->token = ft_strdup(input[i]);
-		new_node->prev = tail;
-		new_node->next = NULL;
-		tail->next = new_node;
-		tail = new_node;
-		i++;
-	}
 	current = head;
 	while (current)
 	{
 		current->type = get_token_type(current, current->token, data);
 		current = current->next;
 	}
+	current = head;
+	while (current)
+	{
+		if (current->token && current->token[0] == '\0')
+			current->type = T_SKIP;
+		current = current->next;
+	}
+}
+
+t_input	*tokenize(char **input, t_data *data)
+{
+	int		i;
+	t_input	*tail;
+	t_input	*head;
+
+	i = 1;
+	tail = malloc(sizeof(t_input));
+	if (!tail)
+	{
+		perror("tokenize");
+		exit(1);
+	}
+	tail->token = ft_strdup(input[0]);
+	tail->prev = NULL;
+	tail->next = NULL;
+	head = tail;
+	while (input[i])
+	{
+		tail = add_token(tail, input[i]);
+		i++;
+	}
+	assign_token_types(head, data);
 	is_cmd_arg(head);
 	return (head);
 }
@@ -56,7 +78,7 @@ t_token_type	get_token_type(t_input *token, char *input, t_data *data)
 			'$'))
 	{
 		parse_and_expand_token(token, data);
-		return (T_WORD);
+		return (token->type);
 	}
 	if (ft_strncmp(input, "|", 1) == 0)
 		return (T_PIPE);
