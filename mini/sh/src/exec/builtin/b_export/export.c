@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 21:50:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:06:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int find_equal(char *s)
 	}
 	return 0;
 }
-
 
 char	*extract_name(char *env_var)
 {

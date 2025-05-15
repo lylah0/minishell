@@ -6,11 +6,18 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/15 21:43:56 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+=======
+/*   Updated: 2025/05/15 09:48:31 by monoguei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+>>>>>>> export
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -23,21 +30,31 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
+<<<<<<< HEAD
 # include <string.h>
+=======
+>>>>>>> export
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+<<<<<<< HEAD
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <dirent.h>
 # include <stdarg.h>
+=======
+# include <signal.h>
+# include <string.h>
+# include <termios.h>
+>>>>>>> export
 
 
 # define TRUE 1
 # define FALSE 0
+<<<<<<< HEAD
 
 extern int			exit_code;
 
@@ -46,6 +63,14 @@ __sighandler_t		handler_sigint(void);
 void				init_signals(void);
 void				restore_terminal(void);
 
+=======
+# define ECHOCTL 0001000
+
+extern int			exit_code;
+extern int exit_code;
+
+// Types des tokens du parseur
+>>>>>>> export
 typedef enum s_token_type
 {
 	T_CMD,
@@ -56,6 +81,7 @@ typedef enum s_token_type
 	T_PIPE,
 	T_SKIP,
 	T_WORD
+<<<<<<< HEAD
 }					t_token_type;
 
 typedef struct s_input
@@ -67,11 +93,49 @@ typedef struct s_input
 	struct s_data	*data;
 }					t_input;
 
+=======
+}	t_token_type;
+
+// États des signaux
+typedef enum e_signal_state
+{
+	OFF = 0,
+	ON = 1
+}	t_signal_state;
+
+// État du noeud : soit token (parsing), soit commande (execution)
+typedef enum e_input_state
+{
+	TOKEN,       // Phase parsing (chaque mot/token)
+	COMMAND      // Phase execution (bloc commande entière)
+}	t_input_state;
+
+// Structure d'un noeud input (token ou commande)
+typedef struct s_input
+{
+	// Commun aux deux phases (parsing & execution)
+	t_input_state	state;      // Indique si le noeud est token ou commande
+	struct s_input	*next;
+	struct s_input	*prev;
+	struct s_data	*data;
+
+	// Utilisé pendant le parsing seulement (state == TOKEN)
+	char			*token;
+	t_token_type	type;
+
+	// Utilisé pendant l'exécution seulement (state == COMMAND)
+	char			**argv;      // ex: ["echo", "hello", NULL]
+	int				is_builtin;  // vrai si builtin
+}	t_input;
+
+// Variable d'environnement
+>>>>>>> export
 typedef struct s_env
 {
 	char			*name;
 	char			*value;
 	struct s_env	*next;
+<<<<<<< HEAD
 }					t_env;
 
 typedef struct s_data
@@ -83,6 +147,38 @@ typedef struct s_data
 	int				stdout_redir;
 	int				stdin_redir;
 }					t_data;
+=======
+}	t_env;
+
+// Gestion des signaux
+typedef struct s_signal
+{
+	t_signal_state	sigint;
+	t_signal_state	sigquit;
+}	t_signal;
+
+// Structure globale du programme
+typedef struct s_data
+{
+	t_input			*input;       // liste des commandes (phase execution)
+	t_env			*env;         // envp
+	t_signal		*signal;      // gestion signaux
+	char			**copy_env;   // tableau d'env (copie)
+	int				should_exit;
+	int				stdout_redir;
+	int				stdin_redir;
+	pid_t			child_pid;
+}	t_data;
+
+char *get_user_input(const char *prompt);
+t_data	*get_data_ptr(t_data *new_data);
+void	init_signals(t_data *data);
+void	handler_sigint(int signum);
+void	handler_sigquit(int signum);
+void	restore_terminal(void);
+
+
+>>>>>>> export
 
 // FONCTIONS LYLAH
 // fonctions parsing
@@ -99,7 +195,11 @@ int					handle_non_operator(char **tab_token, char *array,
 void				handle_operator(char **tab_token, char **array, int *index,
 						int i);
 void				if_quotes(char *input, char **array, int *k, int *i);
+<<<<<<< HEAD
 int					while_quotes(const char *input, int i);
+=======
+int					while_quotes(char *input, int i);
+>>>>>>> export
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
 void				is_env_var(t_input *input, t_data *data);
@@ -111,6 +211,7 @@ char				*extract_plain_text(char *str, int *i);
 char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
 bool				in_quotes(char *str, int index);
+<<<<<<< HEAD
 void				append_char_to_result(char **result, char c);
 void				append_str_to_result(char **result, const char *str);
 int					handle_special_cases(const char *src, int *i,
@@ -126,6 +227,8 @@ int					count_second_parsing_len(char **array);
 int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
 void				expand_env_var_into_array(char *input, char **array_ptr, int *k, int *j);
+=======
+>>>>>>> export
 
 // fonctions execution
 
@@ -133,6 +236,7 @@ int					is_builtin(char *cmd);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
 void				exec_pipe(t_input *head, char *env_path, t_data *data);
+<<<<<<< HEAD
 void				parent(int *prev_pipe, t_input **current, int fd[2]);
 void				child(int prev_pipe, t_input *current, int fd[2],
 						char *env_path, t_data *data);
@@ -140,10 +244,20 @@ t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
 void				exec(t_input *current, t_data *data, char *env_path,
 						int in_pipe);
+=======
+void				parent(int *prev_pipe, t_input **current, int fd[2],
+						t_data **data);
+void				child(int prev_pipe, t_input *current, int fd[2],
+char				*env_path, t_data *data);
+t_input				*get_next_command(t_input *node);
+int					has_next_cmd(t_input *node);
+void				exec(t_input *current, t_data *data, char *env_path);
+>>>>>>> export
 int					is_parent_builtin(char *token);
 bool				is_safe_to_exec_in_parent(t_input *current);
 t_input				*filter_args(t_input *input);
 
+<<<<<<< HEAD
 // utils exec
 
 int					handle_parent_builtin(t_input *current, t_data *data);
@@ -152,6 +266,8 @@ void				handle_fork(int *prev_pipe, t_input **current, int *fd,
 int					count_args(t_input *token);
 void				fill_cmd_args(char **cmd, t_input *token);
 
+=======
+>>>>>>> export
 // fonctions redirection
 
 void				simple_redir(t_input *current, t_data *data);
@@ -160,7 +276,10 @@ void				heredoc_append(t_input *current, t_data *data);
 void				heredoc(t_input *current);
 void				validate_redirections(t_input *current);
 bool				has_redirection(t_input *current);
+<<<<<<< HEAD
 int					open_redirection_file(t_input *current);
+=======
+>>>>>>> export
 
 // fonctions token
 
@@ -189,17 +308,31 @@ void				print_tokens(char **tokens);
 // FONCTIONS EXEC + MONI
 
 /// built-in
+<<<<<<< HEAD
 void				b_echo(t_input *cmd);
 void				b_env(t_data *data);
 void				b_exit(t_data *data, t_input *current, int in_pipe);
 void				b_export(t_data *data);
+=======
+void				b_echo(t_data *data);
+void				b_env(t_data *data);
+void				b_exit(t_data *data);
+void				b_export(t_data *data);
+bool is_valid_env_value_syntax(char *s);
+
+>>>>>>> export
 char				*extract_name(char *input);
 void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);
+<<<<<<< HEAD
 int					kind_of_token(t_data *data, t_input *input, int in_pipe);
 t_env				*update_env_value(t_env *env, char *env_to_update,
 						char *new_value);
+=======
+int					kind_of_token(t_data *data, t_input *input);
+t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
+>>>>>>> export
 
 // init_environment // b_export
 void				free_lle(t_data *data);
@@ -211,19 +344,31 @@ void				sort_words(char **words, int len);
 void				print_copy_env(t_data *data);
 void				create_env_copy_array(t_data *data);
 int					get_array_length(char **array);
+<<<<<<< HEAD
 bool				is_valid_env_var_syntax(char *s);
+=======
+bool				is_valid_env_name_var_syntax(char *s);
+>>>>>>> export
 void				b_export(t_data *data);
 void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
 void				print_export(t_data *data);
 void				add_env_name(t_data *data, char *env_name);
+<<<<<<< HEAD
 void				add_new_env_var_and_value(t_data *data, char *env_name,
 						char *env_value);
+=======
+void				add_new_env_var_and_value(t_data *data, char *env_name, char *env_value);
+>>>>>>> export
 
 // t_env	*add_env_var(t_data *data, char *input);
 
 t_env				*exist_already_in_env(t_env *env, char *name_var);
+<<<<<<< HEAD
 void				lle_del_one(t_env **env, char *env_to_del);
+=======
+void lle_del_one(t_env **env, char *env_to_del);
+>>>>>>> export
 
 void				free_lle(t_data *data);
 void				print_lle(t_data *data);
@@ -234,7 +379,11 @@ void				sort_words(char **words, int len);
 void				print_copy_env(t_data *data);
 void				create_env_copy_array(t_data *data);
 int					get_array_length(char **array);
+<<<<<<< HEAD
 bool				is_valid_env_var_syntax(char *s);
+=======
+bool				is_valid_env_name_var_syntax(char *s);
+>>>>>>> export
 void				b_export(t_data *data);
 void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
@@ -253,6 +402,7 @@ char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
 
 // signals.c
+<<<<<<< HEAD
 __sighandler_t		handler_sigint(void);
 void				init_signals(void);
 void				restore_terminal(void);
@@ -266,12 +416,26 @@ void				lle_del_one(t_env **env, char *env_to_del);
 void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
 t_env				*lle_new(char *name, char *value);
+=======
+void				restore_terminal(void);
+
+// UTILS/lle
+t_env				*search_env_name(t_env *env, char *name);
+void				lle_add_back(t_env **env, t_env *new1);
+void				lle_del_one(t_env **env, char *env_to_del);
+t_env				*lle_last(t_env *env);
+t_env 				*lle_new(char *name, char *value);
+>>>>>>> export
 int					lle_size(t_env *env);
 char				*search_env_value(t_env *env, char *name);
 void				ft_printf_stderr(const char *s, ...);
 
 char				*ft_strndup(const char *src, int n);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> export
 // content devient name par defaut, a adapter si beosin
 
 #endif

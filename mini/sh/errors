@@ -1,0 +1,16 @@
+
+export | grep "HOME"
+ - minishell -> bash: export: '|': not a valid identifier
+ - bash -> export HOME="/home/moni"
+ 
+ minishell> pwdd
+minishell> pwd
+/home/moni/Desktop/CODE/minilylah/minishell_ly_mo/mini/sh
+minishell> 
+
+bash-5.1$ pwdd
+bash: pwdd: command not found
+bash-5.1$ pwd
+/home/moni
+bash-5.1$ 
+

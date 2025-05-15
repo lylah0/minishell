@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 21:50:41 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:06:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	parent(int *prev_pipe, t_input **current, int fd[2])
 		close(fd[0]);
 	*current = get_next_command(*current);
 }
-
 
 void	exec_pipe(t_input *head, char *env_path, t_data *data)
 {

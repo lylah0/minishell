@@ -410,7 +410,11 @@ FodyWeavers.xsd
 *.so
 *.so.*
 *.dll
+<<<<<<< HEAD
 *.dylib
 *mini/sh/obj/*.o
 *mini/sh/obj/*.d
 *.d
+=======
+*.dylib
+>>>>>>> export
