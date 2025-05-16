@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 21:30:17 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:45:01 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	redir(t_input *current, t_data *data)
 			else if (!ft_strncmp(current->token, ">", 2)
 				|| !ft_strncmp(current->token, "<", 2))
 				simple_redir(current, data);
-			current = current->next ? current->next->next : NULL;
+			if (current->next && current->next->next)
+				current = current->next->next;
+			else
+				current = NULL;
 		}
 		else
 			current = current->next;
