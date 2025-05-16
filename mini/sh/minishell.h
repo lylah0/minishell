@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 15:16:38 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:05:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ void	restore_terminal(void);
 
 // FONCTIONS LYLAH
 // fonctions parsing
-char				**fill_tab(t_data *data,char *input, char **array);
-void				if_n_op(t_data *data, char *input, char **array, int *k, int *i);
+char				**fill_tab(char *input, char **array);
+void				if_n_op(char *input, char **array, int *k, int *i);
 void				if_operator(char *input, char **array, int *k, int i);
 int					word_len(char *input);
 char				**first_parsing(t_data *data, char *input);
@@ -271,13 +271,20 @@ t_env				*exist_already_in_env(t_env *env, char *name_var);
 // void init_input(t_input *input);
 
 // utils.c
-void				cleanup_memory(char *line, char **splited_line);
 char				*ft_strdup_equal(const char *src);
 size_t				ft_strcat(char *dest, const char *src);
 int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
+
+//cleanup
+
+void				free_token_list(t_input *head);
+void				cleanup_memory(char *line, char **splited_line);
+void				free_tab(char **tab);
+void				free_env_list(t_env *env);
+void				clean(t_data *data, char **splited_input, char *env_path, char *input);
 
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);

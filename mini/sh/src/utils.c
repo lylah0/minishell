@@ -3,29 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/16 15:19:41 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/16 14:16:45 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	cleanup_memory(char *line, char **splited_line)
-{
-	int	j;
-
-	j = 0;
-	free(line);
-	while (splited_line[j])
-	{
-		if (splited_line[j])
-			free(splited_line[j]);
-		j++;
-	}
-	free(splited_line);
-}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -223,3 +212,5 @@ t_input	*cat_token(t_input *token, char *value, int len)
 	new_token->token[j] = '\0';
 	return (new_token);
 }
+
+

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/16 15:32:11 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/16 14:04:41 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +71,17 @@ void	b_echo(t_data *data)
 	}
 	while (current && current->type != T_PIPE)
 	{
-		if (current->type == T_OP || current->type == T_SKIP)
+		if (current->type == T_OP)
+		{
+			if (current->next)
+				current = current->next;
+			current = current->next;
+			continue ;
+		}
+		if (current->type == T_SKIP)
 		{
 			current = current->next;
-			continue;
+			continue ;
 		}
 		if (current->token != NULL)
 		{

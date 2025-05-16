@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:05:40 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:14:14 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	if_quotes(char *input, char **array, int *k, int *i)
 
 int	while_quotes(const char *input, int i)
 {
-	if (input[i - 1] != ' ' || input[i - 1] != '\t')
+	if (input[i - 1] != ' ' && input[i - 1] != '\t')
 		i++;
 	if (input[i] == '\'')
 	{
@@ -93,8 +93,8 @@ int	while_quotes(const char *input, int i)
 		while (input[i] && input[i] != '"')
 			i++;
 	}
-	while (input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'
-		&& input[i + 1] != '>' && input[i + 1])
+	while (input[i] && input[i + 1] && input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'
+		&& input[i + 1] != '>')
 		i++;
 	return (i);
 }

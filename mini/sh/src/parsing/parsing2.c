@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:09:08 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/16 15:06:11 by monoguei         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/16 18:09:01 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +86,7 @@ char	**parse_input(t_data *data, char *input)
 	if (!first_parse)
 		return (NULL);
 	final_parse = second_parsing(first_parse);
+	free_tab(first_parse);
 	if (!final_parse)
 		return (NULL);
 	return (final_parse);
