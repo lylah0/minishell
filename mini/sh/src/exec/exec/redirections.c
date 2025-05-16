@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 20:35:13 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:30:17 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	redir(t_input *current, t_data *data)
 {
-	while (current)
+	while (current && current->type != T_PIPE)
 	{
 		if (current->type == T_OP)
 		{
@@ -27,8 +27,10 @@ void	redir(t_input *current, t_data *data)
 			else if (!ft_strncmp(current->token, ">", 2)
 				|| !ft_strncmp(current->token, "<", 2))
 				simple_redir(current, data);
+			current = current->next ? current->next->next : NULL;
 		}
-		current = current->next;
+		else
+			current = current->next;
 	}
 }
 

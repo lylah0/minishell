@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 20:17:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:32:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ t_input				*filter_args(t_input *input);
 // utils exec
 
 int					handle_parent_builtin(t_data *data, t_input *current);
-void				handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd, 
+void				handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd,
 						 char *env_path);
 int					count_args(t_input *token);
 void				fill_cmd_args(char **cmd, t_input *token);
@@ -214,7 +214,7 @@ void				print_tokens(char **tokens);
 bool is_valid_env_value_syntax(char *s);
 
 /// built-in
-void				b_echo(t_data *data);
+void				b_echo(t_data *data, t_input *current);
 void				b_env(t_data *data);
 void				b_exit(t_data *data, t_input *current, int in_pipe);
 void				b_export(t_data *data);

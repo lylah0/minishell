@@ -59,7 +59,7 @@ void handler_sigquit(int signum)
 {
 	t_data *data;
 	(void)signum;
-	
+
 	data = get_data_ptr(NULL);
 	if (data && data->signal)
 		data->signal->sigint = ON;
@@ -87,7 +87,7 @@ void init_signals(t_data *data)
 	signal(SIGQUIT, handler_sigquit);
 	tcgetattr(STDIN_FILENO, &term);
 	g_termios_backup = term;
-	term.c_lflag &= ~ECHOCTL;
+	// term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 

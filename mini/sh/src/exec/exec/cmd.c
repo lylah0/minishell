@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 15:17:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:23:42 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	child(t_data *data, int prev_pipe, t_input *current, int fd[2], char *env_p
 {
 	int	in_pipe;
 
+	data->stdin_redir = 0;
+	data->stdout_redir = 0;
 	in_pipe = (prev_pipe != 0 || has_next_cmd(current));
 	if (prev_pipe != 0 && !data->stdin_redir)
 	{
@@ -94,8 +96,6 @@ void	exec_pipe(t_data *data, t_input *head, char *env_path)
 	current = head;
 	while (current)
 	{
-		data->stdin_redir = 0;
-		data->stdout_redir = 0;
 		if (has_next_cmd(current))
 			pipe(fd);
 		else
@@ -111,7 +111,6 @@ void	exec_pipe(t_data *data, t_input *head, char *env_path)
 		handle_fork(data, &prev_pipe, &current, fd, env_path);
 	}
 	wait_all(data);
-	data->child_pid = -1;// 💡 Ça évite de renvoyer un signal à un ancien pid non valide plus tard.
+	data->child_pid = -1;
 
 }
-

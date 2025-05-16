@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 15:14:36 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:03:56 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_parent_builtin(char *token)
 int	handle_parent_builtin(t_data *data, t_input *current)
 {
 	if (is_builtin(current->token) && is_parent_builtin(current->token)
-		&& !data->stdin_redir && !has_next_cmd(current))
+		&& !has_redirection(current) && !has_next_cmd(current))
 	{
 		kind_of_token(data, current, 0);
 		return (1);
@@ -31,19 +31,20 @@ int	handle_parent_builtin(t_data *data, t_input *current)
 	return (0);
 }
 
-void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd, char *env_path)
+void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd,
+		char *env_path)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		data->child_pid = 0;// pour l'enfant, ne rien faire
-		child(data, *prev_pipe, *current, fd, env_path);// ici cest une enfant
+		data->child_pid = 0;
+		child(data, *prev_pipe, *current, fd, env_path);
 	}
 	else
 	{
-		data->child_pid = pid;// memorisation du processus enfant pour que sigint puisse cibler le child
+		data->child_pid = pid;
 		parent(prev_pipe, current, fd);
 	}
 }
@@ -57,8 +58,8 @@ void	fill_cmd_args(char **cmd, t_input *token)
 	tmp = token->next;
 	while (tmp && tmp->type != T_PIPE)
 	{
-		if (tmp->type != T_OP && tmp->type != T_PIPE
-			&& (tmp->prev == NULL || tmp->prev->type != T_OP))
+		if (tmp->type != T_OP && tmp->type != T_PIPE && (tmp->prev == NULL
+				|| tmp->prev->type != T_OP))
 		{
 			cmd[i] = ft_strdup(tmp->token);
 			i++;
@@ -77,8 +78,8 @@ int	count_args(t_input *token)
 	tmp = token->next;
 	while (tmp && tmp->type != T_PIPE)
 	{
-		if (tmp->type != T_OP && tmp->type != T_PIPE
-			&& (tmp->prev == NULL || tmp->prev->type != T_OP))
+		if (tmp->type != T_OP && tmp->type != T_PIPE && (tmp->prev == NULL
+				|| tmp->prev->type != T_OP))
 			count++;
 		tmp = tmp->next;
 	}

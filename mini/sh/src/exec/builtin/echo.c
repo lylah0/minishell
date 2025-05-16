@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 20:34:43 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:32:58 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,49 +43,49 @@ int	n_option(t_input *input)
 		return (OFF);
 }
 
-void	b_echo(t_data *data)
+void	b_echo(t_data *data, t_input *current)
 {
-	t_input	*current;
+	t_input	*curr;
 	int		n_flag;
 	int		first;
 	int		i;
 
 	n_flag = OFF;
 	first = 1;
-	current = data->input->next;
-	while (current && current->token && current->token[0] == '-'
-		&& current->token[1] == 'n')
+	curr = current->next;
+	while (curr && curr->token && curr->token[0] == '-'
+		&& curr->token[1] == 'n')
 	{
 		i = 2;
-		while (current->token[i] == 'n')
+		while (curr->token[i] == 'n')
 			i++;
-		if (current->token[i] != '\0')
+		if (curr->token[i] != '\0')
 			break ;
 		n_flag = ON;
-		current = current->next;
+		curr = curr->next;
 	}
-	while (current && current->type != T_PIPE)
+	while (curr && curr->type != T_PIPE)
 	{
-		if (current->type == T_OP)
+		if (curr->type == T_OP)
 		{
-			if (current->next)
-				current = current->next;
-			current = current->next;
+			if (curr->next)
+				curr = curr->next;
+			curr = curr->next;
 			continue ;
 		}
-		if (current->type == T_SKIP)
+		if (curr->type == T_SKIP)
 		{
-			current = current->next;
+			curr = curr->next;
 			continue ;
 		}
-		if (current->token != NULL)
+		if (curr->token != NULL)
 		{
 			if (!first)
 				write(STDOUT_FILENO, " ", 1);
-			write(STDOUT_FILENO, current->token, strlen(current->token));
+			write(STDOUT_FILENO, curr->token, strlen(curr->token));
 			first = 0;
 		}
-		current = current->next;
+		curr = curr->next;
 	}
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);
