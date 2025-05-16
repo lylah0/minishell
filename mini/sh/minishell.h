@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 08:53:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:09:12 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,13 @@ void	restore_terminal(void);
 
 // FONCTIONS LYLAH
 // fonctions parsing
-char				**fill_tab(char *input, char **array);
-void				if_n_op(char *input, char **array, int *k, int *i);
+char				**fill_tab(t_data *data, char *input, char **array);
+void				if_n_op(t_data *data, char *input, char **array, int *k, int *i);
 void				if_operator(char *input, char **array, int *k, int i);
 int					word_len(char *input);
-char				**first_parsing(char *input);
+char				**first_parsing(t_data *data, char *input);
 char				**second_parsing(char **array);
-char				**parse_input(char *input);
+char				**parse_input(t_data *data, char *input);
 char				**fill_second_tab(char **array, char **tab_token);
 int					handle_non_operator(char **tab_token, char *array,
 						int *index);
@@ -134,7 +134,7 @@ void				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
 void				print_token_list(t_input *head);
 char				*handle_double_quote(char *str, int *i, t_data *data);
-char				*handle_env_variable(char *str, int *i);
+char				*handle_env_variable(t_data *data, char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
 char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
@@ -143,7 +143,7 @@ void				append_char_to_result(char **result, char c);
 void				append_str_to_result(char **result, const char *str);
 int					handle_special_cases(const char *src, int *i,
 						char **result);
-int					handle_normal_word(char *input, char **array, int *k,
+int					handle_normal_word(t_data *data, char *input, char **array, int *k,
 						int i);
 int					count_tokens(const char *input);
 int					quotes(char *input, int *k, int *in_quote,
@@ -153,7 +153,7 @@ int					copy_substring(char *input, char **array_ptr, int start, int len);
 int					count_second_parsing_len(char **array);
 int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
-void				expand_env_var_into_array(char *input, char **array_ptr, int *k, int *j);
+void				expand_env_var_into_array(t_data *data, char *input, char **array_ptr, int *k, int *j);
 
 // fonctions execution
 
@@ -275,13 +275,20 @@ t_env				*exist_already_in_env(t_env *env, char *name_var);
 // void init_input(t_input *input);
 
 // utils.c
-void				cleanup_memory(char *line, char **splited_line);
 char				*ft_strdup_equal(const char *src);
 size_t				ft_strcat(char *dest, const char *src);
 int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
+
+//cleanup
+
+void				free_token_list(t_input *head);
+void				cleanup_memory(char *line, char **splited_line);
+void				free_tab(char **tab);
+void				free_env_list(t_env *env);
+void				clean(t_data *data, char **splited_input, char *env_path, char *input);
 
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);

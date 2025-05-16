@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 18:11:17 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:05:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:09:23 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ char	*find_executable(char **path, char *cmd)
 		free(temp);
 		if (access(new_path, X_OK) == 0)
 		{
-			//			free_tab(path);
+			free_tab(path);
 			return (new_path);
 		}
 		free(new_path);
 		i++;
 	}
-	//	free_tab(path);
+	free_tab(path);
 	return (NULL);
 }
 
@@ -68,10 +68,10 @@ char	*get_env_path(char **env)
 		if (ft_strncmp_end(path[0], "PATH", 4) == 0)
 		{
 			result = ft_strdup(path[1]);
-			//			free_tab(path);
+			free_tab(path);
 			return (result);
 		}
-		//		free_tab(path);
+		free_tab(path);
 		i++;
 	}
 	return (NULL);

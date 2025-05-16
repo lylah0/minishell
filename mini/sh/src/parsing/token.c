@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:05:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:16:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ t_input	*add_token(t_input *tail, char *token_str)
 	new_node = malloc(sizeof(t_input));
 	if (!new_node)
 		exit(1);
-	new_node->token = ft_strdup(token_str);
-	new_node->prev = tail;
+	new_node->token = NULL;
+	new_node->prev = NULL;
 	new_node->next = NULL;
-	tail->next = new_node;
+	if (token_str)
+		new_node->token = ft_strdup(token_str);
+	new_node->prev = tail;
+	if (tail)
+		tail->next = new_node;
 	return (new_node);
 }
 

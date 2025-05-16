@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:39:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:30:31 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,34 @@ void	b_export(t_data *data)
 
 	arg = data->input;
 	if (!arg->next || arg->next->type == T_PIPE)
-		print_export(data);
-	else
 	{
-		while (arg->next)
+		print_export(data);
+		return;
+	}
+	while (arg->next)
+	{
+		if (ft_strchr(arg->next->token, '=') == NULL)
 		{
-			// if (arg->next->type == T_SKIP)
-			// {
-			// 	arg->next = arg->next->next;
-			// 	continue ;
-			// }
-			printf("new_value = (%s)\n", new_value);
-			if (ft_strchr(arg->next->token, '=') == NULL)// pas de '='
-				{
-					if (is_valid_env_name_var_syntax(new_name) == TRUE)
-						add_env_name(data, arg->next->token);
-				}
-			else if (is_valid_env_name_var_syntax(arg->next->token) == TRUE && is_valid_env_value_syntax(new_value) == TRUE)
+			if (is_valid_env_name_var_syntax(arg->next->token) == TRUE)
+				add_env_name(data, arg->next->token);
+		}
+		else
+		{
+			new_name = extract_name(arg->next->token);
+			new_value = extract_value(arg->next->token);
+
+			if (is_valid_env_name_var_syntax(new_name) == TRUE
+				&& is_valid_env_value_syntax(new_value) == TRUE)
 			{
-				new_value = extract_value(arg->next->token);
-				new_name = extract_name(arg->next->token);
-				if (search_env_name(data->env, new_name) == NULL) // pas trouve, new value
+				if (search_env_name(data->env, new_name) == NULL)
 					add_new_env_var_and_value(data, new_name, new_value);
-				else // existe deja
+				else
 					update_env_value(data->env, new_name, new_value);
 			}
-			arg->next = arg->next->next;
+			free(new_name);
+			free(new_value);
 		}
+		arg->next = arg->next->next;
 	}
 }
+

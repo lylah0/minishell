@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:41:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ void lle_to_array(t_data *data)
 	(void)copy_env;
 	index_array = 0;
 	current = data->env;
-	data->copy_env = malloc(sizeof(char **) * lle_size(current) + 1);
+	data->copy_env = malloc(sizeof(char *) * (lle_size(current) + 1));
 	if (!data->copy_env)
 		return ;
-
 	while (current)
 	{
 		data->copy_env[index_array] = strjoin_name_equal_value(current->name, current->value);
 		index_array++;
 		current = current->next;
 	}
+	data->copy_env[index_array] = NULL;
 }
 
 void	swap_words(char **a, char **b)
@@ -126,8 +126,9 @@ void	print_env_array(t_data *data)
 
 void	free_array(char **array)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	if (!array)
 		return;
 	while (array[i])

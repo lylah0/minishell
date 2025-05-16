@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:33:39 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	heredoc(t_input *current)
 		line = readline("> ");
 		if ((ft_strlen(line) != 0) && ft_strncmp(line, del,
 				ft_strlen(line)) == 0)
+		{
+			free(line);
 			break ;
+		}
 		write(hd_pipe[1], line, ft_strlen(line));
 		write(hd_pipe[1], "\n", 1);
 		free(line);

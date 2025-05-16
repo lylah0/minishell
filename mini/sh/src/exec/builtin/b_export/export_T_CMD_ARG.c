@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:41:00 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:27:01 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,20 @@ bool is_valid_env_name_var_syntax(char *s)
 
 bool is_valid_env_value_syntax(char *s)
 {
-	int i = 0;
-	char c = s[i];
-	int len_s = ft_strlen(s);
-	
-	// if (s[0] == '"' && s[len_s] == '"')
-	// {
-	// 	while (ft_isascii(c))
-	// 		i++;
-	// 	if (i == len_s)
-	// 		return TRUE;
-	// }
+	int i;
+	int len_s;
+
+	i = 0;
+	len_s = ft_strlen(s);
+	if (!s)
+		return TRUE;
 	while (s[i])
 	{
-		if (ft_isalnum(c) || c == '_'|| c == '=' || c == '-' || c == '.' || c == '\\')
+		char c = s[i];
+		if (ft_isalnum(c) || c == '_' || c == '=' || c == '-' || c == '.' || c == '\\')
 			i++;
+		else
+			break;
 	}
 	if (i != len_s)
 	{
@@ -63,6 +62,7 @@ bool is_valid_env_value_syntax(char *s)
 	}
 	return TRUE;
 }
+
 
 void	add_env_name(t_data *data, char *env_name)
 {
