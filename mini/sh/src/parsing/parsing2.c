@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:09:08 by lylrandr          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/16 15:06:11 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/16 18:09:01 by lylrandr         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/05/16 20:30:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

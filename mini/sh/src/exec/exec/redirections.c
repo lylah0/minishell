@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/16 14:50:38 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/16 14:33:39 by lylrandr         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/05/16 20:35:13 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

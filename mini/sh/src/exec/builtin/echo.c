@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/16 15:32:11 by monoguei         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/16 14:04:41 by lylrandr         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/05/16 20:34:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +19,6 @@ int	n_option(t_input *input)
 {
 	t_input	*current;
 	int		found;
-	int		i;
 
 	current = input->next;
 	found = 0;
