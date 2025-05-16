@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:37:20 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:56:24 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,17 @@ int	is_builtin(char *cmd)
 		return (0);
 }
 
-
+char	*my_getenv(t_data *data, char *var_name)
+{
+	while (data->env->next && !(ft_strncmp(data->env->name, var_name,
+				ft_strlen(var_name)) == 0
+			&& data->env->name[ft_strlen(var_name)] == '\0'))
+		data->env = data->env->next;
+	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
+		return (data->env->value);
+	else
+		return (NULL);
+}
 
 bool	in_quotes(char *str, int index)
 {
@@ -95,16 +105,4 @@ bool	in_quotes(char *str, int index)
 		i++;
 	}
 	return (in_double);
-}
-
-char	*my_getenv(t_data *data, char *var_name)
-{
-	while (data->env->next && !(ft_strncmp(data->env->name, var_name,
-				ft_strlen(var_name)) == 0
-			&& data->env->name[ft_strlen(var_name)] == '\0'))
-		data->env = data->env->next;
-	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
-		return (data->env->value);
-	else
-		return (NULL);
 }
