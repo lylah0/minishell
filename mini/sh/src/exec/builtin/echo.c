@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 15:10:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:32:11 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,20 @@ int	n_option(t_input *input)
 
 	current = input->next;
 	found = 0;
-	while (current && current->token && current->token[0] == '-'
-		&& current->token[1] == 'n')
+	while (current && current->type != T_PIPE)
 	{
-		i = 2;
-		while (current->token[i] == 'n')
-			i++;
-		if (current->token[i] != '\0')
-			break ;
-		found = 1;
-		current = current->next;
+		if (current->type == T_OP)
+		{
+			if (current->next)
+				current = current->next;
+			current = current->next;
+			continue ;
+		}
+		if (current->type == T_SKIP)
+		{
+			current = current->next;
+			continue ;
+		}
 	}
 	if (found)
 		return (ON);
