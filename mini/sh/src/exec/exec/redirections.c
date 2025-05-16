@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:50:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	heredoc_append(t_input *current, t_data *data)
 		heredoc(current);
 }
 
-void	validate_redirections(t_input *current)
+void	validate_redirections(t_data *data, t_input *current)
 {
 	int	fd;
 
@@ -108,7 +108,7 @@ void	validate_redirections(t_input *current)
 			{
 				ft_printf_stderr(current->next->token);
 				perror(current->next->token);
-				exit_code = 1;
+				data->exit_code = 1;
 				exit(1);
 			}
 			close(fd);

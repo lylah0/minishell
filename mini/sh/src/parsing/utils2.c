@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:01:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 18:42:13 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:56:48 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,6 @@ char	*expand_token_part(char *input, int *i, t_data *data)
 	if (input[*i] == '"')
 		return (handle_double_quote(input, i, data));
 	if (input[*i] == '$')
-		return (handle_env_variable(input, i));
+		return (handle_env_variable(data, input, i));
 	return (extract_plain_text(input, i));
 }

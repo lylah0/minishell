@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:45:29 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:10:04 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	kind_of_token(t_data *data, t_input *input, int in_pipe)
 	input_str = input->token;
 	if (ft_strncmp_end(input_str, "echo", 5) == 0)
 	{
-		b_echo(data->input);
+		b_echo(data);
 		return (0);
 	}
 	if (ft_strncmp_end(input_str, "exit", 5) == 0)

@@ -6,13 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:48:54 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:17:27 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	wait_all(void)
+void	wait_all(t_data *data)
 {
 	int		status;
 	pid_t	pid;
@@ -20,7 +20,7 @@ void	wait_all(void)
 	while ((pid = wait(&status)) > 0)
 	{
 		if (WIFEXITED(status))
-			exit_code = WEXITSTATUS(status);
+			data->exit_code = WEXITSTATUS(status);
 	}
 }
 
@@ -44,7 +44,7 @@ t_input	*get_next_command(t_input *node)
 	return (NULL);
 }
 
-void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *data)
+void	child(t_data *data, int prev_pipe, t_input *current, int fd[2], char *env_path)
 {
 	int	in_pipe;
 
@@ -56,7 +56,7 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 	}
 	if (has_redirection(current))
 	{
-		validate_redirections(current);
+		validate_redirections(data, current);
 		redir(current, data);
 	}
 	if (has_next_cmd(current) && !data->stdout_redir)
@@ -67,7 +67,7 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 		close(fd[1]);
 	if (prev_pipe != 0)
 		close(prev_pipe);
-	exec(current, data, env_path, in_pipe);
+	exec(data, current, env_path, in_pipe);
 }
 
 void	parent(int *prev_pipe, t_input **current, int fd[2])
@@ -84,7 +84,7 @@ void	parent(int *prev_pipe, t_input **current, int fd[2])
 	*current = get_next_command(*current);
 }
 
-void	exec_pipe(t_input *head, char *env_path, t_data *data)
+void	exec_pipe(t_data *data, t_input *head, char *env_path)
 {
 	int		fd[2];
 	int		prev_pipe;
@@ -103,14 +103,14 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 			fd[0] = -1;
 			fd[1] = -1;
 		}
-		if (handle_parent_builtin(current, data))
+		if (handle_parent_builtin(data, current))
 		{
 			current = get_next_command(current);
 			continue ;
 		}
-		handle_fork(&prev_pipe, &current, fd, data, env_path);
+		handle_fork(data, &prev_pipe, &current, fd, env_path);
 	}
-	wait_all();
+	wait_all(data);
 	data->child_pid = -1;// 💡 Ça évite de renvoyer un signal à un ancien pid non valide plus tard.
 
 }

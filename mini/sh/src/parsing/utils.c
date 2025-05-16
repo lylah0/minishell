@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 16:53:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 18:17:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:03:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	append_str_to_result(char **result, const char *str)
 	*result = tmp;
 }
 
-int	handle_normal_word(char *input, char **array, int *k, int i)
+int	handle_normal_word(t_data *data, char *input, char **array, int *k, int i)
 {
 	int	len;
 
@@ -58,7 +58,7 @@ int	handle_normal_word(char *input, char **array, int *k, int i)
 	array[i] = malloc(sizeof(char) * (len + 1));
 	if (!array[i])
 		return (0);
-	if_n_op(input, array, k, &i);
+	if_n_op(data, input, array, k, &i);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:15:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**build_cmd_arg(t_input *token)
 	return (cmd);
 }
 
-void	exec(t_input *current, t_data *data, char *env_path, int in_pipe)
+void	exec(t_data *data, t_input *current, char *env_path, int in_pipe)
 {
 	char	**cmd;
 	char	*cmd_path;

@@ -13,7 +13,7 @@
 #include "../minishell.h"
 static struct termios g_termios_backup;
 
-char *get_user_input(const char *prompt)
+char *get_user_input(t_data *data, const char *prompt)
 {
 	char *line;
 
@@ -22,7 +22,7 @@ char *get_user_input(const char *prompt)
 	{
 		restore_terminal();
 		// cleanup_memory [ ]
-		exit(exit_code);
+		exit(data->exit_code);
 		return (NULL);
 	}
 	return (line);

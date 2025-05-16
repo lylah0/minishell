@@ -6,13 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:05:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:05:06 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	**first_parsing(char *input)
+char	**first_parsing(t_data *data, char *input)
 {
 	char	**array;
 	int		len;
@@ -25,7 +25,7 @@ char	**first_parsing(char *input)
 		return (NULL);
 	}
 	array[len] = NULL;
-	return (fill_tab(input, array));
+	return (fill_tab(data, input, array));
 }
 
 int	word_len(char *input)
@@ -71,7 +71,7 @@ void	if_operator(char *input, char **array, int *k, int i)
 	array[i][j] = '\0';
 }
 
-void	if_n_op(char *input, char **array, int *k, int *i)
+void	if_n_op(t_data *data, char *input, char **array, int *k, int *i)
 {
 	int		j;
 	int		in_quote;
@@ -85,7 +85,7 @@ void	if_n_op(char *input, char **array, int *k, int *i)
 		&& !(input[*k] == '>' && !in_quote))
 	{
 		if (input[*k] == '$')
-			expand_env_var_into_array(input, &array[*i], k, &j);
+			expand_env_var_into_array(data, input, &array[*i], k, &j);
 		else if (quotes(input, k, &in_quote, &quote_char))
 			continue ;
 		else
@@ -98,7 +98,7 @@ void	if_n_op(char *input, char **array, int *k, int *i)
 	array[*i][j] = '\0';
 }
 
-char	**fill_tab(char *input, char **array)
+char	**fill_tab(t_data *data, char *input, char **array)
 {
 	int	i;
 	int	k;
@@ -116,7 +116,7 @@ char	**fill_tab(char *input, char **array)
 			if_quotes(input, array, &k, &i);
 		else if (input[k] == '|' || input[k] == '<' || input[k] == '>')
 			if_operator(input, array, &k, i);
-		else if (!handle_normal_word(input, array, &k, i))
+		else if (!handle_normal_word(data, input, array, &k, i))
 			return (NULL);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:44:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:10:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	n_option(t_input *input)
 		return (OFF);
 }
 
-void	b_echo(t_input *cmd)
+void	b_echo(t_data *data)
 {
 	t_input	*current;
 	int		n_flag;
@@ -49,7 +49,7 @@ void	b_echo(t_input *cmd)
 
 	n_flag = OFF;
 	first = 1;
-	current = cmd->next;
+	current = data->input->next;
 	while (current && current->token && current->token[0] == '-'
 		&& current->token[1] == 'n')
 	{
@@ -79,6 +79,6 @@ void	b_echo(t_input *cmd)
 	}
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);
-	exit_code = 0;
+	data->exit_code = 0;
 	exit(0);
 }

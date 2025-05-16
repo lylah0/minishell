@@ -6,11 +6,9 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 08:53:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:16:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-extern int exit_code;
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -45,9 +43,6 @@ extern int exit_code;
 # define ON 1
 # define OFF 0
 # define ECHOCTL 0001000
-
-
-extern int			exit_code;
 
 typedef enum s_token_type
 {
@@ -98,12 +93,13 @@ typedef struct s_data
 	t_signal		*signal;      // gestion signaux
 	char			**copy_env;   // tableau d'env (copie)
 	int				should_exit;
+	int				exit_code;
 	int				stdout_redir;
 	int				stdin_redir;
 	pid_t			child_pid;
 }	t_data;
 
-char *get_user_input(const char *prompt);
+char *get_user_input(t_data *data, const char *prompt);
 t_data	*get_data_ptr(t_data *new_data);
 void	init_signals(t_data *data);
 void	handler_sigint(int signum);
@@ -114,13 +110,13 @@ void	restore_terminal(void);
 
 // FONCTIONS LYLAH
 // fonctions parsing
-char				**fill_tab(char *input, char **array);
-void				if_n_op(char *input, char **array, int *k, int *i);
+char				**fill_tab(t_data *data,char *input, char **array);
+void				if_n_op(t_data *data, char *input, char **array, int *k, int *i);
 void				if_operator(char *input, char **array, int *k, int i);
 int					word_len(char *input);
-char				**first_parsing(char *input);
+char				**first_parsing(t_data *data, char *input);
 char				**second_parsing(char **array);
-char				**parse_input(char *input);
+char				**parse_input(t_data *data, char *input);
 char				**fill_second_tab(char **array, char **tab_token);
 int					handle_non_operator(char **tab_token, char *array,
 						int *index);
@@ -132,9 +128,9 @@ char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
 void				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
-void				print_token_list(t_input *head);
+void				print_token_list(t_data *data, t_input *head);
 char				*handle_double_quote(char *str, int *i, t_data *data);
-char				*handle_env_variable(char *str, int *i);
+char				*handle_env_variable(t_data *data, char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
 char				*expand_token_string(const char *src, t_data *data);
 char				*extract_var_name(const char *str, int *i);
@@ -143,7 +139,7 @@ void				append_char_to_result(char **result, char c);
 void				append_str_to_result(char **result, const char *str);
 int					handle_special_cases(const char *src, int *i,
 						char **result);
-int					handle_normal_word(char *input, char **array, int *k,
+int					handle_normal_word(t_data *data, char *input, char **array, int *k,
 						int i);
 int					count_tokens(const char *input);
 int					quotes(char *input, int *k, int *in_quote,
@@ -153,20 +149,20 @@ int					copy_substring(char *input, char **array_ptr, int start, int len);
 int					count_second_parsing_len(char **array);
 int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
-void				expand_env_var_into_array(char *input, char **array_ptr, int *k, int *j);
+void				expand_env_var_into_array(t_data *data, char *input, char **array_ptr, int *k, int *j);
 
 // fonctions execution
 
 int					is_builtin(char *cmd);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
-void				exec_pipe(t_input *head, char *env_path, t_data *data);
+void				exec_pipe( t_data *data, t_input *head, char *env_path);
 void				parent(int *prev_pipe, t_input **current, int fd[2]);
-void				child(int prev_pipe, t_input *current, int fd[2],
-						char *env_path, t_data *data);
+void				child(t_data *data, int prev_pipe, t_input *current, int fd[2],
+						char *env_path);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
-void				exec(t_input *current, t_data *data, char *env_path,
+void				exec(t_data *data, t_input *current, char *env_path,
 						int in_pipe);
 int					is_parent_builtin(char *token);
 bool				is_safe_to_exec_in_parent(t_input *current);
@@ -174,9 +170,9 @@ t_input				*filter_args(t_input *input);
 
 // utils exec
 
-int					handle_parent_builtin(t_input *current, t_data *data);
-void				handle_fork(int *prev_pipe, t_input **current, int *fd,
-						t_data *data, char *env_path);
+int					handle_parent_builtin(t_data *data, t_input *current);
+void				handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd, 
+						 char *env_path);
 int					count_args(t_input *token);
 void				fill_cmd_args(char **cmd, t_input *token);
 
@@ -186,7 +182,7 @@ void				simple_redir(t_input *current, t_data *data);
 void				redir(t_input *current, t_data *data);
 void				heredoc_append(t_input *current, t_data *data);
 void				heredoc(t_input *current);
-void				validate_redirections(t_input *current);
+void				validate_redirections(t_data *data, t_input *current);
 bool				has_redirection(t_input *current);
 int					open_redirection_file(t_input *current);
 
@@ -218,7 +214,7 @@ void				print_tokens(char **tokens);
 bool is_valid_env_value_syntax(char *s);
 
 /// built-in
-void				b_echo(t_input *cmd);
+void				b_echo(t_data *data);
 void				b_env(t_data *data);
 void				b_exit(t_data *data, t_input *current, int in_pipe);
 void				b_export(t_data *data);
@@ -227,7 +223,7 @@ void				b_pwd(t_data *data);
 void				b_unset(t_data *data);
 void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input, int in_pipe);
-t_env				*update_env_value(t_env *env, char *env_to_update,
+t_env				*update_env_value(t_data *data, char *env_to_update,
 						char *new_value);
 // int					kind_of_token(t_data *data, t_input *input);
 // t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
@@ -286,9 +282,7 @@ t_input				*cat_token(t_input *token, char *value, int len);
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);
 void				lle_add_back(t_env **env, t_env *new1);
-void				lle_add_front(t_env **env, t_env *new1);
 void				lle_del_one(t_env **env, char *env_to_del);
-void				lle_iter(t_env *env, void (*f)(void *));
 t_env				*lle_last(t_env *env);
 t_env				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);

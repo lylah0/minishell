@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:39:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:08:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	b_export(t_data *data)
 				if (search_env_name(data->env, new_name) == NULL) // pas trouve, new value
 					add_new_env_var_and_value(data, new_name, new_value);
 				else // existe deja
-					update_env_value(data->env, new_name, new_value);
+					update_env_value(data, new_name, new_value);
 			}
 			arg->next = arg->next->next;
 		}

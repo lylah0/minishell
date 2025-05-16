@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:05:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:50:50 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*handle_double_quote(char *str, int *i, t_data *data)
 	return (expanded);
 }
 
-char	*handle_env_variable(char *str, int *i)
+char	*handle_env_variable(t_data *data, char *str, int *i)
 {
 	char	*var_name;
 	char	*var_value;
@@ -85,7 +85,7 @@ char	*handle_env_variable(char *str, int *i)
 	if (str[*i + 1] == '?')
 	{
 		*i += 2;
-		return (ft_itoa(exit_code));
+		return (ft_itoa(data->exit_code));
 	}
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))

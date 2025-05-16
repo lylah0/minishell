@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/30 17:57:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:48:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_str_isdigit(const char *str)
 /// @param data The structure containing input and exit status information.
 void	b_exit(t_data *data)
 {
-	data->should_exit = 1;
+	data->exit_code = 1;
 	data->exit_status = 0;
 	if (data->input->type == T_CMD_ARG)
 	{
@@ -69,6 +69,6 @@ void	b_exit(t_data *data)
 	}
 }
 
-// `echo $?` pour tester dans le terminal et obtenir le exit_code
+// `echo $?` pour tester dans le terminal et obtenir le data->exit_code
 // [ ] si exit dans pipe !!! ca ne quitte pas le term !!!
 // [ ] free proprement ce quil faut !!!
