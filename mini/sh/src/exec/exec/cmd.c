@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:48:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	child(int prev_pipe, t_input *current, int fd[2], char *env_path, t_data *d
 
 void	parent(int *prev_pipe, t_input **current, int fd[2])
 {
-	(void)data;
 	if (*prev_pipe != 0)
 		close(*prev_pipe);
 	if (has_next_cmd(*current))
@@ -112,5 +111,7 @@ void	exec_pipe(t_input *head, char *env_path, t_data *data)
 		handle_fork(&prev_pipe, &current, fd, data, env_path);
 	}
 	wait_all();
+	data->child_pid = -1;// 💡 Ça évite de renvoyer un signal à un ancien pid non valide plus tard.
+
 }
 

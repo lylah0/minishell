@@ -6,13 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:51 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:41:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
-bool is_valid_env_var_syntax(char *s)
+bool is_valid_env_name_var_syntax(char *s)
 {
 	int		i;
 	char	c;
@@ -28,14 +28,40 @@ bool is_valid_env_var_syntax(char *s)
 				i++;
 			else
 			{
-				ft_printf_stderr("minishell: export: '%s': not a valid identifier\n", s);
+				ft_printf_stderr("bash: export: env_name '%s': not a valid identifier\n", s);
 				return (FALSE);
 			}
 		}
 		return (TRUE);
 	}
-	ft_printf_stderr("minishell: export: `%s': not a valid identifier\n", s);
+	ft_printf_stderr("bash: export: env_name '%s': not a valid identifier\n", s);
 	return (FALSE);
+}
+
+bool is_valid_env_value_syntax(char *s)
+{
+	int i = 0;
+	char c = s[i];
+	int len_s = ft_strlen(s);
+	
+	// if (s[0] == '"' && s[len_s] == '"')
+	// {
+	// 	while (ft_isascii(c))
+	// 		i++;
+	// 	if (i == len_s)
+	// 		return TRUE;
+	// }
+	while (s[i])
+	{
+		if (ft_isalnum(c) || c == '_'|| c == '=' || c == '-' || c == '.' || c == '\\')
+			i++;
+	}
+	if (i != len_s)
+	{
+		ft_printf_stderr("bash: export: env_value: '%s': not a valid identifier\n", s);
+		return FALSE;
+	}
+	return TRUE;
 }
 
 void	add_env_name(t_data *data, char *env_name)

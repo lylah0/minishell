@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:43 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:39:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,20 @@ void	b_export(t_data *data)
 		print_export(data);
 	else
 	{
-		while (arg->next && arg->next->type != T_PIPE && arg->next->type != T_OP)
+		while (arg->next)
 		{
 			// if (arg->next->type == T_SKIP)
 			// {
 			// 	arg->next = arg->next->next;
 			// 	continue ;
 			// }
+			printf("new_value = (%s)\n", new_value);
 			if (ft_strchr(arg->next->token, '=') == NULL)// pas de '='
 				{
-					if (is_valid_env_var_syntax(arg->next->token) == TRUE)
+					if (is_valid_env_name_var_syntax(new_name) == TRUE)
 						add_env_name(data, arg->next->token);
 				}
-			else if (is_valid_env_var_syntax(arg->next->token) == TRUE)
+			else if (is_valid_env_name_var_syntax(arg->next->token) == TRUE && is_valid_env_value_syntax(new_value) == TRUE)
 			{
 				new_value = extract_value(arg->next->token);
 				new_name = extract_name(arg->next->token);

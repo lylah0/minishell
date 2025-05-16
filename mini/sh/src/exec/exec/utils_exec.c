@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:06:22 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:48:36 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,15 @@ void	handle_fork(int *prev_pipe, t_input **current, int *fd, t_data *data, char 
 
 	pid = fork();
 	if (pid == 0)
-		child(*prev_pipe, *current, fd, env_path, data);
+	{
+		data->child_pid = 0;// pour l'enfant, ne rien faire
+		child(*prev_pipe, *current, fd, env_path, data);// ici cest une enfant
+	}
 	else
+	{
+		data->child_pid = pid;// memorisation du processus enfant pour que sigint puisse cibler le child
 		parent(prev_pipe, current, fd);
+	}
 }
 
 void	fill_cmd_args(char **cmd, t_input *token)

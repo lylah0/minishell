@@ -6,26 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:07:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:49:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 int exit_code = 0;
-
-char	*get_user_input(const char *prompt)
-{
-	char	*line;
-
-	line = readline(prompt);
-	if (!line)
-	{
-//		fprintf(stderr, "Error reading line\n");
-		return (NULL);
-	}
-	return (line);
-}
 
 t_data	*init_data(t_data *data)
 {
@@ -88,35 +75,43 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)env_path;
 	(void)av;
-	init_signals();
 	data = NULL;
 	data = init_data(data);
+	init_signals(data);
 	init_env(data, envp);
 	while (1)
 	{
 		data->should_exit = 0;
-		input = get_user_input("minishell> ");
+		data->child_pid = -1;// handler ne tente rien de foireux avant fork
+		if (data->signal->sigquit == OFF)
+			input = get_user_input("minishell> ");
+		else 
+			continue;
+		if (!input)
+			break;
 		if (!ft_strlen(input))
 		{
-			restore_terminal();
-			init_signals();
+			init_signals(data);
+			continue;
 		}
-		else
-		{
-			add_history(input);
-			splited_input = parse_input(input);
-			if (!splited_input)
-				continue;
-			env_path = get_env_path(envp);
-			head = do_parsing(head, splited_input, data);
-			data->input = head;
-			exec_cmd(head, data, env_path);
-			if (data->should_exit)
-				break;
-			restore_terminal();
-			init_signals();
-		}
+		if (data->signal->sigint == ON)
+			data->signal->sigint = OFF;
+		if (data->signal->sigquit == ON)
+			data->signal->sigquit = OFF;
+		add_history(input);
+		splited_input = parse_input(input);
+		if (!splited_input)
+			continue;
+		env_path = get_env_path(envp);
+		head = do_parsing(head, splited_input, data);
+		data->input = head;
+		exec_cmd(head, data, env_path);
+		if (data->should_exit)
+			break;
+		init_signals(data);
 	}
+
 	cleanup_memory(input, splited_input);
+	restore_terminal();
 	exit(exit_code);
 }

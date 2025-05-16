@@ -6,18 +6,12 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/15 21:43:56 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 08:53:32 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+extern int exit_code;
 
-=======
-/*   Updated: 2025/05/15 09:48:31 by monoguei         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
->>>>>>> export
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -30,30 +24,28 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
-<<<<<<< HEAD
 # include <string.h>
-=======
->>>>>>> export
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-<<<<<<< HEAD
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <dirent.h>
 # include <stdarg.h>
-=======
 # include <signal.h>
 # include <string.h>
 # include <termios.h>
->>>>>>> export
 
 
 # define TRUE 1
 # define FALSE 0
+# define ON 1
+# define OFF 0
+# define ECHOCTL 0001000
+
 
 extern int			exit_code;
 
@@ -86,6 +78,12 @@ typedef struct s_env
 }	t_env;
 
 // Gestion des signaux
+typedef enum e_signal_state
+{
+	SIGNAL_OFF,
+	SIGNAL_ON
+}	t_signal_state;
+
 typedef struct s_signal
 {
 	t_signal_state	sigint;
@@ -129,8 +127,7 @@ int					handle_non_operator(char **tab_token, char *array,
 void				handle_operator(char **tab_token, char **array, int *index,
 						int i);
 void				if_quotes(char *input, char **array, int *k, int *i);
-// int					while_quotes(const char *input, int i);
-int					while_quotes(char *input, int i);
+int					while_quotes(const char *input, int i);
 char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
 void				is_env_var(t_input *input, t_data *data);
@@ -218,6 +215,7 @@ void				print_all_token_types(t_input *head);
 void				print_tokens(char **tokens);
 
 // FONCTIONS EXEC + MONI
+bool is_valid_env_value_syntax(char *s);
 
 /// built-in
 void				b_echo(t_input *cmd);
@@ -284,12 +282,6 @@ int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
-
-// signals.c
-__sighandler_t		handler_sigint(void);
-void				init_signals(void);
-void				restore_terminal(void);
-
 
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);
