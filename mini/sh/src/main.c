@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:49:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:18:11 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,25 @@ t_data	*init_data(t_data *data)
 	data->copy_env = NULL;
 	data->stdout_redir = 0;
 	data->stdin_redir = 0;
+	data->signal = malloc(sizeof(t_signal));
+	if (!data->signal)
+	{
+		fprintf(stderr, "Error: Memory allocation failed for signal\n");
+		free(data->env);
+		free(data->input);
+		free(data);
+		return (NULL);
+	}
+	data->signal->sigint = OFF;
+	data->signal->sigquit = OFF;
+	data->child_pid = -1;
 	return (data);
 }
 
+
 t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 {
-	// print_tokens(splited_input);
+	//print_tokens(splited_input);
 	head = tokenize(splited_input, data);
 	// print_all_token_types(head);
 	is_env_var(head, data);

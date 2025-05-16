@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:38:00 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:16:18 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void is_env_var(t_input *input, t_data *data)
 	t_input	*curr;
 	char	*expanded;
 
-	curr = NULL;
+	curr = input;
 	expanded = expand_token_string(curr->token, data);
 	free(input->token);
 	input->token = expanded;
