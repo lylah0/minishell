@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 20:34:30 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 22:10:11 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	b_export(t_data *data)
 		print_export(data);
 		return;
 	}
-	while (arg->next)
+	while (arg->next && arg->next->type != T_PIPE)
 	{
 		if (ft_strchr(arg->next->token, '=') == NULL)
 		{

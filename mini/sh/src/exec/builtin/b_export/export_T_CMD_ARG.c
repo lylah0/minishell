@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 21:01:00 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 22:05:48 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ bool is_valid_env_name_var_syntax(char *s)
 				i++;
 			else
 			{
-				ft_printf_stderr("bash: export: env_name '%s': not a valid identifier\n", s);
+				ft_printf_stderr("minishell: export: env_name '%s': not a valid identifier\n", s);
 				return (FALSE);
 			}
 		}
 		return (TRUE);
 	}
-	ft_printf_stderr("bash: export: env_name '%s': not a valid identifier\n", s);
+	ft_printf_stderr("minishell: export: env_name '%s': not a valid identifier\n", s);
 	return (FALSE);
 }
 
@@ -57,7 +57,7 @@ bool is_valid_env_value_syntax(char *s)
 	}
 	if (i != len_s)
 	{
-		ft_printf_stderr("bash: export: env_value: '%s': not a valid identifier\n", s);
+		ft_printf_stderr("minishell: export: env_value: '%s': not a valid identifier\n", s);
 		return FALSE;
 	}
 	return TRUE;

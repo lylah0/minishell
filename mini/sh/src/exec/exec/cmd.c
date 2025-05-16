@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 21:23:42 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:58:54 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ t_input	*get_next_command(t_input *node)
 	return (NULL);
 }
 
-void	child(t_data *data, int prev_pipe, t_input *current, int fd[2], char *env_path)
+void	child(t_data *data, int prev_pipe, t_input *current, int fd[2],
+		char *env_path)
 {
 	int	in_pipe;
 
@@ -112,5 +113,4 @@ void	exec_pipe(t_data *data, t_input *head, char *env_path)
 	}
 	wait_all(data);
 	data->child_pid = -1;
-
 }

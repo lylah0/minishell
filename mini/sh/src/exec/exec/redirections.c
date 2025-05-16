@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 21:45:01 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/16 22:02:47 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void	validate_redirections(t_data *data, t_input *current)
 			}
 			if (fd == -1)
 			{
-				ft_printf_stderr(current->next->token);
 				perror(current->next->token);
 				data->exit_code = 1;
 				exit(1);

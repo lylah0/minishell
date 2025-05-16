@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:34:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:07:01 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:52:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,5 @@ void	b_pwd(t_data *data)
 	char	*pwd_value;
 
 	pwd_value = search_env_value(data->env, "PWD");
-	ft_printf("%s\n", pwd_value);
+	printf("%s\n", pwd_value);
 }
