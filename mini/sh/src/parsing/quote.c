@@ -6,7 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/05/16 14:50:50 by monoguei         ###   ########.fr       */
+=======
 /*   Updated: 2025/05/16 18:04:49 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +89,7 @@ char	*handle_env_variable(t_data *data, char *str, int *i)
 	if (str[*i + 1] == '?')
 	{
 		*i += 2;
-		return (ft_itoa(exit_code));
+		return (ft_itoa(data->exit_code));
 	}
 	(*i)++;
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))

@@ -6,7 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/05/16 15:19:41 by monoguei         ###   ########.fr       */
+=======
 /*   Updated: 2025/05/16 14:16:45 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +34,45 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-// copie colle avec malloc ET ajoute = a la fin
+// Duplique src et ajoute '=' à la fin (ex: src="HOME" -> "HOME=")
 char	*ft_strdup_equal(const char *src)
 {
-	int		i;
-	int		j;
-	int		len;
-	char	*dest;
+    int		i;
+    int		len;
+    char	*dest;
 
-	// if(!src)
-		// return();
-	i = 0;
-	j = 0;
-	len = ft_strlen(src);
-	dest = (char *)malloc((len + 2) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	dest[j] = '=';
-	while (src[i] != 0)
-	{
-		dest[j] = src[i];
-		i++;
-		j++;
-	}
-	dest[++j] = 0;
-	return (dest);
+    if (!src)
+        return (NULL);
+    len = ft_strlen(src);
+    dest = (char *)malloc((len + 2) * sizeof(char)); // +1 pour '=' et +1 pour '\0'
+    if (!dest)
+        return (NULL);
+    for (i = 0; i < len; i++)
+        dest[i] = src[i];
+    dest[len] = '=';
+    dest[len + 1] = '\0';
+    return (dest);
 }
-// export NAME=
-// export NAME
 
+// Duplique src en ajoutant '=' au début (ex: src="HOME" -> "=HOME")
+char	*ft_equal_strdup(const char *src)
+{
+    int		i;
+    int		len;
+    char	*dest;
+
+    if (!src)
+        return (NULL);
+    len = ft_strlen(src);
+    dest = (char *)malloc((len + 2) * sizeof(char)); // +1 pour '=' et +1 pour '\0'
+    if (!dest)
+        return (NULL);
+    dest[0] = '=';
+    for (i = 0; i < len; i++)
+        dest[i + 1] = src[i];
+    dest[len + 1] = '\0';
+    return (dest);
+}
 
 // Concatène str dest+src mod moni
 // return taille tot
@@ -121,11 +135,6 @@ char	*ft_strdup(const char *src)
 		i++;
 	}
 	dest[i] = 0;
-	if (dest == NULL)
-	{
-		free(dest);
-		exit_code = 1;
-	}
 	return (dest);
 }
 
@@ -146,38 +155,6 @@ char	*ft_strndup(const char *src, int n)
 		i++;
 	}
 	dest[i] = 0;
-	if (dest == NULL)
-	{
-		free(dest);
-		exit_code = 1;
-	}
-	return (dest);
-}
-
-
-char	*ft_equal_strdup(const char *src)
-{
-	int		i;
-	int		len;
-	char	*dest;
-
-	i = 0;
-	len = ft_strlen(src);
-	dest = (char *)malloc((len + 2) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	dest[i] = '=';
-	while (src[i] != 0)
-	{
-		dest[i + 1] = src[i];
-		i++;
-	}
-	dest[i + 1] = 0;
-	if (dest == NULL)
-	{
-		free(dest);
-		exit_code = 1;
-	}
 	return (dest);
 }
 

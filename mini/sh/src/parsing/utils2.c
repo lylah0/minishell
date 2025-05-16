@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:01:38 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/05/16 14:56:48 by monoguei         ###   ########.fr       */
+=======
 /*   Updated: 2025/05/16 18:05:19 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 

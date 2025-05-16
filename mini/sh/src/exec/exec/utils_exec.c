@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/15 22:48:36 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:14:36 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_parent_builtin(char *token)
 	return (0);
 }
 
-int	handle_parent_builtin(t_input *current, t_data *data)
+int	handle_parent_builtin(t_data *data, t_input *current)
 {
 	if (is_builtin(current->token) && is_parent_builtin(current->token)
 		&& !data->stdin_redir && !has_next_cmd(current))
@@ -31,7 +31,7 @@ int	handle_parent_builtin(t_input *current, t_data *data)
 	return (0);
 }
 
-void	handle_fork(int *prev_pipe, t_input **current, int *fd, t_data *data, char *env_path)
+void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd, char *env_path)
 {
 	pid_t	pid;
 
@@ -39,7 +39,7 @@ void	handle_fork(int *prev_pipe, t_input **current, int *fd, t_data *data, char 
 	if (pid == 0)
 	{
 		data->child_pid = 0;// pour l'enfant, ne rien faire
-		child(*prev_pipe, *current, fd, env_path, data);// ici cest une enfant
+		child(data, *prev_pipe, *current, fd, env_path);// ici cest une enfant
 	}
 	else
 	{

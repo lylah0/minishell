@@ -6,7 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/05/16 14:50:38 by monoguei         ###   ########.fr       */
+=======
 /*   Updated: 2025/05/16 14:33:39 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +97,7 @@ void	heredoc_append(t_input *current, t_data *data)
 		heredoc(current);
 }
 
-void	validate_redirections(t_input *current)
+void	validate_redirections(t_data *data, t_input *current)
 {
 	int	fd;
 
@@ -111,7 +115,7 @@ void	validate_redirections(t_input *current)
 			{
 				ft_printf_stderr(current->next->token);
 				perror(current->next->token);
-				exit_code = 1;
+				data->exit_code = 1;
 				exit(1);
 			}
 			close(fd);

@@ -6,7 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/05/16 15:32:11 by monoguei         ###   ########.fr       */
+=======
 /*   Updated: 2025/05/16 14:04:41 by lylrandr         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +27,20 @@ int	n_option(t_input *input)
 
 	current = input->next;
 	found = 0;
-	while (current && current->token && current->token[0] == '-'
-		&& current->token[1] == 'n')
+	while (current && current->type != T_PIPE)
 	{
-		i = 2;
-		while (current->token[i] == 'n')
-			i++;
-		if (current->token[i] != '\0')
-			break ;
-		found = 1;
-		current = current->next;
+		if (current->type == T_OP)
+		{
+			if (current->next)
+				current = current->next;
+			current = current->next;
+			continue ;
+		}
+		if (current->type == T_SKIP)
+		{
+			current = current->next;
+			continue ;
+		}
 	}
 	if (found)
 		return (ON);
@@ -40,7 +48,7 @@ int	n_option(t_input *input)
 		return (OFF);
 }
 
-void	b_echo(t_input *cmd)
+void	b_echo(t_data *data)
 {
 	t_input	*current;
 	int		n_flag;
@@ -49,7 +57,7 @@ void	b_echo(t_input *cmd)
 
 	n_flag = OFF;
 	first = 1;
-	current = cmd->next;
+	current = data->input->next;
 	while (current && current->token && current->token[0] == '-'
 		&& current->token[1] == 'n')
 	{
@@ -86,6 +94,6 @@ void	b_echo(t_input *cmd)
 	}
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);
-	exit_code = 0;
+	data->exit_code = 0;
 	exit(0);
 }
