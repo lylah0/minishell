@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 16:58:40 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:45:21 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ void	free_token_list(t_input *head)
 	}
 }
 
-void	free_env_list(t_env *env)
-{
-	t_env *tmp;
+// void	free_env_list(t_env *env)
+// {
+// 	t_env *tmp;
 
-	while (env)
-	{
-		tmp = env;
-		env = env->next;
-		free(tmp->name);
-		free(tmp->value);
-		free(tmp);
-	}
-}
+// 	while (env)
+// 	{
+// 		tmp = env;
+// 		env = env->next;
+// 		free(tmp->name);
+// 		free(tmp->value);
+// 		free(tmp);
+// 	}
+// }
 
 void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 {
@@ -83,4 +83,9 @@ void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 		free(env_path);
 	if (input)
 		free(input);
+			// Après avoir fini d’utiliser readline()
+	rl_clear_history();             // vide l’historique
+	rl_free_line_state();           // libère certains buffers internes
+	rl_cleanup_after_signal();      // en cas de signal
+
 }

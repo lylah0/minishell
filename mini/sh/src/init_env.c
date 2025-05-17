@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:07:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:58:45 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,21 @@ void	print_lle(t_data *data)
 	}
 }
 
+void	free_env_list(t_env *head)
+{
+    t_env *tmp;
+    while (head)
+    {
+        tmp = head->next;
+        free(head->name);
+        free(head->value);
+        free(head);
+        head = tmp;
+    }
+}
+
+
+
 t_env	*create_lle(char **envp)
 {
 	int		i = 0;
@@ -71,6 +86,8 @@ t_env	*create_lle(char **envp)
 		if (!current->name || (separator && !current->value))
 		{
 			free(current->name);
+			free(current->value);
+			free(current);
 			return (0);
 		}
 		if (!head)

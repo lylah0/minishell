@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 15:08:26 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:48:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ void	exit_no_arg(t_data *data, int in_pipe)
 {
 	if (!in_pipe)
 		ft_putstr_fd("exit\n", 1); // Only print when not in a pipeline
+	rl_clear_history();             // vide l’historique
+	rl_free_line_state();           // libère certains buffers internes
+	rl_cleanup_after_signal();      // en cas de signal
+	free_lle(data);
+	// Après avoir fini d’utiliser readline()
 	exit(data->exit_code);
 }
 
