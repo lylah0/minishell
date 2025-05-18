@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/18 13:15:06 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:39:55 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	print_lle(t_data *data)
 		printf("%s", current->name);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		if (current->value)
 			printf("=%s\n", current->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+		else
+			printf("\n");
 		current = current->next;
 	}
 }
@@ -100,15 +102,33 @@ t_env	*create_lle(char **envp)
 	return (head);
 }
 
-/// @brief 
-/// @param data 
-/// @param envp 
+t_env	*create_lle_empty(t_env *env)
+{
+	t_env	*current = NULL;
+
+	current = env;
+	current = malloc(sizeof(t_env));
+	if (!current)
+	{
+		free(current);
+		return (0);
+	}
+	current->name = ft_strdup("");
+	current->value = NULL;
+	current->next = NULL;
+	return (current);
+}
+
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_lle(envp);
 	if(!data->env)
-	{
-		free(data);
+    {
+        // on force l’allocation d’une liste vide (sentinel)
+        data->env         = malloc(sizeof *data->env);
+        data->env->name   = NULL;
+        data->env->value  = NULL;
+        data->env->next   = NULL;
 		return ;
 	}
 }

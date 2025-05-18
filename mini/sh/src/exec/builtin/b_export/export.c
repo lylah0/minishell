@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 22:10:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:41:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ void	b_export(t_data *data)
 	char	*new_value;
 
 	arg = data->input;
+	if (!data->env || !data->env->name)
+	{
+		printf("Aucune variable d'environnement\nInitialisation d'un environnement vide...\n");
+		data->env         = malloc(sizeof *data->env);
+        data->env->name   = ft_strdup("Head_of_environnement");
+        data->env->value  = NULL;
+        data->env->next   = NULL;
+		return ;
+	}
 	if (!arg->next || arg->next->type == T_PIPE)
 	{
 		print_export(data);
