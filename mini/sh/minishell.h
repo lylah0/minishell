@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/18 13:04:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:43:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 # define ON 1
 # define OFF 0
 # define ECHOCTL 0001000
+# define YES 1
+# define NO 0
 
 typedef enum s_token_type
 {

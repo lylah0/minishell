@@ -21,8 +21,7 @@ char *get_user_input(t_data *data, const char *prompt)
 	if (!line)
 	{
 		restore_terminal();
-		// cleanup_memory [ ]
-		exit(data->exit_code);
+		data->should_exit = YES;
 		return (NULL);
 	}
 	return (line);
@@ -78,6 +77,11 @@ void handler_sigquit(int signum)
 	return ;
 }
 
+// « La présence ou absence de l'écho de caractères de contrôle comme ^C ou
+// ^\ dépend uniquement du réglage visuel du terminal (flag ECHOCTL dans la
+// structure termios), et non du traitement réel des signaux. Ainsi, ne pas
+// les afficher ne modifie aucunement le comportement fonctionnel imposé par
+// le sujet et respecté par notre implémentation. »
 void init_signals(t_data *data)
 {
 	struct termios term;
