@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/17 20:48:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:02:26 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,8 @@ void	exit_no_arg(t_data *data, int in_pipe)
 {
 	if (!in_pipe)
 		ft_putstr_fd("exit\n", 1); // Only print when not in a pipeline
-	rl_clear_history();             // vide l’historique
-	rl_free_line_state();           // libère certains buffers internes
-	rl_cleanup_after_signal();      // en cas de signal
-	free_lle(data);
-	// Après avoir fini d’utiliser readline()
-	exit(data->exit_code);
+	data->should_exit = 1;
+	// exit(data->exit_code);
 }
 
 void	exit_n(t_data *data, char *num)
@@ -52,7 +48,8 @@ void	exit_n(t_data *data, char *num)
 	n = (ft_atoi(num) % 256 + 256) % 256;
 	ft_putstr_fd("exit\n", 1);
 	data->exit_code = n;
-	exit(data->exit_code);
+	data->should_exit = 1;
+	// exit(data->exit_code);
 }
 
 void	exit_alpha(t_data *data, char *word)
@@ -60,7 +57,8 @@ void	exit_alpha(t_data *data, char *word)
 	ft_putstr_fd("exit\n", 1);
 	ft_printf_stderr("minishell: exit: %s: numeric argument required\n", word);
 	data->exit_code = 2;
-	exit(data->exit_code);
+	data->should_exit = 1;
+	// exit(data->exit_code);
 }
 
 void	exit_multiple_arg(t_data *data)
@@ -81,7 +79,7 @@ void	b_exit(t_data *data, t_input *current, int in_pipe)
 			|| next_token->next->type == T_PIPE
 			|| next_token->next->type == T_OP))
 		exit_n(data, next_token->token);
-	else if (str_isdigit(next_token->token) == TRUE && next_token->next
+	else if (next_token && next_token->next
 		&& next_token->next->type != T_PIPE && next_token->next->type != T_OP)
 		exit_multiple_arg(data);
 	else if (str_isdigit(next_token->token) == FALSE)

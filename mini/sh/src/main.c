@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 20:34:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:05:01 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_data	*init_data(void)
     data->should_exit = 0;
     data->child_pid = -1;
     data->exit_code = 0;
+	data->signal = NULL;
 
     // Allouer la structure signal
     data->signal = malloc(sizeof(t_signal));
@@ -107,20 +108,12 @@ int	main(int ac, char **av, char **envp)
 		head = do_parsing(head, splited_input, data);
 		data->input = head;
 		exec_cmd(data, head, env_path);
-		clean(data, splited_input, env_path, input);
-		if (data->should_exit)
+		clean(data, splited_input, env_path, input);// regarde pourquoi ca empeche 
+		if (data->should_exit == 1)
 			break ;
 		init_signals(data);
 	}
-	//cleanup_memory(input, splited_input);
-	if (data->env)
-	{
-		free_env_list(data->env);
-		free(data->env);
-	}
-	if (data->signal)
-		free(data->signal);
-	free(data);
-	restore_terminal();
-	exit(data->exit_code);
+	// cleanup_memory(input, splited_input);
+	int exit_code = free_all(data);
+	exit(exit_code);
 }

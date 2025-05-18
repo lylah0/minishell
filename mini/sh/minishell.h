@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 21:32:39 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:04:39 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,7 @@ void				cleanup_memory(char *line, char **splited_line);
 void				free_tab(char **tab);
 void				free_env_list(t_env *env);
 void				clean(t_data *data, char **splited_input, char *env_path, char *input);
+int					free_all(t_data *data);
 
 // UTILS/lle
 t_env				*search_env_name(t_env *env, char *name);

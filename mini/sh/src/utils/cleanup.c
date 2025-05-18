@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/17 20:45:21 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:08:12 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,48 +27,33 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-void	cleanup_memory(char *line, char **splited_line)
-{
-	int	j;
-
-	j = 0;
-	free(line);
-	while (splited_line[j])
-	{
-		if (splited_line[j])
-			free(splited_line[j]);
-		j++;
-	}
-	free(splited_line);
-}
-
-void	free_token_list(t_input *head)
-{
-	t_input *tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		if (tmp->token)
-			free(tmp->token);
-		free(tmp);
-	}
-}
-
-// void	free_env_list(t_env *env)
+// void	free_token_list(t_input *head)
 // {
-// 	t_env *tmp;
+// 	t_input *tmp;
 
-// 	while (env)
+// 	while (head)
 // 	{
-// 		tmp = env;
-// 		env = env->next;
-// 		free(tmp->name);
-// 		free(tmp->value);
+// 		tmp = head;
+// 		head = head->next;
+// 		if (tmp->token)
+// 			free(tmp->token);
 // 		free(tmp);
 // 	}
 // }
+
+void	free_token_list(t_input *head)
+{
+    t_input *tmp;
+
+    while (head)
+    {
+        tmp = head;
+        head = head->next;
+        if (tmp->token) // Libération du champ token
+            free(tmp->token);
+        free(tmp); // Libération du nœud
+    }
+}
 
 void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 {
@@ -83,9 +68,38 @@ void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 		free(env_path);
 	if (input)
 		free(input);
-			// Après avoir fini d’utiliser readline()
+}
+
+int	free_all(t_data *data)
+{
+	int exit_code = -1;
+	if (!data)
+		return -1;
+
+	if (data->input)
+	{
+		if (data->input->token)
+			free_token_list(data->input);
+		// free(data->input);
+	}
+
+	if (data->env)
+		free_env_list(data->env);
+
+	if (data->signal)
+		free(data->signal);
+
+	// if (data->child_pid)
+	// 	free(data->child_pid);inutile, int 
+
 	rl_clear_history();             // vide l’historique
 	rl_free_line_state();           // libère certains buffers internes
-	rl_cleanup_after_signal();      // en cas de signal
+	rl_cleanup_after_signal();    
+
+	restore_terminal();
+
+	exit_code = data->exit_code;
+	free(data);
+	return(exit_code);
 
 }

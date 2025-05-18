@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 20:35:19 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:15:03 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*ft_strdup(const char *src)
 
 	i = 0;
 	len = ft_strlen(src);
-	dest = (char *)malloc((len + 1) * sizeof(char));
+	dest = (char *)malloc(sizeof(char) * (len + 1));
 	if (!dest)
 		return (NULL);
 	while (src[i] != 0)
@@ -142,7 +142,7 @@ char	*ft_strndup(const char *src, int n)
 
 	i = 0;
 	len = ft_strlen(src);
-	dest = (char *)malloc((len + 1) * sizeof(char));
+	dest = (char *)malloc(sizeof(char) * (len + 1));
 	if (!dest)
 		return (NULL);
 	while (i < n)

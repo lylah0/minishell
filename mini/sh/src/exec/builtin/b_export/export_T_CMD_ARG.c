@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 22:05:48 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/18 12:46:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool is_valid_env_value_syntax(char *s)
 	while (s[i])
 	{
 		char c = s[i];
-		if (ft_isalnum(c) || c == '_' || c == '=' || c == '-' || c == '.' || c == '\\')
+		if (c != 0 && c != '\n')
 			i++;
 		else
 			break;

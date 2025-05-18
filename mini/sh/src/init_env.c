@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/17 20:58:45 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:15:06 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,9 @@ t_env	*create_lle(char **envp)
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_lle(envp);
+	if(!data->env)
+	{
+		free(data);
+		return ;
+	}
 }
