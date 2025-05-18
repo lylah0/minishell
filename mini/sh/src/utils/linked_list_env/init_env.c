@@ -6,11 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/18 13:39:55 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:56:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../../minishell.h"
 
 void	free_lle(t_data *data)
 {

@@ -6,11 +6,11 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/17 21:15:03 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:56:30 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

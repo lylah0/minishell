@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 21:33:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:56:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 int	kind_of_token(t_data *data, t_input *input, int in_pipe)
 {
