@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 18:22:05 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 19:49:01 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	b_echo(t_data *data, t_input *current)
 		n_flag = ON;
 		curr = curr->next;
 	}
-	while (curr->next && curr && curr->type != T_PIPE)
+	while (curr && curr->type != T_PIPE)
 	{
 		if (curr->type == T_OP)
 		{

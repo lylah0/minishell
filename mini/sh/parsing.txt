@@ -1,0 +1,1011 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expend.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/09 15:08:45 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+char	*safe_strjoin_replace(char **dest, const char *suffix)
+{
+	char	*tmp;
+	char	*safe_src;
+
+	if (!suffix)
+		return (*dest);
+	if (*dest)
+		safe_src = ft_strdup(*dest);
+	else
+		safe_src = ft_strdup("");
+	if (!safe_src)
+		return (NULL);
+	tmp = ft_strjoin(safe_src, suffix);
+	free(safe_src);
+	if (*dest)
+		free(*dest);
+	*dest = tmp;
+	return (*dest);
+}
+
+char	*extract_var_name(const char *str, int *i)
+{
+	int len = 0;
+	char *name;
+
+	while (ft_isalnum(str[*i + len]) || str[*i + len] == '_')
+		len++;
+	name = ft_substr(str, *i, len);
+	*i += len;
+	return (name);
+}
+
+static void	handle_env_var_expansion(const char *src, int *i, char **result, t_data *data)
+{
+	char	*tmp;
+	char	*var_name;
+	char	*var_value;
+
+	(*i)++;
+	if (src[*i] == '?')
+	{
+		(*i)++;
+		var_value = ft_strdup("0");  // temporairement 0
+		safe_strjoin_replace(result, var_value);
+		free(var_value);
+		return;
+	}
+	if (!src[*i] || (!ft_isalnum(src[*i]) && src[*i] != '_'))
+	{
+		safe_strjoin_replace(result, "$");
+		return;
+	}
+	var_name = extract_var_name(src, i);
+	var_value = my_getenv(data, var_name);
+	if (!var_value)
+		var_value = "";
+	tmp = ft_strjoin(*result, var_value);
+	free(*result);
+	*result = tmp;
+	free(var_name);
+}
+
+
+char	*expand_token_string(const char *src, t_data *data)
+{
+	int		i = 0;
+	char	*result;
+	char	*tmp;
+	char	tmp_str[2];
+	char	*old;
+
+	result = ft_calloc(1, sizeof(char));
+	if (!result)
+		return (NULL);
+	while (src[i])
+	{
+		if (src[i] == '$')
+		{
+			handle_env_var_expansion(src, &i, &result, data);
+			continue;
+		}
+		else
+		{
+			tmp_str[0] = src[i];
+			tmp_str[1] = '\0';
+			tmp = ft_strjoin(result, tmp_str);
+			old = result;
+			result = tmp;
+			free(old);
+			i++;
+		}
+	}
+	return (result);
+}
+
+void is_env_var(t_input *input, t_data *data)
+{
+	t_input *curr = input;
+	char	*expanded;
+
+	expanded = expand_token_string(curr->token, data);
+	free(input->token);
+	input->token = expanded;
+}
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fonctions_main.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/11 21:09:38 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/06 16:56:54 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+// Fonction qui imprime le type d'un seul token (comme précédemment)
+void	print_token_type(t_input *token)
+{
+	if (!token)
+	{
+		printf("Token is NULL\n");
+		return ;
+	}
+	switch (token->type)
+	{
+	case T_CMD:
+		printf("Token type: T_CMD\n");
+		break ;
+	case T_ARG:
+		printf("Token type: T_ARG\n");
+		break ;
+	case T_FILE:
+		printf("Token type: T_FILE\n");
+		break ;
+		break ;
+	case T_OP:
+		printf("Token type: T_OP\n");
+		break ;
+	case T_PIPE:
+		printf("Token type: T_PIPE\n");
+		break ;
+	case T_CMD_ARG:
+		printf("Token type: T_CMD_ARG\n");
+		break;
+	case T_WORD:
+		printf("Token type: T_WORD\n");
+		break;
+	default:
+		printf("Unknown token type\n");
+		break ;
+	}
+}
+
+// Fonction pour imprimer tous les types dans une liste chaînée de tokens
+void	print_all_token_types(t_input *head)
+{
+	t_input	*current;
+
+	current = head;
+	if (!current)
+	{
+		printf("No tokens in the list\n");
+		return ;
+	}
+	while (current)
+	{
+		print_token_type(current); // Affiche le type du token actuel
+		current = current->next;   // Passe au token suivant
+	}
+}
+
+void	print_tokens(char **tokens)
+{
+	int i = 0;
+
+	printf("Tokens:\n");
+	while (tokens[i])
+	{
+		printf("Token[%d]: %s\n", i, tokens[i]);
+		i++;
+	}
+}
+
+ void	print_token_list(t_input *head)
+{
+	t_input	*curr = head;
+	int		i = 0;
+
+	printf("\n Vérification des tokens après expansion :\n");
+	while (curr)
+	{
+		printf("Token[%d]: %s,(Type: %d)\n", i, curr->token, curr->type);
+		curr = curr->next;
+		i++;
+	}
+	printf("\n");
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   more.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/12 16:21:17 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+t_input *filter_args(t_input *args)
+{
+	t_input *filtered = NULL;
+	t_input **tail = &filtered;
+
+	while (args)
+	{
+		if (args->type == T_OP && args->next)
+		{
+			args = args->next->next;
+			continue;
+		}
+		if (args->type == T_ARG || args->type == T_WORD)
+		{
+			*tail = args;
+			tail = &args->next;
+		}
+		args = args->next;
+	}
+	*tail = NULL;
+	return filtered;
+}
+
+
+
+int	is_cmd(char *token, char **env)
+{
+	char	*path;
+	char	*executable;
+
+	path = get_env_path(env);
+	if (!path)
+		return (0);
+	executable = get_path(path, token);
+	free(path);
+	if (executable)
+	{
+		free(executable);
+		return (1);
+	}
+	return (0);
+}
+
+int	is_builtin(char *cmd)
+{
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	else
+		return (0);
+}
+
+char	*my_getenv(t_data *data, char *var_name)
+{
+	while (data->env->next && !(ft_strncmp(data->env->name, var_name, ft_strlen(var_name)) == 0
+		&& data->env->name[ft_strlen(var_name)] == '\0'))
+		data->env = data->env->next;
+	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
+		return (data->env->value);
+	else
+		return (NULL);
+}
+
+bool	in_quotes(char *str, int index)
+{
+	bool	in_single = false;
+	bool	in_double = false;
+	int		i = 0;
+
+	while (i < index && str[i])
+	{
+		if (str[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (str[i] == '"' && !in_single)
+			in_double = !in_double;
+		i++;
+	}
+	return in_double;
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing2.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid Date        by              +#+  #+#    #+#             */
+/*   Updated: 2025/05/08 15:35:27 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+#include "../../minishell.h"
+
+char	**second_parsing(char **array)
+{
+	int	i;
+	int	j;
+	int	len;
+
+	i = 0;
+	len = 0;
+	while (array[i])
+	{
+		j = 0;
+		if (array[i][0] == '\'' || array[i][0] == '"')
+		{
+			len++;
+			i++;
+			continue ;
+		}
+		while (array[i][j])
+		{
+			if (array[i][j] == ' ')
+				len++;
+			j++;
+		}
+		i++;
+		len++;
+	}
+	return (fill_second_tab(array, malloc_second_parsing(len)));
+}
+
+void	handle_operator(char **tab_token, char **array, int *index, int i)
+{
+	tab_token[*index] = ft_strdup(array[i]);
+	(*index)++;
+}
+
+int	handle_non_operator(char **tab_token, char *array, int *index)
+{
+	char	**split_tab;
+	int		j;
+
+	split_tab = ft_split(array, ' ');
+	if (!split_tab)
+		return (0);
+	j = 0;
+	while (split_tab[j])
+	{
+		tab_token[*index] = ft_strdup(split_tab[j]);
+		(*index)++;
+		j++;
+	}
+	j = 0;
+	while (split_tab[j])
+	{
+		free(split_tab[j]);
+		j++;
+	}
+	free(split_tab);
+	return (1);
+}
+
+char	**fill_second_tab(char **array, char **tab_token)
+{
+	int	i;
+	int	index;
+
+	i = 0;
+	index = 0;
+	while (array[i])
+	{
+		if (array[i][0] == '\'' || array[i][0] == '"')
+			handle_operator(tab_token, array, &index, i);
+		else if (array[i][0] == '|' || array[i][0] == '<' || array[i][0] == '>')
+			handle_operator(tab_token, array, &index, i);
+		else
+		{
+			if (!handle_non_operator(tab_token, array[i], &index))
+				return (NULL);
+		}
+		i++;
+	}
+	tab_token[index] = NULL;
+	return (tab_token);
+}
+
+char	**parse_input(char *input)
+{
+	char	**first_parse;
+	char	**final_parse;
+
+	if (!input)
+		return (NULL);
+	if (is_open_quotes(input))
+	{
+		printf("missing one quote\n");
+		exit(0);
+	}
+	first_parse = first_parsing(input);
+	if (!first_parse)
+		return (NULL);
+	final_parse = second_parsing(first_parse);
+	if (!final_parse)
+		return (NULL);
+	return (final_parse);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/11 20:06:15 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+char	**first_parsing(char *input)
+{
+	int		i;
+	int		len;
+	char	**array;
+
+	i = 0;
+	len = 1;
+	while (input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+		{
+			len++;
+			i = while_quotes(input, i);
+		}
+		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+			len++;
+		else if (input[i] == ' ' || input[i] == '\t')
+		{
+			len++;
+			while (ft_iswhitespace(input[i]))
+				i++;
+			i -= 1;
+		}
+		i++;
+	}
+	len++;
+	array = malloc(sizeof(char *) * (len + 1));
+	if (!array)
+		return (NULL);
+	array[len] = NULL;
+	return (fill_tab(input, array));
+}
+
+int	word_len(char *input)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (input[i] == ' ')
+		i++;
+	if (input[i] == '\'' || input[i] == '"')
+	{
+		if (input[i - 1] != ' ' || input[i - 1] != '\t')
+			i++;
+		quote = input[i];
+		i++;
+		while (input[i] && input[i] != quote)
+			i++;
+		if (input[i] == quote)
+			i++;
+		return (i);
+	}
+	else
+	{
+		while (input[i] && input[i] != '|' && input[i] != '>' && input[i] != '<'
+			&& input[i] != ' ')
+			i++;
+		return (i);
+	}
+}
+
+void	if_operator(char *input, char **array, int *k, int i)
+{
+	int	j;
+	int	len;
+
+	j = 0;
+	len = 0;
+	while (input[*k + len] == '|' || input[*k + len] == '<' || input[*k
+		+ len] == '>')
+		len++;
+	array[i] = malloc(sizeof(char) * (len + 1));
+	if (!array[i])
+		return ;
+	while (input[*k] == '|' || input[*k] == '<' || input[*k] == '>')
+	{
+		array[i][j] = input[*k];
+		j++;
+		(*k)++;
+	}
+	array[i][j] = '\0';
+}
+
+void	if_n_op(char *input, char **array, int *k, int *i)
+{
+	int		j = 0;
+	char	quote;
+
+	while (input[*k] && input[*k] != ' ' && input[*k] != '|' &&
+		input[*k] != '<' && input[*k] != '>')
+	{
+		if (input[*k] == '\'' || input[*k] == '"')
+		{
+			quote = input[*k];
+			(*k)++;
+			while (input[*k] && input[*k] != quote)
+				array[*i][j++] = input[(*k)++];
+			if (input[*k] == quote)
+				(*k)++;
+		}
+		else
+		{
+			array[*i][j++] = input[(*k)++];
+		}
+	}
+	array[*i][j] = '\0';
+}
+
+
+char	**fill_tab(char *input, char **array)
+{
+	int	i;
+	int	k;
+	int	len;
+
+	i = 0;
+	k = 0;
+	array[i] = NULL;
+	while (input[k])
+	{
+		while (input[k] == ' ')
+			k++;
+		len = word_len(&input[k]);
+		if (input[k] == '\'' || input[k] == '"')
+			if_quotes(input, array, &k, &i);
+		else if (input[k] == '|' || input[k] == '<' || input[k] == '>')
+			if_operator(input, array, &k, i);
+		else
+		{
+			array[i] = malloc(sizeof(char) * (len + 1));
+			if (!array[i])
+				return (NULL);
+			if_n_op(input, array, &k, &i);
+		}
+		i++;
+	}
+	array[i] = NULL;
+	return (array);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 18:11:17 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/04/07 15:35:21 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+char	**split_path(char *fullpath)
+{
+	if (!fullpath)
+		return (NULL);
+	return (ft_split(fullpath, ':'));
+}
+
+char	*find_executable(char **path, char *cmd)
+{
+	int		i;
+	char	*temp;
+	char	*new_path;
+
+	i = 0;
+	if (!path)
+		return (NULL);
+	while (path[i])
+	{
+		temp = ft_strjoin(path[i], "/");
+		new_path = ft_strjoin(temp, cmd);
+		free(temp);
+		if (access(new_path, X_OK) == 0)
+		{
+			//			free_tab(path);
+			return (new_path);
+		}
+		free(new_path);
+		i++;
+	}
+	//	free_tab(path);
+	return (NULL);
+}
+
+char	*get_path(char *fullpath, char *cmd)
+{
+	char	**path;
+
+	path = split_path(fullpath);
+	return (find_executable(path, cmd));
+}
+
+char	*get_env_path(char **env)
+{
+	int		i;
+	char	**path;
+	char	*result;
+
+	i = 0;
+	while (env[i])
+	{
+		path = ft_split(env[i], '=');
+		if (!path)
+			return (NULL);
+		if (ft_strncmp_end(path[0], "PATH", 4) == 0)
+		{
+			result = ft_strdup(path[1]);
+			//			free_tab(path);
+			return (result);
+		}
+		//		free_tab(path);
+		i++;
+	}
+	return (NULL);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/09 16:11:40 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+char	*handle_quoted_token(char *quoted_str)
+{
+	int	len;
+	int	j;
+	int	i;
+	char	*result;
+
+	len = ft_strlen(quoted_str);
+	result = malloc(sizeof(char) * (len + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (quoted_str[i])
+	{
+		if (quoted_str[i] == quoted_str[0])
+		{
+			i++;
+			continue;
+		}
+		result[j++] = quoted_str[i++];
+	}
+	result[j] = '\0';
+	return (result);
+}
+
+char	**malloc_second_parsing(int len)
+{
+	char	**tab_token;
+
+	tab_token = malloc(sizeof(char *) * (len + 1));
+	if (!tab_token)
+		return (NULL);
+	tab_token[len] = NULL;
+	return (tab_token);
+}
+
+void	if_quotes(char *input, char **array, int *k, int *i)
+{
+	char	quote;
+	int		start;
+	int		len;
+	int		j;
+
+	// if (input[*k - 1] != ' ' && input[*k - 1] != '\t')
+	quote = input[*k];
+	start = *k;
+	(*k)++;
+	while (input[*k] && input[*k] != quote)
+		(*k)++;
+	if (input[*k] == quote)
+		(*k)++;
+	while (input[*k] && input[*k] != ' ' && input[*k] != '|' && input[*k] != '<'
+		&& input[*k] != '>' && input[*k] != ';' && input[*k] != '&'
+		&& input[*k] != '(' && input[*k] != ')')
+		(*k)++;
+	len = *k - start;
+	array[*i] = malloc(sizeof(char) * (len + 1));
+	if (!array[*i])
+		return ;
+	j = 0;
+	while (j < len)
+	{
+		array[*i][j] = input[start + j];
+		j++;
+	}
+	array[*i][j] = '\0';
+}
+
+
+//Parcours un token depuis un guillemet jusqu'a la fin du meme type de guillemet puis copie la suite
+//jusqu'a un separateur
+int	while_quotes(char *input, int i)
+{
+	if (input[i - 1] != ' ' || input[i - 1] != '\t')
+		i++;
+	if (input[i] == '\'')
+	{
+		i++;
+		while (input[i] != '\'')
+			i++;
+	}
+	else if (input[i] == '"')
+	{
+		i++;
+		while (input[i] != '"')
+			i++;
+	}
+	while (input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'
+		&& input[i + 1] != '>' && input[i + 1])
+		i++;
+	return (i);
+}
+
+int	is_open_quotes(char *input)
+{
+	int	i;
+	int	in_dquote;
+	int	in_squote;
+
+	i = 0;
+	in_dquote = 0;
+	in_squote = 0;
+	while (input[i])
+	{
+		if (input[i] == '"' && !in_squote)
+			in_dquote = !in_dquote;
+		else if (input[i] == '\'' && !in_dquote)
+			in_squote = !in_squote;
+		i++;
+	}
+	if (in_dquote || in_squote)
+		return (1);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/09 15:50:46 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+void	parse_and_expand_token(t_input *token, t_data *data)
+{
+	int		i = 0;
+	char	*input = token->token;
+	char	*result = ft_calloc(1, sizeof(char));
+	char	*temp;
+	char	*joined;
+
+	while (input[i])
+	{
+		if (input[i] == '\'')
+			temp = handle_single_quote(input, &i);
+		else if (input[i] == '"')
+			temp = handle_double_quote(input, &i, data);
+		else if (input[i] == '$')
+			temp = handle_env_variable(input, &i);
+		else
+			temp = extract_plain_text(input, &i);
+		if (!temp)
+			break;
+		joined = ft_strjoin(result, temp);
+		free(result);
+
+		result = joined;
+		free(temp);
+	}
+	if (!result)
+		result = ft_strdup("");
+	free(token->token);
+	token->token = result;
+	if (token->token[0] == '\0')
+		token->type = T_SKIP;
+	else
+		token->type = T_WORD;
+}
+
+
+char *handle_single_quote(char *str, int *i)
+{
+	int		start;
+	int		len;
+
+	start = ++(*i);
+	len = 0;
+	while (str[*i] && str[*i] != '\'')
+	{
+		(*i)++;
+		len++;
+	}
+	if (str[*i] == '\'')
+		(*i)++;
+	return (ft_substr(str, start, len));
+}
+
+char	*handle_double_quote(char *str, int *i, t_data *data)
+{
+	char	*content;
+	char	*expanded;
+	int		start;
+	int		len;
+
+	start = ++(*i);
+	len = 0;
+	while (str[*i] && str[*i] != '"')
+	{
+		(*i)++;
+		len++;
+	}
+	content = ft_substr(str, start, len);
+	if (str[*i] == '"')
+		(*i)++;
+	expanded = expand_token_string(content, data);
+	free(content);
+	return (expanded);
+}
+
+char	*handle_env_variable(char *str, int *i)
+{
+	char	*var_name;
+	char	*var_value;
+
+	if (str[*i + 1] == '?')
+	{
+		*i += 2;
+		return ft_itoa(exit_code);
+	}
+	(*i)++;
+	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
+		return ft_strdup("$");
+	var_name = extract_var_name(str, i);
+	if (!var_name)
+		return ft_strdup("");
+	var_value = getenv(var_name);
+	free(var_name);
+	if (!var_value)
+		return ft_strdup("");
+	return ft_strdup(var_value);
+}
+
+char *extract_plain_text(char *str, int *i)
+{
+	int start = *i;
+	int len = 0;
+
+	while (str[*i] && str[*i] != '\'' && str[*i] != '"' && str[*i] != '$')
+	{
+		(*i)++;
+		len++;
+	}
+	return ft_substr(str, start, len);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/08 15:31:25 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+t_input	*tokenize(char **input, t_data *data)
+{
+	int		i;
+	t_input	*tail;
+	t_input	*head;
+	t_input	*new_node;
+	t_input	*current;
+
+	i = 1;
+	tail = malloc(sizeof(t_input));
+	if (!tail)
+		exit(1);
+	tail->token = ft_strdup(input[0]);
+	tail->prev = NULL;
+	tail->next = NULL;
+	head = tail;
+	while (input[i])
+	{
+		new_node = malloc(sizeof(t_input));
+		if (!new_node)
+			exit(1);
+		new_node->token = ft_strdup(input[i]);
+		new_node->prev = tail;
+		new_node->next = NULL;
+		tail->next = new_node;
+		tail = new_node;
+		i++;
+	}
+	current = head;
+	while (current)
+	{
+		current->type = get_token_type(current, current->token, data);
+		current = current->next;
+	}
+	is_cmd_arg(head);
+	return (head);
+}
+
+t_token_type	get_token_type(t_input *token, char *input, t_data *data)
+{
+	if (ft_strchr(input, '\'') || ft_strchr(input, '"') || ft_strchr(input,
+			'$'))
+	{
+		parse_and_expand_token(token, data);
+		return (token->type);
+	}
+	if (ft_strncmp(input, "|", 1) == 0)
+		return (T_PIPE);
+	else if (ft_strncmp(input, "<", 1) == 0 || ft_strncmp(input, ">", 1) == 0
+		|| ft_strncmp(input, ">>", 2) == 0 || ft_strncmp(input, "<<", 2) == 0)
+		return (T_OP);
+	else if (token->prev != NULL && token->prev->type == T_OP)
+		return (T_FILE);
+	else if (token->prev != NULL && (token->prev->type == T_CMD
+			|| token->prev->type == T_ARG || token->prev->type == T_WORD))
+		return (T_ARG);
+	return (T_CMD);
+}
+
+void	is_cmd_arg(t_input *token)
+{
+	t_input	*curr;
+
+	curr = token;
+	while (curr)
+	{
+		if (curr->type == T_CMD && curr->next && curr->next->type == T_ARG)
+			curr->type = T_CMD_ARG;
+		curr = curr->next;
+	}
+}
