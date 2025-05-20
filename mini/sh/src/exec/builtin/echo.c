@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:18:01 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:58:32 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	n_option(t_input *input)
 			current = current->next;
 			continue ;
 		}
+		current = current->next;
 	}
 	if (found)
 		return (ON);
@@ -49,6 +50,11 @@ void	b_echo(t_data *data, t_input *current)
 	int		n_flag;
 	int		first;
 	int		i;
+if (!data || !current)
+{
+	write(2, "b_echo: invalid input\n", 23);
+	exit(1);
+}
 
 	n_flag = OFF;
 	first = 1;
@@ -80,12 +86,23 @@ void	b_echo(t_data *data, t_input *current)
 		}
 		if (curr->token != NULL)
 		{
+			if (curr->token == NULL)
+			{
+				write(2, "b_echo: null token\n", 19);
+				break;
+			}
 			if (!first)
 				write(STDOUT_FILENO, " ", 1);
-			write(STDOUT_FILENO, curr->token, ft_strlen(curr->token));
+			if (curr->token != NULL)
+				write(STDOUT_FILENO, curr->token, ft_strlen(curr->token));
 			first = 0;
 		}
 		curr = curr->next;
+	}
+	if (curr->token == NULL)
+	{
+		write(2, "b_echo: null token\n", 19);
+		return;
 	}
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);

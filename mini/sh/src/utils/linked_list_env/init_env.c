@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 12:30:18 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:42:24 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,17 @@ t_env	*create_lle(char **envp)
 			current->value = NULL;
 		}
 		current->next = NULL;
-		if (!current->name || (separator && !current->value))
-		{
-			free(current->name);
-			free(current->value);
-			free(current);
-			free_env_list(head);//
-			return (0);
-		}
+			if (!current->name || (separator && !current->value))
+			{
+				if (current->name)
+					free(current->name);
+				if (current->value)
+					free(current->value);
+				free(current);
+				free_env_list(head);
+				return (0);
+			}
+
 		if (!head)
 			head = current;
 		else
@@ -124,7 +127,6 @@ void	init_env(t_data *data, char **envp)
 	data->env = create_lle(envp);
 	if(!data->env)
     {
-        // on force l’allocation d’une liste vide (sentinel)
         data->env         = malloc(sizeof *data->env);
         data->env->name   = NULL;
         data->env->value  = NULL;

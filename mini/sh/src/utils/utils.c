@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/18 13:56:30 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:33:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,26 +113,6 @@ int	ft_strncmp_end(char *s1, char *s2, size_t n)
 	return (0);
 }
 
-// copie colle avec malloc
-char	*ft_strdup(const char *src)
-{
-	int		i;
-	int		len;
-	char	*dest;
-
-	i = 0;
-	len = ft_strlen(src);
-	dest = (char *)malloc(sizeof(char) * (len + 1));
-	if (!dest)
-		return (NULL);
-	while (src[i] != 0)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-	return (dest);
-}
 
 char	*ft_strndup(const char *src, int n)
 {

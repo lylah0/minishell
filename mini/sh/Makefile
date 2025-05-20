@@ -50,4 +50,9 @@ helgrind: $(NAME)
 
 leaks: $(NAME)
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(NAME)
-	# valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./minishell
+	# valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose env -i ./minishell
+	# valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose env -i ./minishell
+
+.PHONY: all clean fclean re leaks helgrind
+
+
