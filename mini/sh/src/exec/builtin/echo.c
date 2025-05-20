@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 21:32:58 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:18:01 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	b_echo(t_data *data, t_input *current)
 		{
 			if (!first)
 				write(STDOUT_FILENO, " ", 1);
-			write(STDOUT_FILENO, curr->token, strlen(curr->token));
+			write(STDOUT_FILENO, curr->token, ft_strlen(curr->token));
 			first = 0;
 		}
 		curr = curr->next;

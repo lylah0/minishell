@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/16 15:09:14 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:24:10 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*update_env_value(t_data *data, char *env_to_update, char *new_value)
 	if (!current)
 	{
 		ft_printf_stderr("cd: %s not set\n", env_to_update);
-		data->exit_code = 1;
+		data->exit_code = 2;
 		return (NULL);
 	}
 	free (current->value);

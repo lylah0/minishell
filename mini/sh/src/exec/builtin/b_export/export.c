@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/18 13:41:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:39:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	b_export(t_data *data)
 	if (!arg->next || arg->next->type == T_PIPE)
 	{
 		print_export(data);
-		return;
+		return ;
 	}
 	while (arg->next && arg->next->type != T_PIPE)
 	{
@@ -79,6 +79,8 @@ void	b_export(t_data *data)
 		{
 			if (is_valid_env_name_var_syntax(arg->next->token) == TRUE)
 				add_env_name(data, arg->next->token);
+			else
+				data->exit_code = 1;
 		}
 		else
 		{
@@ -93,6 +95,8 @@ void	b_export(t_data *data)
 				else // existe deja
 					update_env_value(data, new_name, new_value);
 			}
+			else
+				data->exit_code = 1;				
 			free(new_name);
 			free(new_value);
 		}
