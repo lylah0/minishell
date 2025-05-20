@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:47:17 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:02:59 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,56 +58,56 @@ void	b_export(t_data *data)
 	char	*new_name;
 	char	*new_value;
 
-	arg = data->input;
+	arg = data->input->next; // ✅ on commence à l'élément après "export"
 	if (!data->env || !data->env->name)
 	{
 		printf("Aucune variable d'environnement\nInitialisation d'un environnement vide...\n");
 		data->env         = malloc(sizeof *data->env);
-        data->env->name   = ft_strdup("Head_of_environnement");
-        data->env->value  = NULL;
-        data->env->next   = NULL;
+		data->env->name   = ft_strdup("Head_of_environnement");
+		data->env->value  = NULL;
+		data->env->next   = NULL;
 		return ;
 	}
-	if (!arg->next || arg->next->type == T_PIPE)
+	if (!arg || arg->type == T_PIPE)
 	{
 		print_export(data);
 		return ;
 	}
-	while (arg->next && arg->next->type != T_PIPE)
+	while (arg && arg->type != T_PIPE)
 	{
-		if (ft_strchr(arg->next->token, '=') == NULL)
+		if (ft_strchr(arg->token, '=') == NULL)
 		{
-			if (is_valid_env_name_var_syntax(arg->next->token) == TRUE)
-				add_env_name(data, arg->next->token);
+			if (is_valid_env_name_var_syntax(arg->token) == TRUE)
+				add_env_name(data, arg->token);
 			else
 				data->exit_code = 1;
 		}
 		else
 		{
-			new_name = extract_name(arg->next->token);
-			new_value = extract_value(arg->next->token);
+			new_name = extract_name(arg->token);
+			new_value = extract_value(arg->token);
 			if (!new_name || !new_value)
 			{
 				free(new_name);
 				free(new_value);
 				data->exit_code = 2;
-				return ; 
+				return ;
 			}
-
 			if (is_valid_env_name_var_syntax(new_name) == TRUE
 				&& is_valid_env_value_syntax(new_value) == TRUE)
 			{
 				if (search_env_name(data->env, new_name) == NULL)
 					add_new_env_var_and_value(data, new_name, new_value);
-				else // existe deja
+				else
 					update_env_value(data, new_name, new_value);
 			}
 			else
-				data->exit_code = 1;				
+				data->exit_code = 1;
 			free(new_name);
 			free(new_value);
 		}
-		arg->next = arg->next->next;
+		arg = arg->next;
 	}
 }
+
 

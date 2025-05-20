@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:35:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:05:11 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,4 @@ void print_export(t_data *data)
 	lle_to_array(data);
 	sort_words(data->copy_env, lle_size(data->env));
 	print_env_array(data);
-	free_array(data->copy_env);
 }

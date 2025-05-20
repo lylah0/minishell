@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 13:44:19 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:02:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,6 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-// void	free_token_list(t_input *head)
-// {
-// 	t_input *tmp;
-
-// 	while (head)
-// 	{
-// 		tmp = head;
-// 		head = head->next;
-// 		if (tmp->token)
-// 			free(tmp->token);
-// 		free(tmp);
-// 	}
-// }
-
 void	free_token_list(t_input *head)
 {
 	t_input	*tmp;
@@ -49,11 +35,12 @@ void	free_token_list(t_input *head)
 	{
 		tmp = head;
 		head = head->next;
-		if (tmp->token) // Libération du champ token
+		if (tmp->token)
 			free(tmp->token);
-		free(tmp); // Libération du nœud
+		free(tmp);
 	}
 }
+
 
 void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 {
@@ -92,6 +79,7 @@ int	free_all(t_data *data)
 	rl_cleanup_after_signal();
 	restore_terminal();
 	exit_code = data->exit_code;
-	free(data);
+	if (data)
+		free(data);
 	return (exit_code);
 }
