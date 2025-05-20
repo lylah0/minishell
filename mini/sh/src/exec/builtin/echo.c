@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 12:58:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:11:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,6 @@ void	b_echo(t_data *data, t_input *current)
 	int		n_flag;
 	int		first;
 	int		i;
-if (!data || !current)
-{
-	write(2, "b_echo: invalid input\n", 23);
-	exit(1);
-}
 
 	n_flag = OFF;
 	first = 1;
@@ -86,11 +81,6 @@ if (!data || !current)
 		}
 		if (curr->token != NULL)
 		{
-			if (curr->token == NULL)
-			{
-				write(2, "b_echo: null token\n", 19);
-				break;
-			}
 			if (!first)
 				write(STDOUT_FILENO, " ", 1);
 			if (curr->token != NULL)
@@ -98,11 +88,6 @@ if (!data || !current)
 			first = 0;
 		}
 		curr = curr->next;
-	}
-	if (curr->token == NULL)
-	{
-		write(2, "b_echo: null token\n", 19);
-		return;
 	}
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);

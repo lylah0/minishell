@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 18:25:22 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:19:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ static void	handle_env_var_expansion(const char *src, int *i, char **result,
 	if (handle_special_cases(src, i, result))
 		return ;
 	var_name = extract_var_name(src, i);
-	var_value = my_getenv(data, var_name);
+	
+	var_value = search_env_value(data->env, var_name);
+
+	// var_value = my_getenv(data, var_name);
 	if (!var_value)
 		var_value = "";
 	append_str_to_result(result, var_value);
