@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/18 13:56:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:30:18 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ void	free_env_list(t_env *head)
     }
 }
 
-
-
 t_env	*create_lle(char **envp)
 {
 	int		i = 0;
@@ -70,7 +68,8 @@ t_env	*create_lle(char **envp)
 		current = malloc(sizeof(t_env));
 		if (!current)
 		{
-			free(current);
+			//free(current);
+			free_env_list(head);//
 			return (0);
 		}
 		separator = ft_strchr(envp[i], '=');
@@ -90,6 +89,7 @@ t_env	*create_lle(char **envp)
 			free(current->name);
 			free(current->value);
 			free(current);
+			free_env_list(head);//
 			return (0);
 		}
 		if (!head)
