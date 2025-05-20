@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 12:33:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:10:04 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,4 +189,59 @@ t_input	*cat_token(t_input *token, char *value, int len)
 	return (new_token);
 }
 
+int	str_isdigit(char *str)
+{
+	int	i;
 
+	i = 0;
+	if (!str || !*str)
+		return (0);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+char	*strjoin_name_equal_value(char *name, char *value)
+{
+	int i = 0;
+	int j = 0;
+	int tot_len;
+	if (value)
+		tot_len = ft_strlen(name) + ft_strlen(value) + 4;// = , \0 , " , "
+	else
+		tot_len = ft_strlen(name) + 1;
+	char *s = malloc(sizeof(char) * tot_len);
+	if (!s)
+		return NULL;
+	while (name[i])
+	{
+		s[i] = name[i];
+		i++;
+	}
+	if (value)
+	{
+		s[i++] = '=';
+		s[i++] = '"';
+		while (value[j])
+			s[i++] = value[j++];
+		s[i++] = '"';
+		}
+	s[i] = '\0';
+	return (s);
+}
+
+void	swap_words(char **a, char **b)
+{
+	char *temp;
+	temp = NULL;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 13:50:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:12:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,7 @@ int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
+int	str_isdigit(char *str);
 
 //cleanup
 
@@ -298,7 +299,13 @@ t_env				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);
 char				*search_env_value(t_env *env, char *name);
 void				ft_printf_stderr(const char *s, ...);
+void lle_to_array(t_data *data);
+char	*strjoin_name_equal_value(char *name, char *value);
 
 char				*ft_strndup(const char *src, int n);
+void	swap_words(char **a, char **b);
 
+int		find_equal(char *s);
+char	*extract_name(char *env_var);
+char	*extract_value(char *env_var);
 #endif

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/18 13:02:26 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:00:18 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,7 @@
 #define TRUE 1
 #define FALSE 0
 
-int	str_isdigit(char *str)
-{
-	int	i;
 
-	i = 0;
-	if (!str || !*str)
-		return (0);
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 void	exit_no_arg(t_data *data, int in_pipe)
 {

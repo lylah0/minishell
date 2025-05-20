@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:24:10 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:58:18 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	cd_home(t_data *data)
 	free(new_oldpwd_value);
 	free(home_value);
 }
+
 void	cd_return(t_data *data)
 {
 	char	*new_pwd_value;
@@ -72,6 +73,7 @@ void	cd_return(t_data *data)
 	free(new_oldpwd_value);
 	free(new_pwd_value);
 }
+
 void	cd_path(t_data *data)
 {
 	char	*new_pwd_value;
@@ -92,7 +94,6 @@ void	cd_path(t_data *data)
 	free(new_oldpwd_value);
 	free(new_pwd_value);
 }
-
 
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
 /// @param data Pointer to the shell data structure containing environment variables

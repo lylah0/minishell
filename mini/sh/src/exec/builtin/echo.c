@@ -3,90 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 19:49:01 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:59:52 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-#define OFF 0
-#define ON 1
-
-int	n_option(t_input *input)
+static int	is_n_flag(char *token)
 {
-	t_input	*current;
-	int		found;
+	int	i;
 
-	current = input->next;
-	found = 0;
-	while (current && current->type != T_PIPE)
+	if (!token || token[0] != '-' || token[1] != 'n')
+		return (0);
+	i = 2;
+	while (token[i] == 'n')
+		i++;
+	return (token[i] == '\0');
+}
+
+static void	print_echo_args(t_input *curr, int *first)
+{
+	if (curr->token != NULL)
 	{
-		if (current->type == T_OP)
-		{
-			if (current->next)
-				current = current->next;
-			current = current->next;
-			continue ;
-		}
-		if (current->type == T_SKIP)
-		{
-			current = current->next;
-			continue ;
-		}
-		current = current->next;
+		if (!*first)
+			write(STDOUT_FILENO, " ", 1);
+		write(STDOUT_FILENO, curr->token, ft_strlen(curr->token));
+		*first = 0;
 	}
-	if (found)
-		return (ON);
-	else
-		return (OFF);
 }
 
 void	b_echo(t_data *data, t_input *current)
 {
-	t_input	*curr;
-	int		n_flag;
-	int		first;
-	int		i;
+	t_input	*curr = current->next;
+	int		n_flag = OFF;
+	int		first = 1;
 
-	n_flag = OFF;
-	first = 1;
-	curr = current->next;
-	while (curr && curr->token && curr->token[0] == '-'
-		&& curr->token[1] == 'n')
+	while (curr && is_n_flag(curr->token))
 	{
-		i = 2;
-		while (curr->token[i] == 'n')
-			i++;
-		if (curr->token[i] != '\0')
-			break ;
 		n_flag = ON;
 		curr = curr->next;
 	}
 	while (curr && curr->type != T_PIPE)
 	{
-		if (curr->type == T_OP)
-		{
-			if (curr->next)
-				curr = curr->next;
-			curr = curr->next;
-			continue ;
-		}
-		if (curr->type == T_SKIP)
+		if (curr->type == T_OP || curr->type == T_SKIP)
 		{
 			curr = curr->next;
 			continue ;
 		}
-		if (curr->token != NULL)
-		{
-			if (!first)
-				write(STDOUT_FILENO, " ", 1);
-			if (curr->token != NULL)
-				write(STDOUT_FILENO, curr->token, ft_strlen(curr->token));
-			first = 0;
-		}
+		print_echo_args(curr, &first);
 		curr = curr->next;
 	}
 	if (n_flag == OFF)

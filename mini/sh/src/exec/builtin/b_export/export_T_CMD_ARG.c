@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:25:10 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:06:23 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,19 @@ bool is_valid_env_name_var_syntax(char *s)
 				i++;
 			else
 			{
-				ft_printf_stderr("minishell: export: env_name '%s': not a valid identifier\n", s);
+				ft_printf_stderr("minishell: export: env_name ");
+				ft_printf_stderr("'%s': not a valid identifier\n", s);
 				return (FALSE);
 			}
 		}
 		return (TRUE);
 	}
-	ft_printf_stderr("minishell: export: env_name '%s': not a valid identifier\n", s);
+	ft_printf_stderr("minishell: export: env_name");
+	ft_printf_stderr("'%s': not a valid identifier\n", s);
 	return (FALSE);
 }
 
-bool is_valid_env_value_syntax(char *s)
+bool is_valid_envvalue_syntax(char *s)
 {
 	int i;
 	int len_s;
@@ -57,7 +59,8 @@ bool is_valid_env_value_syntax(char *s)
 	}
 	if (i != len_s)
 	{
-		ft_printf_stderr("minishell: export: env_value: '%s': not a valid identifier\n", s);
+		ft_printf_stderr("minishell: export: envvalue: ");
+		ft_printf_stderr("'%s': not a valid identifier\n", s);
 		return FALSE;
 	}
 	return TRUE;
@@ -77,15 +80,15 @@ void	add_env_name(t_data *data, char *env_name)
 	}
 }
 
-void	add_new_env_var_and_value(t_data *data, char *env_name, char *env_value)
+void	add_new_env_var_and_value(t_data *data, char *env_name, char *envvalue)
 {
 	t_env	*new_node;
 
-	if (!data || !env_name || !env_value)
+	if (!data || !env_name || !envvalue)
 		return;
 	if (search_env_name(data->env, env_name) == NULL)
 	{
-		new_node = lle_new(env_name, env_value);
+		new_node = lle_new(env_name, envvalue);
 		lle_add_back(&data->env, new_node);
 	}
 }

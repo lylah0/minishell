@@ -3,75 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 20:05:11 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:11:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
-
-char	*strjoin_name_equal_value(char *name, char *value)
-{
-	int i = 0;
-	int j = 0;
-	int tot_len;
-	if (value)
-		tot_len = ft_strlen(name) + ft_strlen(value) + 4;// = , \0 , " , "
-	else
-		tot_len = ft_strlen(name) + 1;
-	char *s = malloc(sizeof(char) * tot_len);
-	if (!s)
-		return NULL;
-	while (name[i])
-	{
-		s[i] = name[i];
-		i++;
-	}
-	if (value)
-	{
-		s[i++] = '=';
-		s[i++] = '"';
-		while (value[j])
-			s[i++] = value[j++];
-		s[i++] = '"';
-		}
-	s[i] = '\0';
-
-	return (s);
-}
-
-void lle_to_array(t_data *data)
-{
-	char	**copy_env;
-	t_env	*current;
-	int		index_array;
-
-	(void)copy_env;
-	index_array = 0;
-	current = data->env;
-	data->copy_env = malloc(sizeof(char *) * (lle_size(current) + 1));
-	if (!data->copy_env)
-		return ;
-	while (current)
-	{
-		data->copy_env[index_array] = strjoin_name_equal_value(current->name, current->value);
-		index_array++;
-		current = current->next;
-	}
-	data->copy_env[index_array] = NULL;
-}
-
-void	swap_words(char **a, char **b)
-{
-	char *temp;
-	temp = NULL;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
 
 int	compare_words(char *w1, char *w2)
 {

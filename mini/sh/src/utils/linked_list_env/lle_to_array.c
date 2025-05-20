@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   lle_to_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:01:48 by monoguei         ###   ########.fr       */
+/*   Created: 2025/05/20 22:07:09 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/20 22:07:30 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	b_env(t_data* data)
+void lle_to_array(t_data *data)
 {
-	t_input *current;
+	char	**copy_env;
+	t_env	*current;
+	int		index_array;
 
-	current = data->input;
-	if (!data->env || !data->env->name)
-	{
-		printf("aucune variable d'environnement\n");
+	(void)copy_env;
+	index_array = 0;
+	current = data->env;
+	data->copy_env = malloc(sizeof(char *) * (lle_size(current) + 1));
+	if (!data->copy_env)
 		return ;
-	}
-	while (current->next && current->next->type != T_OP && current->next->type
-		!= T_PIPE)
+	while (current)
 	{
+		data->copy_env[index_array] = strjoin_name_equal_value(current->name, 
+			current->value);
+		index_array++;
 		current = current->next;
-		if (ft_strncmp_end(current->token, "env", 4) != 0)
-		{
-			ft_printf_stderr("env: '%s': No such file or directory\n",
-				current->token);
-			return ;
-		}
 	}
-	print_lle(data);
+	data->copy_env[index_array] = NULL;
 }
-
