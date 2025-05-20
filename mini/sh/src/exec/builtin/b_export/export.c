@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 11:39:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:47:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,13 @@ void	b_export(t_data *data)
 		{
 			new_name = extract_name(arg->next->token);
 			new_value = extract_value(arg->next->token);
+			if (!new_name || !new_value)
+			{
+				free(new_name);
+				free(new_value);
+				data->exit_code = 2;
+				return ; 
+			}
 
 			if (is_valid_env_name_var_syntax(new_name) == TRUE
 				&& is_valid_env_value_syntax(new_value) == TRUE)
