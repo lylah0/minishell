@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:52:37 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 17:48:00 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:14:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,17 @@ int	is_builtin(char *cmd)
 
 char	*my_getenv(t_data *data, char *var_name)
 {
-	while (data->env->next && !(ft_strncmp(data->env->name, var_name,
-				ft_strlen(var_name)) == 0
-			&& data->env->name[ft_strlen(var_name)] == '\0'))
-		data->env = data->env->next;
-	if (ft_strncmp(data->env->name, var_name, ft_strlen(data->env->name)) == 0)
-		return (data->env->value);
-	else
-		return (NULL);
+	t_env	*tmp;
+
+	tmp = data->env;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->name, var_name, ft_strlen(var_name)) == 0
+			&& tmp->name[ft_strlen(var_name)] == '\0')
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 bool	in_quotes(char *str, int index)

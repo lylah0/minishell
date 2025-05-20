@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 13:50:32 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:21:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char **av, char **envp)
 		data->child_pid = -1; // handler ne tente rien de foireux avant fork
 		if (data->signal->sigquit == OFF)
 			input = get_user_input(data, "\033[1;38;5;147m\u273F Minishell \u279C\033[0m ");
-		else 
+		else
 			continue;
 		if (!input)
 			break ;
@@ -108,7 +108,7 @@ int	main(int ac, char **av, char **envp)
 		head = do_parsing(head, splited_input, data);
 		data->input = head;
 		exec_cmd(data, head, env_path);
-		clean(data, splited_input, env_path, input);// regarde pourquoi ca empeche 
+		clean(data, splited_input, env_path, input);// regarde pourquoi ca empeche
 		if (data->should_exit == 1)
 			break ;
 		init_signals(data);

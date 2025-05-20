@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 12:42:24 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:15:35 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	free_lle(t_data *data)
 {
-	t_env *temp = NULL;
+	t_env	*temp;
 
+	temp = NULL;
 	while (data->env)
 	{
 		temp = data->env->next;
@@ -33,9 +34,11 @@ void	print_lle(t_data *data)
 	current = data->env;
 	while (current)
 	{
-		printf("%s", current->name);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+		printf("%s", current->name);
+			// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		if (current->value)
-			printf("=%s\n", current->value);// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
+			printf("=%s\n", current->value);
+				// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		else
 			printf("\n");
 		current = current->next;
@@ -44,32 +47,36 @@ void	print_lle(t_data *data)
 
 void	free_env_list(t_env *head)
 {
-    t_env *tmp;
-    while (head)
-    {
-        tmp = head->next;
-        free(head->name);
-        free(head->value);
-        free(head);
-        head = tmp;
-    }
+	t_env	*tmp;
+
+	while (head)
+	{
+		tmp = head->next;
+		free(head->name);
+		free(head->value);
+		free(head);
+		head = tmp;
+	}
 }
 
 t_env	*create_lle(char **envp)
 {
-	int		i = 0;
-	t_env	*current = NULL;
-	t_env	*head = NULL;
-	t_env	*temp = NULL;
+	int		i;
+	t_env	*current;
+	t_env	*head;
+	t_env	*temp;
 	char	*separator;
 
+	i = 0;
+	current = NULL;
+	head = NULL;
+	temp = NULL;
 	while (envp[i])
 	{
 		current = malloc(sizeof(t_env));
 		if (!current)
 		{
-			//free(current);
-			free_env_list(head);//
+			free_env_list(head);
 			return (0);
 		}
 		separator = ft_strchr(envp[i], '=');
@@ -84,17 +91,16 @@ t_env	*create_lle(char **envp)
 			current->value = NULL;
 		}
 		current->next = NULL;
-			if (!current->name || (separator && !current->value))
-			{
-				if (current->name)
-					free(current->name);
-				if (current->value)
-					free(current->value);
-				free(current);
-				free_env_list(head);
-				return (0);
-			}
-
+		if (!current->name || (separator && !current->value))
+		{
+			if (current->name)
+				free(current->name);
+			if (current->value)
+				free(current->value);
+			free(current);
+			free_env_list(head);
+			return (0);
+		}
 		if (!head)
 			head = current;
 		else
@@ -107,8 +113,9 @@ t_env	*create_lle(char **envp)
 
 t_env	*create_lle_empty(t_env *env)
 {
-	t_env	*current = NULL;
+	t_env	*current;
 
+	current = NULL;
 	current = env;
 	current = malloc(sizeof(t_env));
 	if (!current)
@@ -125,12 +132,12 @@ t_env	*create_lle_empty(t_env *env)
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_lle(envp);
-	if(!data->env)
-    {
-        data->env         = malloc(sizeof *data->env);
-        data->env->name   = NULL;
-        data->env->value  = NULL;
-        data->env->next   = NULL;
+	if (!data->env)
+	{
+		data->env = malloc(sizeof *data->env);
+		data->env->name = NULL;
+		data->env->value = NULL;
+		data->env->next = NULL;
 		return ;
 	}
 }

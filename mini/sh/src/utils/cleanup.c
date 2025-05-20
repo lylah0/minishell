@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 12:15:24 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:44:19 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ void	free_tab(char **tab)
 
 void	free_token_list(t_input *head)
 {
-    t_input *tmp;
+	t_input	*tmp;
 
-    while (head)
-    {
-        tmp = head;
-        head = head->next;
-        if (tmp->token) // Libération du champ token
-            free(tmp->token);
-        free(tmp); // Libération du nœud
-    }
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		if (tmp->token) // Libération du champ token
+			free(tmp->token);
+		free(tmp); // Libération du nœud
+	}
 }
 
 void	clean(t_data *data, char **splited_input, char *env_path, char *input)
@@ -72,34 +72,26 @@ void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 
 int	free_all(t_data *data)
 {
-	int exit_code = -1;
+	int	exit_code;
+
+	exit_code = -1;
 	if (!data)
-		return -1;
-
+		return (-1);
+	if (data->copy_env)
+		free_tab(data->copy_env);
 	if (data->input)
-	{
-		if (data->input->token)
-			free_token_list(data->input);
-		// free(data->input);
-	}
-
+		free_token_list(data->input);
 	if (data->env)
 		free_env_list(data->env);
-
 	if (data->signal)
 		free(data->signal);
-
 	// if (data->child_pid)
-	// 	free(data->child_pid);inutile, int 
-
-	rl_clear_history();             // vide l’historique
-	rl_free_line_state();           // libère certains buffers internes
-	rl_cleanup_after_signal();    
-
+	// 	free(data->child_pid);inutile, int
+	rl_clear_history();   // vide l’historique
+	rl_free_line_state(); // libère certains buffers internes
+	rl_cleanup_after_signal();
 	restore_terminal();
-
 	exit_code = data->exit_code;
 	free(data);
-	return(exit_code);
-
+	return (exit_code);
 }
