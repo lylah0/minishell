@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 12:29:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 14:30:15 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_input	*add_token(t_input *tail, char *token_str)
 {
 	t_input	*new_node;
 
-	new_node = malloc(sizeof(t_input));
+	new_node = malloc(sizeof(t_input));// 181 (120 direct, 61 indirect) bytes in 3 blocks are definitely lost in loss
 	if (!new_node)
 	{
 		tail->data->exit_code = 1;
@@ -30,7 +30,7 @@ t_input	*add_token(t_input *tail, char *token_str)
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	if (token_str)
-		new_node->token = ft_strdup(token_str);
+		new_node->token = ft_strdup(token_str);//21 bytes in 4 blocks are indirectly lost in loss
 	new_node->prev = tail;
 	if (tail)
 		tail->next = new_node;

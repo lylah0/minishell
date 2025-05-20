@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 13:11:02 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:35:14 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	b_echo(t_data *data, t_input *current)
 		n_flag = ON;
 		curr = curr->next;
 	}
-	while (curr && curr->type != T_PIPE)
+	while (curr->next && curr && curr->type != T_PIPE)
 	{
 		if (curr->type == T_OP)
 		{

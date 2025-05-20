@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/18 13:43:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:50:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char				**malloc_second_parsing(int len);
 int					is_open_quotes(char *input);
 void				is_env_var(t_input *input, t_data *data);
 char				*handle_quoted_token(char *quoted_str);
-void				print_token_list(t_data *data, t_input *head);
+void				print_token_list(t_input *head);
 char				*handle_double_quote(char *str, int *i, t_data *data);
 char				*handle_env_variable(t_data *data, char *str, int *i);
 char				*extract_plain_text(char *str, int *i);
