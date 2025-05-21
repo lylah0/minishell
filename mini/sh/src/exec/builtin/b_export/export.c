@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:06:50 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:36:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ void	b_export(t_data *data)
 	t_input	*arg;
 
 	arg = data->input->next;
+	if (data->pipe_op == YES)
+	{
+		data->exit_code = 1;
+		return ;
+	}
 	if (!arg || arg->type == T_PIPE)
 		return (handle_export_no_args(data));
 	while (arg && arg->type != T_PIPE)

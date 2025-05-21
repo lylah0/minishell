@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:06:04 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:37:07 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ void	b_unset(t_data *data)
 
 	if (!data || !data->input || !data->input->next)
 		return ;
+	if (data->pipe_op == YES)
+	{
+		data->exit_code = 1;
+		return ;
+	}
 	if (!data->env)
 	{
 		init_empty_env(data);

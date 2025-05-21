@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:14:06 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:41:38 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int	main(int ac, char **av, char **envp)
 			data->signal->sigint = OFF;
 		if (data->signal->sigquit == ON)
 			data->signal->sigquit = OFF;
+		data->pipe_op = NO;
+		if (!(ft_strchr(input, '|') == NULL && ft_strchr(input, '<') == NULL && ft_strchr(input, '>') == NULL))
+			data->pipe_op = YES;
 		add_history(input);
 		splited_input = parse_input(data, input);
 		if (!splited_input)
