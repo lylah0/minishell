@@ -6,19 +6,19 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:01:37 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:13:27 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_tab(char** tab)
+void	free_tab(char **tab)
 {
 	int	i;
 
 	i = 0;
 	if (!tab)
-		return;
+		return ;
 	while (tab[i])
 	{
 		free(tab[i]);
@@ -27,9 +27,9 @@ void	free_tab(char** tab)
 	free(tab);
 }
 
-void	free_token_list(t_input* head)
+void	free_token_list(t_input *head)
 {
-	t_input* tmp;
+	t_input	*tmp;
 
 	while (head)
 	{
@@ -41,7 +41,7 @@ void	free_token_list(t_input* head)
 	}
 }
 
-void	clean(t_data* data, char** splited_input, char* env_path, char* input)
+void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 {
 	if (data->input)
 	{
@@ -56,7 +56,7 @@ void	clean(t_data* data, char** splited_input, char* env_path, char* input)
 		free(input);
 }
 
-int	free_all(t_data* data)
+int	free_all(t_data *data)
 {
 	int	exit_code;
 

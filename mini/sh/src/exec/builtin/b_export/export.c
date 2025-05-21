@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:16:57 by monoguei         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/05/21 19:05:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../../../minishell.h"
 
@@ -72,6 +73,11 @@ void	b_export(t_data	*data)
 	t_input	*arg;
 
 	arg = data->input->next;
+	if (data->pipe_op == YES)
+	{
+		data->exit_code = 1;
+		return ;
+	}
 	if (!arg || arg->type == T_PIPE)
 		return (handle_export_no_args(data));
 	while (arg && arg->type != T_PIPE)

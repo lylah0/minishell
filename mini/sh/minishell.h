@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:58:10 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:59:35 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_data
 	int				stdout_redir;
 	int				stdin_redir;
 	pid_t			child_pid;
+	int				pipe_op;
 }					t_data;
 
 typedef struct s_ifn_op_ctx
@@ -156,6 +157,7 @@ int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
 void				expand_env_var_into_array(t_data *data, char *input,
 						char **array_ptr, int *k, int *j);
+int					ft_striswhitespace(const char *str);
 int					handle_token_logic(const char *input, int *i, int *len);
 
 // fonctions execution
@@ -181,6 +183,14 @@ void				handle_fork(t_data *data, int *prev_pipe, t_input **current,
 						int *fd);
 int					count_args(t_input *token);
 void				fill_cmd_args(char **cmd, t_input *token);
+void				copy_until_dollar(char *dst, const char *src, int *i, int *j);
+void				copy_value(char *dst, const char *value, int *j);
+t_input				*cat_token(t_input *token, char *value, int len);
+int					str_isdigit(char *str);
+void				copy_name(char *dst, const char *name, int *i);
+void				copy_value_with_quotes(char *dst, const char *value, int *i);
+char				*strjoin_name_equal_value(char *name, char *value);
+void				swap_words(char **a, char **b);
 
 // fonctions redirection
 
@@ -193,7 +203,6 @@ bool				has_redirection(t_input *current);
 int					open_redirection_file(t_input *current);
 
 // fonctions token
-
 int					is_cmd(char *token, char **env);
 t_input				*tokenize(char **input, t_data *data);
 t_token_type		get_token_type(t_input *token, char *input, t_data *data);
@@ -202,8 +211,6 @@ void				is_cmd_arg(t_input *token);
 void				parse_and_expand_token(t_input *token, t_data *data);
 char				*handle_single_quote(char *str, int *i);
 char				*my_getenv(t_data *data, char *var_name);
-
-// fonctions exit code
 
 // fonctions path
 char				**split_path(char *fullpath);
@@ -218,6 +225,12 @@ void				print_tokens(char **tokens);
 
 // FONCTIONS EXEC + MONI
 bool				is_valid_env_value_syntax(char *s);
+void				free_lle(t_data *data);
+void				print_lle(t_data *data);
+void				free_env_list(t_env *head);
+t_env				*create_lle(char **envp);
+t_env				*create_lle_empty(t_env *env);
+void				init_env(t_data *data, char **envp);
 
 /// built-in
 void				b_echo(t_data *data, t_input *current);

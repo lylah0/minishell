@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lle_last.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:58:54 by monoguei           #+#    #+#             */
-/*   Updated: 2025/04/04 12:32:27 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:58:54 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 14:11:45 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

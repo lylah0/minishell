@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:21:31 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:13:47 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,41 @@
 // Duplique src et ajoute '=' à la fin (ex: src="HOME" -> "HOME=")
 char	*ft_strdup_equal(const char *src)
 {
-    int		i;
-    int		len;
-    char	*dest;
+	int		i;
+	int		len;
+	char	*dest;
 
-    if (!src)
-        return (NULL);
-    len = ft_strlen(src);
-    dest = (char *)malloc((len + 2) * sizeof(char)); // +1 pour '=' et +1 pour '\0'
-    if (!dest)
-        return (NULL);
-    for (i = 0; i < len; i++)
-        dest[i] = src[i];
-    dest[len] = '=';
-    dest[len + 1] = '\0';
-    return (dest);
+	if (!src)
+		return (NULL);
+	len = ft_strlen(src);
+	dest = (char *)malloc((len + 2) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	for (i = 0; i < len; i++)
+		dest[i] = src[i];
+	dest[len] = '=';
+	dest[len + 1] = '\0';
+	return (dest);
 }
 
 // Duplique src en ajoutant '=' au début (ex: src="HOME" -> "=HOME")
 char	*ft_equal_strdup(const char *src)
 {
-    int		i;
-    int		len;
-    char	*dest;
+	int		i;
+	int		len;
+	char	*dest;
 
-    if (!src)
-        return (NULL);
-    len = ft_strlen(src);
-    dest = (char *)malloc((len + 2) * sizeof(char)); // +1 pour '=' et +1 pour '\0'
-    if (!dest)
-        return (NULL);
-    dest[0] = '=';
-    for (i = 0; i < len; i++)
-        dest[i + 1] = src[i];
-    dest[len + 1] = '\0';
-    return (dest);
+	if (!src)
+		return (NULL);
+	len = ft_strlen(src);
+	dest = (char *)malloc((len + 2) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	dest[0] = '=';
+	for (i = 0; i < len; i++)
+		dest[i + 1] = src[i];
+	dest[len + 1] = '\0';
+	return (dest);
 }
 
 // Concatène str dest+src mod moni

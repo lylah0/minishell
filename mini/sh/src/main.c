@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:58:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:47:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_data	*init_data(void)
 	data->child_pid = -1;
 	data->exit_code = 0;
 	data->signal = NULL;
-	// Allouer la structure signal
 	data->signal = malloc(sizeof(t_signal));
 	if (!data->signal)
 	{
@@ -50,7 +49,7 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 	head = tokenize(splited_input, data);
 	// print_all_token_types(head);
 	is_env_var(head, data);
-	// print_token_list(head);
+	print_token_list(head);
 	return (head);
 }
 
@@ -81,7 +80,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		data->should_exit = 0;
-		data->child_pid = -1; // handler ne tente rien de foireux avant fork
+		data->child_pid = -1;
 		if (data->signal->sigquit == OFF)
 			input = get_user_input(data,
 					"\033[1;38;5;147m\u273F Minishell \u279C\033[0m ");
@@ -89,6 +88,11 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		if (!input)
 			break ;
+		if (ft_striswhitespace(input) == TRUE)
+		{
+			free(input);
+			continue ;
+		}
 		if (!ft_strlen(input))
 		{
 			init_signals(data);
@@ -98,6 +102,9 @@ int	main(int ac, char **av, char **envp)
 			data->signal->sigint = OFF;
 		if (data->signal->sigquit == ON)
 			data->signal->sigquit = OFF;
+		data->pipe_op = NO;
+		if (!(ft_strchr(input, '|') == NULL && ft_strchr(input, '<') == NULL && ft_strchr(input, '>') == NULL))
+			data->pipe_op = YES;
 		add_history(input);
 		splited_input = parse_input(data, input);
 		if (!splited_input)
@@ -114,7 +121,6 @@ int	main(int ac, char **av, char **envp)
 			tmp = tmp->next;
 		}
 		clean(data, splited_input, data->env_path, input);
-			// regarde pourquoi ca empeche
 		if (data->should_exit == 1)
 			break ;
 		init_signals(data);

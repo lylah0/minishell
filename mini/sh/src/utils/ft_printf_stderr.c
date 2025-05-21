@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_stderr.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:29:49 by moni              #+#    #+#             */
-/*   Updated: 2025/05/15 22:04:47 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:13:22 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	ft_putstr_fd(char *s, int fd)
 
 void	ft_printf_stderr(const char *s, ...)
 {
-	int			i;
-	va_list		ap;
-	char		*str;
+	int		i;
+	va_list	ap;
+	char	*str;
 
 	va_start(ap, s);
 	i = 0;
@@ -48,4 +48,3 @@ void	ft_printf_stderr(const char *s, ...)
 	}
 	va_end(ap);
 }
-

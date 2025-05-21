@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:16:18 by monoguei         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/05/21 19:06:34 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../../minishell.h"
 
@@ -37,6 +38,11 @@ void	b_unset(t_data *data)
 
 	if (!data || !data->input || !data->input->next)
 		return ;
+	if (data->pipe_op == YES)
+	{
+		data->exit_code = 1;
+		return ;
+	}
 	if (!data->env)
 	{
 		init_empty_env(data);
@@ -45,10 +51,10 @@ void	b_unset(t_data *data)
 	current = data->input->next;
 	while (current)
 	{
-		if (current->type == T_WORD)
-			unset_env_var(&data->env, current->token);
-		else if (current->type != T_SKIP)
+		unset_env_var(&data->env, current->token);
+		if (current->next)
+			current = current->next;
+		else
 			break ;
-		current = current->next;
 	}
 }

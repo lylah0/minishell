@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fonctions_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 21:09:38 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:09:56 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:50:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,17 @@
 // 	}
 // }
 
-//  void	print_token_list(t_input *head)
-// {
-// 	t_input	*curr = head;
-// 	int		i = 0;
+ void	print_token_list(t_input *head)
+{
+	t_input	*curr = head;
+	int		i = 0;
 
-// 	printf("\n Vérification des tokens après expansion :\n");
-// 	while (curr)
-// 	{
-// 		printf("Token[%d]: %s,(Type: %d)\n", i, curr->token, curr->type);
-// 		curr = curr->next;
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
+	printf("\n Vérification des tokens après expansion :\n");
+	while (curr)
+	{
+		printf("Token[%d]: %s,(Type: %d)\n", i, curr->token, curr->type);
+		curr = curr->next;
+		i++;
+	}
+	printf("\n");
+}
