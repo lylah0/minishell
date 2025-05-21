@@ -1,38 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lle_search_env.c                                   :+:      :+:    :+:   */
+/*   init_env2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 16:49:34 by monoguei         ###   ########.fr       */
+/*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 16:56:06 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-t_env	*search_env_name(t_env *env, char *name)
+t_env	*create_lle_empty(t_env *env)
 {
 	t_env	*current;
-	t_env	**return_env;
 
+	current = NULL;
 	current = env;
-	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)
-			+ 1) != 0)
-		current = current->next;
-	if (current == NULL)
-		return (NULL);
-	return_env = &current;
-	return (*return_env);
+	current = malloc(sizeof(t_env));
+	if (!current)
+	{
+		free(current);
+		return (0);
+	}
+	current->name = ft_strdup("");
+	current->value = NULL;
+	current->next = NULL;
+	return (current);
 }
 
-char	*search_env_value(t_env *env, char *name)
+void	init_env(t_data *data, char **envp)
 {
-	t_env	*var;
-
-	var = search_env_name(env, name);
-	if (!var || !var->value)
-		return (NULL);
-	return (var->value);
+	data->env = create_lle(envp);
+	if (!data->env)
+	{
+		data->env = malloc(sizeof * data->env);
+		data->env->name = NULL;
+		data->env->value = NULL;
+		data->env->next = NULL;
+		return ;
+	}
 }
