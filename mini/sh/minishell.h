@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:06:47 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 21:48:06 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:52:56 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,8 @@ void			print_copy_env(t_data *data);
 void			print_export(t_data *data);
 void			print_lle(t_data *data);
 void			print_token_list(t_input *head);
+int				quotes(char *input, int *k, int *in_quote, char *quote_char);
+void			redir(t_input *current, t_data *data);
 char			**second_parsing(char **array);
 t_env			*search_env_name(t_env *env, char *name);
 char			*search_env_value(t_env *env, char *name);
