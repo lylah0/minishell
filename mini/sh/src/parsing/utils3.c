@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 16:04:35 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:44:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int	ft_striswhitespace(const char *str)
 {
 	int	i;
 
-	if (!str)
-		return (FALSE);
 	i = 0;
 	while (str[i])
 	{

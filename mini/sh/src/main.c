@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 16:05:36 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:47:02 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,13 @@ int	main(int ac, char **av, char **envp)
 					"\033[1;38;5;147m\u273F Minishell \u279C\033[0m ");
 		else
 			continue ;
-		if (!input || ft_striswhitespace(input) == TRUE)
+		if (!input)
 			break ;
+		if (ft_striswhitespace(input) == TRUE)
+		{
+			free(input);
+			continue ;
+		}
 		if (!ft_strlen(input))
 		{
 			init_signals(data);
