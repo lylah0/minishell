@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 15:35:13 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:05:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
 void				expand_env_var_into_array(t_data *data, char *input,
 						char **array_ptr, int *k, int *j);
+int					ft_striswhitespace(const char *str);
 int					handle_token_logic(const char *input, int *i, int *len);
 
 // fonctions execution
