@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:22:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 21:58:18 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:01:55 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,25 @@ t_env	*update_env_value(t_data *data, char *env_to_update, char *new_value)
 		data->exit_code = 2;
 		return (NULL);
 	}
-	free (current->value);
+	free(current->value);
 	current->value = ft_strdup(new_value);
 	if (!current->value)
-		return NULL;
+		return (NULL);
 	return (current);
 }
 
 void	cd_home(t_data *data)
 {
-	char *home_value;
-	char *new_oldpwd_value;
+	char	*home_value;
+	char	*new_oldpwd_value;
 
 	home_value = ft_strdup(search_env_value(data->env, "HOME"));
 	new_oldpwd_value = ft_strdup(search_env_value(data->env, "PWD"));
 	if (chdir(home_value) == -1)
 	{
 		perror("cd -");
-		free (new_oldpwd_value);
-		free (home_value);
+		free(new_oldpwd_value);
+		free(home_value);
 		data->exit_code = 1;
 		return ;
 	}
@@ -63,8 +63,8 @@ void	cd_return(t_data *data)
 	if (chdir(new_oldpwd_value) == -1)
 	{
 		perror("cd -");
-		free (new_oldpwd_value);
-		free (new_pwd_value);
+		free(new_oldpwd_value);
+		free(new_pwd_value);
 		data->exit_code = 1;
 		return ;
 	}
@@ -96,19 +96,19 @@ void	cd_path(t_data *data)
 }
 
 /// @brief built-in change directory `cd <path>`, `cd`, `cd -`, `cd..`
-/// @param data Pointer to the shell data structure containing environment variables
+/// @param data Pointer to the shell data structure containing environment var
 /// @param arg Path to change the current working directory to
-void b_cd(t_data *data)
+void	b_cd(t_data *data)
 {
-	t_input		*arg;
+	t_input	*arg;
 
 	arg = data->input->next;
 	if (!arg)
 		cd_home(data);
 	else if (arg && ft_strncmp_end(arg->token, "-", 1) == 0)
 	{
-		if (ft_strlen(arg->token)>1)
-			ft_printf_stderr("option not needed for minishell\n"); //seulement cd - est géré, pas d'options -*
+		if (ft_strlen(arg->token) > 1)
+			ft_printf_stderr("option not needed for minishell\n");
 		else
 		{
 			cd_return(data);

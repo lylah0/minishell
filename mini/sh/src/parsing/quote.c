@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 13:18:57 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:03:54 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ char	*handle_env_variable(t_data *data, char *str, int *i)
 	if (!var_name)
 		return (ft_strdup(""));
 	var_value = search_env_value(data->env, var_name);
-	// var_value = my_getenv(data, var_name);
 	free(var_name);
 	if (!var_value)
 		return (ft_strdup(""));

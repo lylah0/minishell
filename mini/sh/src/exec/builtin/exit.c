@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:00:18 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:04:43 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 #define TRUE 1
 #define FALSE 0
 
-
-
 void	exit_no_arg(t_data *data, int in_pipe)
 {
 	if (!in_pipe)
-		ft_putstr_fd("exit\n", 1); // Only print when not in a pipeline
+		ft_putstr_fd("exit\n", 1);
 	data->should_exit = 1;
-	// exit(data->exit_code);
 }
 
 void	exit_n(t_data *data, char *num)
@@ -33,7 +30,6 @@ void	exit_n(t_data *data, char *num)
 	ft_putstr_fd("exit\n", 1);
 	data->exit_code = n;
 	data->should_exit = 1;
-	// exit(data->exit_code);
 }
 
 void	exit_alpha(t_data *data, char *word)
@@ -42,7 +38,6 @@ void	exit_alpha(t_data *data, char *word)
 	ft_printf_stderr("minishell: exit: %s: numeric argument required\n", word);
 	data->exit_code = 2;
 	data->should_exit = 1;
-	// exit(data->exit_code);
 }
 
 void	exit_multiple_arg(t_data *data)
@@ -63,8 +58,8 @@ void	b_exit(t_data *data, t_input *current, int in_pipe)
 			|| next_token->next->type == T_PIPE
 			|| next_token->next->type == T_OP))
 		exit_n(data, next_token->token);
-	else if (next_token && next_token->next
-		&& next_token->next->type != T_PIPE && next_token->next->type != T_OP)
+	else if (next_token && next_token->next && next_token->next->type != T_PIPE
+		&& next_token->next->type != T_OP)
 		exit_multiple_arg(data);
 	else if (str_isdigit(next_token->token) == FALSE)
 		exit_alpha(data, next_token->token);

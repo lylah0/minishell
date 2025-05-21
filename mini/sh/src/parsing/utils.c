@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 16:53:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:43:31 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:26:17 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,45 +50,32 @@ void	append_str_to_result(char **result, const char *str)
 	*result = tmp;
 }
 
-int	handle_normal_word(t_data *data, char *input, char **array, int *k, int i)
+int	handle_normal_word(t_data *data, char *input, int *k, int i)
 {
 	int	len;
 
 	len = word_len(&input[*k]);
-	array[i] = malloc(sizeof(char) * (len + 256));
-	if (!array[i])
+	data->array[i] = malloc(sizeof(char) * (len + 256));
+	if (!data->array[i])
 		return (0);
-	if_n_op(data, input, array, k, &i);
+	if_n_op(data, input, k, &i);
 	return (1);
 }
 
-int count_tokens(const char *input)
+int	count_tokens(const char *input)
 {
-	int i = 0;
-	int len = 1;
+	int	i;
+	int	len;
 
+	i = 0;
+	len = 1;
 	while (input[i])
 	{
-		if (input[i] == '"' || input[i] == '\'')
-		{
-			len++;
-			i = while_quotes(input, i);
-			if (input[i] == '\0')
-				break;
-		}
-		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			len++;
-		else if (input[i] == ' ' || input[i] == '\t')
-		{
-			len++;
-			while (input[i] == ' ' || input[i] == '\t')
-				i++;
-			if (input[i] == '\0')
-				break;
-			i--;
-		}
+		if (!handle_token_logic(input, &i, &len))
+			break ;
+		if (!input[i])
+			break ;
 		i++;
 	}
 	return (len + 1);
 }
-

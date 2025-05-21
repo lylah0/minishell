@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:27:29 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:01:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

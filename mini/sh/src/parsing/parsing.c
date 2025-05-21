@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:44:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:33:20 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,17 @@
 
 char	**first_parsing(t_data *data, char *input)
 {
-	char	**array;
 	int		len;
 
 	len = count_tokens(input);
-	array = malloc(sizeof(char *) * (len + 1));
-	if (!array)
+	data->array = malloc(sizeof(char *) * (len + 1));
+	if (!data->array)
 	{
 		perror("first_parsing");
 		return (NULL);
 	}
-	array[len] = NULL;
-	return (fill_tab(data, input, array));
+	data->array[len] = NULL;
+	return (fill_tab(data, input));
 }
 
 int	word_len(char *input)
@@ -71,7 +70,7 @@ void	if_operator(char *input, char **array, int *k, int i)
 	array[i][j] = '\0';
 }
 
-void	if_n_op(t_data *data, char *input, char **array, int *k, int *i)
+void	if_n_op(t_data *data, char *input, int *k, int *i)
 {
 	int		j;
 	int		in_quote;
@@ -85,27 +84,27 @@ void	if_n_op(t_data *data, char *input, char **array, int *k, int *i)
 		&& !(input[*k] == '>' && !in_quote))
 	{
 		if (input[*k] == '$')
-			expand_env_var_into_array(data, input, &array[*i], k, &j);
+			expand_env_var_into_array(data, input, &data->array[*i], k, &j);
 		else if (quotes(input, k, &in_quote, &quote_char))
 			continue ;
 		else
 		{
-			array[*i][j] = input[*k];
+			data->array[*i][j] = input[*k];
 			j++;
 			(*k)++;
 		}
 	}
-	array[*i][j] = '\0';
+	data->array[*i][j] = '\0';
 }
 
-char	**fill_tab(t_data *data, char *input, char **array)
+char	**fill_tab(t_data *data, char *input)
 {
 	int	i;
 	int	k;
 
 	i = 0;
 	k = 0;
-	array[i] = NULL;
+	data->array[i] = NULL;
 	while (input[k])
 	{
 		while (input[k] == ' ')
@@ -113,13 +112,13 @@ char	**fill_tab(t_data *data, char *input, char **array)
 		if (!input[k])
 			break ;
 		if (input[k] == '\'' || input[k] == '"')
-			if_quotes(input, array, &k, &i);
+			if_quotes(input, data->array, &k, &i);
 		else if (input[k] == '|' || input[k] == '<' || input[k] == '>')
-			if_operator(input, array, &k, i);
-		else if (!handle_normal_word(data, input, array, &k, i))
+			if_operator(input, data->array, &k, i);
+		else if (!handle_normal_word(data, input, &k, i))
 			return (NULL);
 		i++;
 	}
-	array[i] = NULL;
-	return (array);
+	data->array[i] = NULL;
+	return (data->array);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD_ARG.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 09:47:25 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:00:48 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	is_valid_env_value_syntax(char *s)
 {
 	int		i;
 	int		len_s;
-	char	c ;
+	char	c;
 
 	i = 0;
 	len_s = ft_strlen(s);
@@ -62,11 +62,10 @@ bool	is_valid_env_value_syntax(char *s)
 	{
 		ft_printf_stderr("minishell: export: envvalue: ");
 		ft_printf_stderr("'%s': not a valid identifier\n", s);
-		return FALSE;
+		return (FALSE);
 	}
-	return TRUE;
+	return (TRUE);
 }
-
 
 void	add_env_name(t_data *data, char *env_name)
 {

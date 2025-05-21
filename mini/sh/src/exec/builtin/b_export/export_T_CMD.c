@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_T_CMD.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:49:28 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:11:38 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:00:52 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,32 @@
 
 int	compare_words(char *w1, char *w2)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (w1[i] && w2[i])
 	{
 		if (w1[i] < w2[i])
-			return 0;
+			return (0);
 		if (w1[i] > w2[i])
-			return 1;
-		if  (w1[i] == w2[i])
+			return (1);
+		if (w1[i] == w2[i])
 			i++;
 	}
 	if (w1[i])
-		return 1;
+		return (1);
 	else
-		return 0;
+		return (0);
 }
 
-void	sort_words(char	**words, int len)
+void	sort_words(char **words, int len)
 {
-	int	i = 0;
-	int	j = 1;
+	int	i;
+	int	j;
 
-	while(i < len && j < len)
+	i = 0;
+	j = 1;
+	while (i < len && j < len)
 	{
 		if (compare_words(words[i], words[j]) == 1)
 			swap_words(&words[i], &words[j]);
@@ -57,7 +60,6 @@ void	print_env_array(t_data *data)
 	i = 0;
 	while (i < lle_size(data->env))
 	{
-
 		printf("export %s\n", data->copy_env[i]);
 		i++;
 	}
@@ -65,11 +67,11 @@ void	print_env_array(t_data *data)
 
 void	free_array(char **array)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!array)
-		return;
+		return ;
 	while (array[i])
 	{
 		free(array[i]);
@@ -78,7 +80,7 @@ void	free_array(char **array)
 	free(array);
 }
 
-void print_export(t_data *data)
+void	print_export(t_data *data)
 {
 	lle_to_array(data);
 	sort_words(data->copy_env, lle_size(data->env));

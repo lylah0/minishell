@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:06:41 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:00:08 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int	handle_parent_builtin(t_data *data, t_input *current)
 	return (0);
 }
 
-void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd,
-		char *env_path)
+void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd)
 {
 	pid_t	pid;
 
@@ -40,7 +39,7 @@ void	handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd,
 	if (pid == 0)
 	{
 		data->child_pid = 0;
-		child(data, *prev_pipe, *current, fd, env_path);
+		child(data, *prev_pipe, *current, fd);
 	}
 	else
 	{

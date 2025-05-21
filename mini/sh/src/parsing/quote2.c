@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:13:05 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/16 18:14:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:10:18 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int	while_quotes(const char *input, int i)
 		while (input[i] && input[i] != '"')
 			i++;
 	}
-	while (input[i] && input[i + 1] && input[i + 1] != ' ' && input[i + 1] != '|' && input[i + 1] != '<'
-		&& input[i + 1] != '>')
+	while (input[i] && input[i + 1] && input[i + 1] != ' ' && input[i
+			+ 1] != '|' && input[i + 1] != '<' && input[i + 1] != '>')
 		i++;
 	return (i);
 }

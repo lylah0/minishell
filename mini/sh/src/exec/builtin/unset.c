@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:03:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:06:04 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static void unset_env_var(t_env **env, char *name)
+static void	unset_env_var(t_env **env, char *name)
 {
 	if (search_env_name(*env, name))
 		lle_del_one(env, name);
 }
 
-static void init_empty_env(t_data *data)
+static void	init_empty_env(t_data *data)
 {
 	printf("Aucune variable d'environnement\n");
 	printf("Initialisation d'un environnement vide...\n");
-	data->env = malloc(sizeof *data->env);
+	data->env = malloc(sizeof * data->env);
 	if (data->env)
 	{
 		data->env->name = ft_strdup("Head_of_environnement");
@@ -31,16 +31,16 @@ static void init_empty_env(t_data *data)
 	}
 }
 
-void b_unset(t_data *data)
+void	b_unset(t_data *data)
 {
-	t_input *current;
+	t_input	*current;
 
 	if (!data || !data->input || !data->input->next)
-		return;
+		return ;
 	if (!data->env)
 	{
 		init_empty_env(data);
-		return;
+		return ;
 	}
 	current = data->input->next;
 	while (current)
@@ -48,7 +48,7 @@ void b_unset(t_data *data)
 		if (current->type == T_WORD)
 			unset_env_var(&data->env, current->token);
 		else if (current->type != T_SKIP)
-			break;
+			break ;
 		current = current->next;
 	}
 }

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:15 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:01:48 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:01:03 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	b_env(t_data* data)
+void	b_env(t_data *data)
 {
-	t_input *current;
+	t_input	*current;
 
 	current = data->input;
 	if (!data->env || !data->env->name)
@@ -22,8 +22,8 @@ void	b_env(t_data* data)
 		printf("aucune variable d'environnement\n");
 		return ;
 	}
-	while (current->next && current->next->type != T_OP && current->next->type
-		!= T_PIPE)
+	while (current->next && current->next->type != T_OP
+		&& current->next->type != T_PIPE)
 	{
 		current = current->next;
 		if (ft_strncmp_end(current->token, "env", 4) != 0)
@@ -35,4 +35,3 @@ void	b_env(t_data* data)
 	}
 	print_lle(data);
 }
-

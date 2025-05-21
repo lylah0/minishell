@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 09:44:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:06:50 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
-
 
 static void	handle_export_no_args(t_data *data)
 {
@@ -19,10 +18,10 @@ static void	handle_export_no_args(t_data *data)
 	{
 		printf("Aucune variable d'environnement\n");
 		printf("Initialisation d'un environnement vide...\n");
-		data->env         = malloc(sizeof *data->env);
-		data->env->name   = ft_strdup("Head_of_environnement");
-		data->env->value  = NULL;
-		data->env->next   = NULL;
+		data->env = malloc(sizeof * data->env);
+		data->env->name = ft_strdup("Head_of_environnement");
+		data->env->value = NULL;
+		data->env->next = NULL;
 		return ;
 	}
 	print_export(data);
@@ -30,9 +29,11 @@ static void	handle_export_no_args(t_data *data)
 
 static void	handle_export_assignment(t_data *data, char *token)
 {
-	char *new_name = extract_name(token);
-	char *new_value = extract_value(token);
+	char	*new_name;
+	char	*new_value;
 
+	new_name = extract_name(token);
+	new_value = extract_value(token);
 	if (!new_name || !new_value)
 	{
 		free(new_name);
@@ -63,15 +64,16 @@ static void	handle_export_name(t_data *data, char *token)
 }
 
 /// @brief builtin affiche, ajoute ou maj environnement
-/// @example `export` `export NAME` `export NAME=` `export NAME=value` 
+/// @example `export` `export NAME` `export NAME=` `export NAME=value`
 /// `export NAME1=value NAME2=value`
 /// @param data
 void	b_export(t_data *data)
 {
-	t_input *arg = data->input->next;
+	t_input	*arg;
 
+	arg = data->input->next;
 	if (!arg || arg->type == T_PIPE)
-		return handle_export_no_args(data);
+		return (handle_export_no_args(data));
 	while (arg && arg->type != T_PIPE)
 	{
 		if (ft_strchr(arg->token, '='))

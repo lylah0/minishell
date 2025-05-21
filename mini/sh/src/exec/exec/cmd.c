@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:06:31 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:54:48 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	wait_all(t_data *data)
 	int		status;
 	pid_t	pid;
 
-	while ((pid = wait(&status)) > 0)
+	pid = wait(&status);
+	while (pid > 0)
 	{
 		if (WIFEXITED(status))
 			data->exit_code = WEXITSTATUS(status);
+		pid = wait(&status);
 	}
 }
 
@@ -35,8 +37,7 @@ int	has_next_cmd(t_input *node)
 	return (0);
 }
 
-void	child(t_data *data, int prev_pipe, t_input *current, int fd[2],
-		char *env_path)
+void	child(t_data *data, int prev_pipe, t_input *current, int fd[2])
 {
 	int	in_pipe;
 
@@ -61,7 +62,7 @@ void	child(t_data *data, int prev_pipe, t_input *current, int fd[2],
 		close(fd[1]);
 	if (prev_pipe != 0)
 		close(prev_pipe);
-	exec(data, current, env_path, in_pipe);
+	exec(data, current, in_pipe);
 }
 
 void	parent(int *prev_pipe, t_input **current, int fd[2])
@@ -78,7 +79,7 @@ void	parent(int *prev_pipe, t_input **current, int fd[2])
 	*current = get_next_command(*current);
 }
 
-void	exec_pipe(t_data *data, t_input *head, char *env_path)
+void	exec_pipe(t_data *data, t_input *head)
 {
 	int		fd[2];
 	int		prev_pipe;
@@ -100,7 +101,7 @@ void	exec_pipe(t_data *data, t_input *head, char *env_path)
 			current = get_next_command(current);
 			continue ;
 		}
-		handle_fork(data, &prev_pipe, &current, fd, env_path);
+		handle_fork(data, &prev_pipe, &current, fd);
 	}
 	wait_all(data);
 	data->child_pid = -1;

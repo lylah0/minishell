@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 21:48:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:58:53 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,31 +50,29 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 	head = tokenize(splited_input, data);
 	// print_all_token_types(head);
 	is_env_var(head, data);
-	print_token_list(head);
+	// print_token_list(head);
 	return (head);
 }
 
-void	exec_cmd(t_data *data, t_input *head, char *env_path)
+void	exec_cmd(t_data *data, t_input *head)
 {
 	t_input	*curr;
 
 	curr = head;
 	if (!curr)
 		return ;
-	exec_pipe(data, curr, env_path);
+	exec_pipe(data, curr);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
 	char	**splited_input;
-	char	*env_path;
 	t_data	*data;
 	t_input	*tmp;
 	int		exit_code;
 
 	(void)ac;
-	(void)env_path;
 	(void)av;
 	data = NULL;
 	data = init_data();
@@ -104,18 +102,18 @@ int	main(int ac, char **av, char **envp)
 		splited_input = parse_input(data, input);
 		if (!splited_input)
 			continue ;
-		env_path = get_env_path(envp);
+		data->env_path = get_env_path(envp);
 		if (data->input)
 			free_token_list(data->input);
 		data->input = do_parsing(NULL, splited_input, data);
-		exec_cmd(data, data->input, env_path);
+		exec_cmd(data, data->input);
 		tmp = data->input;
 		while (tmp)
 		{
 			// printf("data->input contains: %s\n", tmp->token);
 			tmp = tmp->next;
 		}
-		clean(data, splited_input, env_path, input);
+		clean(data, splited_input, data->env_path, input);
 			// regarde pourquoi ca empeche
 		if (data->should_exit == 1)
 			break ;

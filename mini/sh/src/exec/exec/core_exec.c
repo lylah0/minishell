@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 09:35:00 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:52:40 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static int	handle_echo_exit(t_data* data, t_input* input, int in_pipe)
+static int	handle_echo_exit(t_data *data, t_input *input, int in_pipe)
 {
-	char* input_str = input->token;
+	char	*input_str;
 
+	input_str = input->token;
 	if (ft_strncmp_end(input_str, "echo", 5) == 0)
 	{
 		b_echo(data, input);
@@ -29,10 +30,11 @@ static int	handle_echo_exit(t_data* data, t_input* input, int in_pipe)
 	return (1);
 }
 
-static int	handle_cd_pwd_env(t_data* data, t_input* input)
+static int	handle_cd_pwd_env(t_data *data, t_input *input)
 {
-	char* input_str = input->token;
+	char	*input_str;
 
+	input_str = input->token;
 	if (ft_strncmp_end(input_str, "cd", 3) == 0)
 	{
 		b_cd(data);
@@ -51,10 +53,11 @@ static int	handle_cd_pwd_env(t_data* data, t_input* input)
 	return (1);
 }
 
-static int	handle_unset_export(t_data* data, t_input* input)
+static int	handle_unset_export(t_data *data, t_input *input)
 {
-	char* input_str = input->token;
+	char	*input_str;
 
+	input_str = input->token;
 	if (ft_strncmp_end(input_str, "unset", 6) == 0)
 	{
 		b_unset(data);
@@ -68,7 +71,7 @@ static int	handle_unset_export(t_data* data, t_input* input)
 	return (1);
 }
 
-int	kind_of_token(t_data* data, t_input* input, int in_pipe)
+int	kind_of_token(t_data *data, t_input *input, int in_pipe)
 {
 	if (handle_echo_exit(data, input, in_pipe) == 0)
 		return (0);

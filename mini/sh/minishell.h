@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:43:59 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:58:10 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdarg.h>
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdio.h>
@@ -28,15 +29,6 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <dirent.h>
-# include <stdarg.h>
-# include <signal.h>
-# include <string.h>
-# include <termios.h>
-
 
 # define TRUE 1
 # define FALSE 0
@@ -72,58 +64,58 @@ typedef struct s_env
 	char			*name;
 	char			*value;
 	struct s_env	*next;
-}	t_env;
+}					t_env;
 
 // Gestion des signaux
 typedef enum e_signal_state
 {
 	SIGNAL_OFF,
 	SIGNAL_ON
-}	t_signal_state;
+}					t_signal_state;
 
 typedef struct s_signal
 {
 	t_signal_state	sigint;
 	t_signal_state	sigquit;
-}	t_signal;
+}					t_signal;
 
 // Structure globale du programme
 typedef struct s_data
 {
-	t_input			*input;       // liste des commandes (phase execution)
-	t_env			*env;         // envp
-	t_signal		*signal;      // gestion signaux
-	char			**copy_env;   // tableau d'env (copie)
+	t_input			*input;
+	t_env			*env;
+	t_signal		*signal;
+	char			**copy_env;
+	char			*env_path;
+	char			**array;
 	int				should_exit;
 	int				exit_code;
 	int				stdout_redir;
 	int				stdin_redir;
 	pid_t			child_pid;
-}	t_data;
+}					t_data;
 
 typedef struct s_ifn_op_ctx
 {
-	t_data	*data;
-	char	*input;
-	char	**array;
-	int		*k;
-	int		*i;
-}	t_ifn_op_ctx;
+	t_data			*data;
+	char			*input;
+	char			**array;
+	int				*k;
+	int				*i;
+}					t_ifn_op_ctx;
 
-char *get_user_input(t_data *data, const char *prompt);
-t_data	*get_data_ptr(t_data *new_data);
-void	init_signals(t_data *data);
-void	handler_sigint(int signum);
-void	handler_sigquit(int signum);
-void	restore_terminal(void);
-
-
+char				*get_user_input(t_data *data, const char *prompt);
+t_data				*get_data_ptr(t_data *new_data);
+void				init_signals(t_data *data);
+void				handler_sigint(int signum);
+void				handler_sigquit(int signum);
+void				restore_terminal(void);
 
 // FONCTIONS LYLAH
 // fonctions parsing
-char				**fill_tab(t_data *data, char *input, char **array);
+char				**fill_tab(t_data *data, char *input);
 
-void				if_n_op(t_data *data, char *input, char **array, int *k, int *i);
+void				if_n_op(t_data *data, char *input, int *k, int *i);
 void				if_operator(char *input, char **array, int *k, int i);
 int					word_len(char *input);
 char				**first_parsing(t_data *data, char *input);
@@ -151,31 +143,33 @@ void				append_char_to_result(char **result, char c);
 void				append_str_to_result(char **result, const char *str);
 int					handle_special_cases(const char *src, int *i,
 						char **result);
-int					handle_normal_word(t_data *data, char *input, char **array, int *k,
+int					handle_normal_word(t_data *data, char *input, int *k,
 						int i);
 int					count_tokens(const char *input);
 int					quotes(char *input, int *k, int *in_quote,
 						char *quote_char);
-int					copy_substring(char *input, char **array_ptr, int start, int len);
+int					copy_substring(char *input, char **array_ptr, int start,
+						int len);
 
 int					count_second_parsing_len(char **array);
 int					append_to_result(char **result, char *temp);
 char				*expand_token_part(char *input, int *i, t_data *data);
-void				expand_env_var_into_array(t_data *data, char *input, char **array_ptr, int *k, int *j);
+void				expand_env_var_into_array(t_data *data, char *input,
+						char **array_ptr, int *k, int *j);
+int					handle_token_logic(const char *input, int *i, int *len);
 
 // fonctions execution
 
 int					is_builtin(char *cmd);
 char				**build_cmd_arg(t_input *token);
 int					count_cmd(t_input *head);
-void				exec_pipe( t_data *data, t_input *head, char *env_path);
+void				exec_pipe(t_data *data, t_input *head);
 void				parent(int *prev_pipe, t_input **current, int fd[2]);
-void				child(t_data *data, int prev_pipe, t_input *current, int fd[2],
-						char *env_path);
+void				child(t_data *data, int prev_pipe, t_input *current,
+						int fd[2]);
 t_input				*get_next_command(t_input *node);
 int					has_next_cmd(t_input *node);
-void				exec(t_data *data, t_input *current, char *env_path,
-						int in_pipe);
+void				exec(t_data *data, t_input *current, int in_pipe);
 int					is_parent_builtin(char *token);
 bool				is_safe_to_exec_in_parent(t_input *current);
 t_input				*filter_args(t_input *input);
@@ -183,8 +177,8 @@ t_input				*filter_args(t_input *input);
 // utils exec
 
 int					handle_parent_builtin(t_data *data, t_input *current);
-void				handle_fork(t_data *data, int *prev_pipe, t_input **current, int *fd,
-						 char *env_path);
+void				handle_fork(t_data *data, int *prev_pipe, t_input **current,
+						int *fd);
 int					count_args(t_input *token);
 void				fill_cmd_args(char **cmd, t_input *token);
 
@@ -223,7 +217,7 @@ void				print_all_token_types(t_input *head);
 void				print_tokens(char **tokens);
 
 // FONCTIONS EXEC + MONI
-bool is_valid_env_value_syntax(char *s);
+bool				is_valid_env_value_syntax(char *s);
 
 /// built-in
 void				b_echo(t_data *data, t_input *current);
@@ -237,8 +231,6 @@ void				b_cd(t_data *data);
 int					kind_of_token(t_data *data, t_input *input, int in_pipe);
 t_env				*update_env_value(t_data *data, char *env_to_update,
 						char *new_value);
-// int					kind_of_token(t_data *data, t_input *input);
-// t_env				*update_env_value(t_env *env, char *env_to_update, char *new_value);
 
 // init_environment // b_export
 void				free_lle(t_data *data);
@@ -259,8 +251,6 @@ void				add_env_name(t_data *data, char *env_name);
 void				add_new_env_var_and_value(t_data *data, char *env_name,
 						char *env_value);
 
-// t_env	*add_env_var(t_data *data, char *input);
-
 t_env				*exist_already_in_env(t_env *env, char *name_var);
 void				lle_del_one(t_env **env, char *env_to_del);
 
@@ -279,9 +269,6 @@ void				init_env(t_data *data, char **envp);
 void				add_env_var(t_data *data, char *input);
 t_env				*exist_already_in_env(t_env *env, char *name_var);
 
-// // init_arg
-// void init_input(t_input *input);
-
 // utils.c
 char				*ft_strdup_equal(const char *src);
 size_t				ft_strcat(char *dest, const char *src);
@@ -289,15 +276,16 @@ int					ft_strncmp_end(char *s1, char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strcpy(char *dest, const char *src);
 t_input				*cat_token(t_input *token, char *value, int len);
-int	str_isdigit(char *str);
+int					str_isdigit(char *str);
 
-//cleanup
+// cleanup
 
 void				free_token_list(t_input *head);
 void				cleanup_memory(char *line, char **splited_line);
 void				free_tab(char **tab);
 void				free_env_list(t_env *env);
-void				clean(t_data *data, char **splited_input, char *env_path, char *input);
+void				clean(t_data *data, char **splited_input, char *env_path,
+						char *input);
 int					free_all(t_data *data);
 
 // UTILS/lle
@@ -309,13 +297,13 @@ t_env				*lle_new(char *name, char *value);
 int					lle_size(t_env *env);
 char				*search_env_value(t_env *env, char *name);
 void				ft_printf_stderr(const char *s, ...);
-void lle_to_array(t_data *data);
-char	*strjoin_name_equal_value(char *name, char *value);
+void				lle_to_array(t_data *data);
+char				*strjoin_name_equal_value(char *name, char *value);
 
 char				*ft_strndup(const char *src, int n);
-void	swap_words(char **a, char **b);
+void				swap_words(char **a, char **b);
 
-int		find_equal(char *s);
-char	*extract_name(char *env_var);
-char	*extract_value(char *env_var);
+int					find_equal(char *s);
+char				*extract_name(char *env_var);
+char				*extract_value(char *env_var);
 #endif
