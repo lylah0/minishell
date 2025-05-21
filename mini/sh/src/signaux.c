@@ -1,22 +1,22 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   signaux.c                                          :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2025/03/03 07:36:08 by monoguei          #+#    #+#             */
-// /*   Updated: 2025/05/13 10:34:04 by monoguei         ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signaux.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/21 14:14:21 by lylrandr          #+#    #+#             */
+/*   Updated: 2025/05/21 14:14:28 by lylrandr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 
-static struct termios g_termios_backup;
+static struct termios	g_termios_backup;
 
-char *get_user_input(t_data *data, const char *prompt)
+char	*get_user_input(t_data *data, const char *prompt)
 {
-	char *line;
+	char	*line;
 
 	line = readline(prompt);
 	if (!line)
@@ -28,19 +28,20 @@ char *get_user_input(t_data *data, const char *prompt)
 	return (line);
 }
 
-t_data *get_data_ptr(t_data *new_data)
+t_data	*get_data_ptr(t_data *new_data)
 {
-	static t_data *saved = NULL;
+	static t_data	*saved = NULL;
+
 	if (new_data)
 		saved = new_data;
 	return (saved);
 }
 
-void handler_sigint(int signum)
+void	handler_sigint(int signum)
 {
-	t_data *data;
-	(void)signum;
+	t_data	*data;
 
+	(void)signum;
 	data = get_data_ptr(NULL);
 	if (data && data->signal)
 		data->signal->sigint = ON;
@@ -55,11 +56,11 @@ void handler_sigint(int signum)
 	}
 }
 
-void handler_sigquit(int signum)
+void	handler_sigquit(int signum)
 {
-	t_data *data;
-	(void)signum;
+	t_data	*data;
 
+	(void)signum;
 	data = get_data_ptr(NULL);
 	if (data && data->signal)
 		data->signal->sigint = ON;
@@ -83,20 +84,19 @@ void handler_sigquit(int signum)
 // structure termios), et non du traitement réel des signaux. Ainsi, ne pas
 // les afficher ne modifie aucunement le comportement fonctionnel imposé par
 // le sujet et respecté par notre implémentation. »
-void init_signals(t_data *data)
+void	init_signals(t_data *data)
 {
-	struct termios term;
+	struct termios	term;
 
 	get_data_ptr(data);
 	signal(SIGINT, handler_sigint);
 	signal(SIGQUIT, handler_sigquit);
 	tcgetattr(STDIN_FILENO, &term);
 	g_termios_backup = term;
-	// term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void restore_terminal(void)
+void	restore_terminal(void)
 {
 	tcsetattr(STDIN_FILENO, TCSANOW, &g_termios_backup);
 }

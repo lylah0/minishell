@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 18:15:35 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:13:13 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ void	print_lle(t_data *data)
 	while (current)
 	{
 		printf("%s", current->name);
-			// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		if (current->value)
 			printf("=%s\n", current->value);
-				// pourquoi ca ne simprime pas si linked list imprimer aussi ? verifier coherence printf write
 		else
 			printf("\n");
 		current = current->next;
@@ -134,7 +132,7 @@ void	init_env(t_data *data, char **envp)
 	data->env = create_lle(envp);
 	if (!data->env)
 	{
-		data->env = malloc(sizeof *data->env);
+		data->env = malloc(sizeof * data->env);
 		data->env->name = NULL;
 		data->env->value = NULL;
 		data->env->next = NULL;

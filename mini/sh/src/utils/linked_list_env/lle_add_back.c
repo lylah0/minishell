@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lle_add_back.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:29 by monoguei           #+#    #+#             */
-/*   Updated: 2025/04/05 15:28:33 by monoguei         ###   ########.fr       */
+/*   Created: 2024/01/27 15:57:29 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 14:11:03 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

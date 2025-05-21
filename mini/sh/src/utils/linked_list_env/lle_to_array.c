@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lle_to_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 22:07:09 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:07:30 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:11:57 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void lle_to_array(t_data *data)
+void	lle_to_array(t_data *data)
 {
 	char	**copy_env;
 	t_env	*current;
@@ -26,8 +26,8 @@ void lle_to_array(t_data *data)
 		return ;
 	while (current)
 	{
-		data->copy_env[index_array] = strjoin_name_equal_value(current->name, 
-			current->value);
+		data->copy_env[index_array] = strjoin_name_equal_value(current->name,
+				current->value);
 		index_array++;
 		current = current->next;
 	}

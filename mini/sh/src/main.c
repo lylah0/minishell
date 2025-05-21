@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:58:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:14:06 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_data	*init_data(void)
 	data->child_pid = -1;
 	data->exit_code = 0;
 	data->signal = NULL;
-	// Allouer la structure signal
 	data->signal = malloc(sizeof(t_signal));
 	if (!data->signal)
 	{
@@ -114,7 +113,7 @@ int	main(int ac, char **av, char **envp)
 			tmp = tmp->next;
 		}
 		clean(data, splited_input, data->env_path, input);
-			// regarde pourquoi ca empeche
+		// regarde pourquoi ca empeche
 		if (data->should_exit == 1)
 			break ;
 		init_signals(data);

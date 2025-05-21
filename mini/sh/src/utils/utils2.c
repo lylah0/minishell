@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:25:04 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:13:57 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_input* cat_token(t_input* token, char* value, int len)
+t_input	*cat_token(t_input *token, char *value, int len)
 {
-	t_input* new_token;
+	t_input	*new_token;
 	int		i;
 	int		j;
 	int		k;
@@ -47,7 +47,7 @@ t_input* cat_token(t_input* token, char* value, int len)
 	return (new_token);
 }
 
-int	str_isdigit(char* str)
+int	str_isdigit(char *str)
 {
 	int	i;
 
@@ -65,18 +65,22 @@ int	str_isdigit(char* str)
 	return (1);
 }
 
-char* strjoin_name_equal_value(char* name, char* value)
+char	*strjoin_name_equal_value(char *name, char *value)
 {
-	int i = 0;
-	int j = 0;
-	int tot_len;
+	int		i;
+	int		j;
+	int		tot_len;
+	char	*s;
+
+	i = 0;
+	j = 0;
 	if (value)
 		tot_len = ft_strlen(name) + ft_strlen(value) + 4;
 	else
 		tot_len = ft_strlen(name) + 1;
-	char* s = malloc(sizeof(char) * tot_len);
+	s = malloc(sizeof(char) * tot_len);
 	if (!s)
-		return NULL;
+		return (NULL);
 	while (name[i])
 	{
 		s[i] = name[i];
@@ -94,9 +98,9 @@ char* strjoin_name_equal_value(char* name, char* value)
 	return (s);
 }
 
-void	swap_words(char** a, char** b)
+void	swap_words(char **a, char **b)
 {
-	char* temp;
+	char *temp;
 	temp = NULL;
 
 	temp = *a;

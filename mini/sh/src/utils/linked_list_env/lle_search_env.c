@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lle_search_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/15 22:04:39 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:12:51 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,25 @@ t_env	*search_env_name(t_env *env, char *name)
 	t_env	**return_env;
 
 	current = env;
-	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name) + 1) != 0)
+	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)
+			+ 1) != 0)
 		current = current->next;
 	if (current == NULL)
 		return (NULL);
 	return_env = &current;
 	return (*return_env);
 }
+
 /// @brief Recherche la valeur d'une variable d'environnement de manière sécurisée.
 /// @param env Pointeur vers la tête de la liste chaînée des variables d'environnement.
 /// @param name Le nom de la variable d'environnement à rechercher.
 /// @return La valeur de la variable d'environnement si elle existe et est définie, NULL sinon.
-char *search_env_value(t_env *env, char *name)
+char	*search_env_value(t_env *env, char *name)
 {
-	t_env *var = search_env_name(env, name);
+	t_env	*var;
+
+	var = search_env_name(env, name);
 	if (!var || !var->value)
-		return NULL;
-	return var->value;
+		return (NULL);
+	return (var->value);
 }
