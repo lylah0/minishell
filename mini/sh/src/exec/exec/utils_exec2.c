@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils3.c                                           :+:      :+:    :+:   */
+/*   utils_exec2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 09:44:35 by monoguei         ###   ########.fr       */
+/*   Created: 2025/05/21 09:06:33 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 09:06:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
-void	expand_env_var_into_array(t_data *data, char *input, char **array_ptr, int *k, int *j)
+t_input	*get_next_command(t_input *node)
 {
-	char	*expanded;
-	int		l;
-
-	expanded = handle_env_variable(data, input, k);
-	if (expanded && expanded[0] != '\0')
-	{
-		l = 0;
-		while (expanded[l])
-		{
-			(*array_ptr)[*j] = expanded[l];
-			(*j)++;
-			l++;
-		}
-	}
-	free(expanded);
+	while (node && node->type != T_PIPE)
+		node = node->next;
+	if (node && node->type == T_PIPE)
+		return (node->next);
+	return (NULL);
 }

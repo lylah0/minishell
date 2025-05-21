@@ -6,13 +6,13 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 21:48:31 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:06:23 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:47:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
-bool is_valid_env_name_var_syntax(char *s)
+bool	is_valid_env_name_var_syntax(char *s)
 {
 	int		i;
 	char	c;
@@ -40,22 +40,23 @@ bool is_valid_env_name_var_syntax(char *s)
 	return (FALSE);
 }
 
-bool is_valid_envvalue_syntax(char *s)
+bool	is_valid_env_value_syntax(char *s)
 {
-	int i;
-	int len_s;
+	int		i;
+	int		len_s;
+	char	c ;
 
 	i = 0;
 	len_s = ft_strlen(s);
 	if (!s)
-		return TRUE;
+		return (TRUE);
 	while (s[i])
 	{
-		char c = s[i];
+		c = s[i];
 		if (c != 0 && c != '\n')
 			i++;
 		else
-			break;
+			break ;
 	}
 	if (i != len_s)
 	{
@@ -72,7 +73,7 @@ void	add_env_name(t_data *data, char *env_name)
 	t_env	*new_node;
 
 	if (!data || !env_name)
-		return;
+		return ;
 	if (search_env_name(data->env, env_name) == NULL)
 	{
 		new_node = lle_new(env_name, NULL);
@@ -85,7 +86,7 @@ void	add_new_env_var_and_value(t_data *data, char *env_name, char *envvalue)
 	t_env	*new_node;
 
 	if (!data || !env_name || !envvalue)
-		return;
+		return ;
 	if (search_env_name(data->env, env_name) == NULL)
 	{
 		new_node = lle_new(env_name, envvalue);

@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:12:20 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:44:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	handle_export_no_args(t_data *data)
 	if (!data->env || !data->env->name)
 	{
 		printf("Aucune variable d'environnement\n");
-		rintf("Initialisation d'un environnement vide...\n");
+		printf("Initialisation d'un environnement vide...\n");
 		data->env         = malloc(sizeof *data->env);
 		data->env->name   = ft_strdup("Head_of_environnement");
 		data->env->value  = NULL;

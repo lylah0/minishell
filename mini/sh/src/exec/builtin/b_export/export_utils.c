@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 22:11:30 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/20 22:12:37 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:45:47 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,3 @@ char	*extract_value(char *env_var)
 		return NULL;
 	return (new_value);
 }
-
-int		find_equal(char *s);
-char	*extract_name(char *env_var);
-char	*extract_value(char *env_var);

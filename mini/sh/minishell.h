@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:41:45 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/20 22:12:52 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:43:59 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,15 @@ typedef struct s_data
 	pid_t			child_pid;
 }	t_data;
 
+typedef struct s_ifn_op_ctx
+{
+	t_data	*data;
+	char	*input;
+	char	**array;
+	int		*k;
+	int		*i;
+}	t_ifn_op_ctx;
+
 char *get_user_input(t_data *data, const char *prompt);
 t_data	*get_data_ptr(t_data *new_data);
 void	init_signals(t_data *data);
@@ -113,6 +122,7 @@ void	restore_terminal(void);
 // FONCTIONS LYLAH
 // fonctions parsing
 char				**fill_tab(t_data *data, char *input, char **array);
+
 void				if_n_op(t_data *data, char *input, char **array, int *k, int *i);
 void				if_operator(char *input, char **array, int *k, int i);
 int					word_len(char *input);

@@ -11,6 +11,7 @@
 // /* ************************************************************************** */
 
 #include "../minishell.h"
+
 static struct termios g_termios_backup;
 
 char *get_user_input(t_data *data, const char *prompt)
