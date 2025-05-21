@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 09:21:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:04:43 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:16:09 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-#define TRUE 1
-#define FALSE 0
 
 void	exit_no_arg(t_data *data, int in_pipe)
 {

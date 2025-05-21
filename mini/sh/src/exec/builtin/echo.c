@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:49:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:04:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:17:04 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,29 @@ static void	print_echo_args(t_input *curr, int *first)
 	}
 }
 
+static void	handle_echo_flags(t_input **curr, int *n_flag)
+{
+	while (*curr && is_n_flag((*curr)->token))
+	{
+		*n_flag = ON;
+		*curr = (*curr)->next;
+	}
+}
+
+static void	print_echo_tokens(t_input *curr, int *first)
+{
+	while (curr && curr->type != T_PIPE && curr->type != T_OP)
+	{
+		if (curr->type == T_OP || curr->type == T_SKIP)
+		{
+			curr = curr->next;
+			continue ;
+		}
+		print_echo_args(curr, first);
+		curr = curr->next;
+	}
+}
+
 void	b_echo(t_data *data, t_input *current)
 {
 	t_input	*curr;
@@ -44,21 +67,8 @@ void	b_echo(t_data *data, t_input *current)
 	curr = current->next;
 	n_flag = OFF;
 	first = 1;
-	while (curr && is_n_flag(curr->token))
-	{
-		n_flag = ON;
-		curr = curr->next;
-	}
-	while (curr && curr->type != T_PIPE && curr->type != T_OP)
-	{
-		if (curr->type == T_OP || curr->type == T_SKIP)
-		{
-			curr = curr->next;
-			continue ;
-		}
-		print_echo_args(curr, &first);
-		curr = curr->next;
-	}
+	handle_echo_flags(&curr, &n_flag);
+	print_echo_tokens(curr, &first);
 	if (n_flag == OFF)
 		write(STDOUT_FILENO, "\n", 1);
 	data->exit_code = 0;

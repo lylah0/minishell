@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:06:04 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:16:18 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

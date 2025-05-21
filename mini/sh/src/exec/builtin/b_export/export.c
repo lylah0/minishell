@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:45 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 14:06:50 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:16:57 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../minishell.h"
 
-static void	handle_export_no_args(t_data *data)
+static void	handle_export_no_args(t_data	*data)
 {
 	if (!data->env || !data->env->name)
 	{
@@ -27,7 +27,7 @@ static void	handle_export_no_args(t_data *data)
 	print_export(data);
 }
 
-static void	handle_export_assignment(t_data *data, char *token)
+static void	handle_export_assignment(t_data	*data, char	*token)
 {
 	char	*new_name;
 	char	*new_value;
@@ -55,7 +55,7 @@ static void	handle_export_assignment(t_data *data, char *token)
 	free(new_value);
 }
 
-static void	handle_export_name(t_data *data, char *token)
+static void	handle_export_name(t_data	*data, char	*token)
 {
 	if (is_valid_env_name_var_syntax(token) == TRUE)
 		add_env_name(data, token);
@@ -64,10 +64,10 @@ static void	handle_export_name(t_data *data, char *token)
 }
 
 /// @brief builtin affiche, ajoute ou maj environnement
-/// @example `export` `export NAME` `export NAME=` `export NAME=value`
+/// @example `export` `export NAME` `export NAME=` `export NAME=value` 
 /// `export NAME1=value NAME2=value`
 /// @param data
-void	b_export(t_data *data)
+void	b_export(t_data	*data)
 {
 	t_input	*arg;
 
