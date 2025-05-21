@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signaux.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:14:21 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 14:14:28 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:20:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,6 @@ void	handler_sigquit(int signum)
 	return ;
 }
 
-// « La présence ou absence de l'écho de caractères de contrôle comme ^C ou
-// ^\ dépend uniquement du réglage visuel du terminal (flag ECHOCTL dans la
-// structure termios), et non du traitement réel des signaux. Ainsi, ne pas
-// les afficher ne modifie aucunement le comportement fonctionnel imposé par
-// le sujet et respecté par notre implémentation. »
 void	init_signals(t_data *data)
 {
 	struct termios	term;
