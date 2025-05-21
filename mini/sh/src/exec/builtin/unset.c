@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:35:40 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 15:37:07 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:56:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void	b_unset(t_data *data)
 	current = data->input->next;
 	while (current)
 	{
-		if (current->type == T_WORD)
-			unset_env_var(&data->env, current->token);
-		else if (current->type != T_SKIP)
+		unset_env_var(&data->env, current->token);
+		if (current->next)
+			current = current->next;
+		else
 			break ;
-		current = current->next;
 	}
 }
