@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 14:13:47 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:40:31 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,35 +19,19 @@ char	*ft_strdup_equal(const char *src)
 	int		len;
 	char	*dest;
 
+	i = 0;
 	if (!src)
 		return (NULL);
 	len = ft_strlen(src);
 	dest = (char *)malloc((len + 2) * sizeof(char));
 	if (!dest)
 		return (NULL);
-	for (i = 0; i < len; i++)
+	while (i < len)
+	{
 		dest[i] = src[i];
+		i++;
+	}
 	dest[len] = '=';
-	dest[len + 1] = '\0';
-	return (dest);
-}
-
-// Duplique src en ajoutant '=' au début (ex: src="HOME" -> "=HOME")
-char	*ft_equal_strdup(const char *src)
-{
-	int		i;
-	int		len;
-	char	*dest;
-
-	if (!src)
-		return (NULL);
-	len = ft_strlen(src);
-	dest = (char *)malloc((len + 2) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	dest[0] = '=';
-	for (i = 0; i < len; i++)
-		dest[i + 1] = src[i];
 	dest[len + 1] = '\0';
 	return (dest);
 }
@@ -113,4 +97,21 @@ char	*ft_strndup(const char *src, int n)
 	}
 	dest[i] = 0;
 	return (dest);
+}
+
+int	handle_empty_or_whitespace_input(t_data *data, char *input)
+{
+	if (!input)
+		return (1);
+	if (ft_striswhitespace(input) == TRUE)
+	{
+		free(input);
+		return (1);
+	}
+	if (!ft_strlen(input))
+	{
+		init_signals(data);
+		return (1);
+	}
+	return (0);
 }

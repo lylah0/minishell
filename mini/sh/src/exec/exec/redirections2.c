@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:18:44 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:47:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:42:54 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

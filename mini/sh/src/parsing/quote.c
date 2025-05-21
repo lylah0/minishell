@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:58:51 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:03:54 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:32:45 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

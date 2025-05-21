@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/21 19:06:34 by monoguei         ###   ########.fr       */
+/*   Created: 2025/04/21 18:15:25 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 19:38:08 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../../minishell.h"
 

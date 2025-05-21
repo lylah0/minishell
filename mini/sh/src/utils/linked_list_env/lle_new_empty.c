@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_env2.c                                        :+:      :+:    :+:   */
+/*   lle_new_empty.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 16:56:06 by monoguei         ###   ########.fr       */
+/*   Created: 2025/05/21 19:13:41 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 19:36:17 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,4 @@ t_env	*create_lle_empty(t_env *env)
 	current->value = NULL;
 	current->next = NULL;
 	return (current);
-}
-
-void	init_env(t_data *data, char **envp)
-{
-	data->env = create_lle(envp);
-	if (!data->env)
-	{
-		data->env = malloc(sizeof * data->env);
-		data->env->name = NULL;
-		data->env->value = NULL;
-		data->env->next = NULL;
-		return ;
-	}
 }

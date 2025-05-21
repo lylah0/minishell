@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 17:01:05 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 17:02:58 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:08:01 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	copy_name(char *dst, const char *name, int *i)
 void	copy_value_with_quotes(char *dst, const char *value, int *i)
 {
 	int	j;
-    
-    j = 0;
+
+	j = 0;
 	dst[(*i)++] = '=';
 	dst[(*i)++] = '"';
 	while (value[j])
@@ -53,10 +53,11 @@ void	copy_value_with_quotes(char *dst, const char *value, int *i)
 
 char	*strjoin_name_equal_value(char *name, char *value)
 {
-	int		i = 0;
+	int		i;
 	int		tot_len;
 	char	*s;
 
+	i = 0;
 	if (value)
 		tot_len = ft_strlen(name) + ft_strlen(value) + 4;
 	else
@@ -73,7 +74,7 @@ char	*strjoin_name_equal_value(char *name, char *value)
 
 void	swap_words(char **a, char **b)
 {
-	char *temp;
+	char	*temp;
 
 	temp = NULL;
 	temp = *a;

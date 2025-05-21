@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 14:51:39 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:02:51 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:34:29 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

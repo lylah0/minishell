@@ -3,92 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 16:56:28 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:39:33 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void	free_lle(t_data *data)
+void	split_env(const char *env, char **name, char **value)
 {
-	t_env	*temp;
+	char	*sep;
 
-	temp = NULL;
-	while (data->env)
+	sep = ft_strchr(env, '=');
+	if (sep)
 	{
-		temp = data->env->next;
-		free(data->env->name);
-		free(data->env->value);
-		free(data->env);
-		data->env = temp;
-	}
-}
-
-void	print_lle(t_data *data)
-{
-	t_env	*current;
-
-	current = data->env;
-	while (current)
-	{
-		printf("%s", current->name);
-		if (current->value)
-			printf("=%s\n", current->value);
-		else
-			printf("\n");
-		current = current->next;
-	}
-}
-
-void	free_env_list(t_env *head)
-{
-	t_env	*tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		free(head->name);
-		free(head->value);
-		free(head);
-		head = tmp;
-	}
-}
-
-static void	fill_env_node(t_env *node, const char *env)
-{
-	char	*separator;
-
-	separator = ft_strchr(env, '=');
-	if (separator)
-	{
-		node->name = ft_substr(env, 0, separator - env);
-		node->value = ft_strdup(separator + 1);
+		*name = ft_substr(env, 0, sep - env);
+		*value = ft_strdup(sep + 1);
 	}
 	else
 	{
-		node->name = ft_strdup(env);
-		node->value = NULL;
+		*name = ft_strdup(env);
+		*value = NULL;
 	}
 }
 
-static t_env	*create_env_node(const char *env)
+t_env	*create_lle(t_data *data, char **envp)
 {
+	t_env	*head;
+	t_env	*tail;
 	t_env	*node;
+	int		i;
 
-	node = malloc(sizeof(t_env));
-	if (!node)
-		return (NULL);
-	fill_env_node(node, env);
-	node->next = NULL;
-	if (!node->name || (ft_strchr(env, '=') && !node->value))
+	i = 0;
+	head = NULL;
+	tail = NULL;
+	while (envp[i])
 	{
-		free(node->name);
-		free(node->value);
-		free(node);
-		return (NULL);
+		node = create_env_node(envp[i]);
+		if (!node)
+		{
+			free_lle(data);
+			return (NULL);
+		}
+		if (!head)
+			head = node;
+		else
+			tail->next = node;
+		tail = node;
+		i++;
 	}
-	return (node);
+	return (head);
+}
+
+void	init_env(t_data *data, char **envp)
+{
+	data->env = create_lle(data, envp);
+	if (!data->env)
+	{
+		data->env = malloc(sizeof * data->env);
+		data->env->name = NULL;
+		data->env->value = NULL;
+		data->env->next = NULL;
+		return ;
+	}
 }

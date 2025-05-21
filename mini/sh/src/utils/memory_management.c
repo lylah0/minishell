@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 14:13:27 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:40:15 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	free_all(t_data *data)
 	if (data->input)
 		free_token_list(data->input);
 	if (data->env)
-		free_env_list(data->env);
+		free_lle(data);
 	if (data->signal)
 		free(data->signal);
 	rl_clear_history();

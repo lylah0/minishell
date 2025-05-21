@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 18:12:43 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 14:00:08 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:42:43 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

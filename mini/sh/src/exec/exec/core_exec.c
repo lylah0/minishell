@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:02:20 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 13:52:40 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:35:25 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,14 @@ int	kind_of_token(t_data *data, t_input *input, int in_pipe)
 	if (handle_unset_export(data, input) == 0)
 		return (0);
 	return (1);
+}
+
+void	exec_cmd(t_data *data, t_input *head)
+{
+	t_input	*curr;
+
+	curr = head;
+	if (!curr)
+		return ;
+	exec_pipe(data, curr);
 }

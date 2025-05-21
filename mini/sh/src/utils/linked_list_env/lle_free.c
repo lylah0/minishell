@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lle_last.c                                         :+:      :+:    :+:   */
+/*   lle_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:58:54 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 19:11:24 by monoguei         ###   ########.fr       */
+/*   Created: 2025/05/21 19:12:41 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 21:29:55 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-/// @brief Returns the last node of the linked list.
-/// @param env The head of the linked list.
-/// @return The last node of the linked list, or NULL if the list is empty.
-t_env	*lle_last(t_env *env)
+void	free_lle(t_data *data)
 {
-	t_env	*env_last;
+	t_env	*temp;
 
-	if (!env)
-		return (0);
-	env_last = env;
-	while (env_last->next)
-		env_last = env_last->next;
-	return (env_last);
+	temp = NULL;
+	while (data->env)
+	{
+		temp = data->env->next;
+		free(data->env->name);
+		free(data->env->value);
+		free(data->env);
+		data->env = temp;
+	}
 }

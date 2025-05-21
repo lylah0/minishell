@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:28:30 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:10:44 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:33:06 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/// @brief
-/// @param tail
-/// @param token_str
-/// @return
 t_input	*add_token(t_input *tail, char *token_str)
 {
 	t_input	*new_node;

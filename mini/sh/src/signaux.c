@@ -3,30 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signaux.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:14:21 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 16:20:42 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:10:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 static struct termios	g_termios_backup;
-
-char	*get_user_input(t_data *data, const char *prompt)
-{
-	char	*line;
-
-	line = readline(prompt);
-	if (!line)
-	{
-		restore_terminal();
-		data->should_exit = YES;
-		return (NULL);
-	}
-	return (line);
-}
 
 t_data	*get_data_ptr(t_data *new_data)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 16:44:00 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:34:03 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,21 @@ int	ft_striswhitespace(const char *str)
 		i++;
 	}
 	return (TRUE);
+}
+
+void	print_token_list(t_input *head)
+{
+	t_input	*curr;
+	int		i;
+
+	curr = head;
+	i = 0;
+	printf("\n Vérification des tokens après expansion :\n");
+	while (curr)
+	{
+		printf("Token[%d]: %s,(Type: %d)\n", i, curr->token, curr->type);
+		curr = curr->next;
+		i++;
+	}
+	printf("\n");
 }

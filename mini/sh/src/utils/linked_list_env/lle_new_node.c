@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lle_search_env.c                                   :+:      :+:    :+:   */
+/*   lle_new_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 19:07:29 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 20:48:34 by monoguei         ###   ########.fr       */
+/*   Created: 2025/05/21 19:30:50 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/21 21:36:49 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-t_env	*search_env_name(t_env *env, char *name)
+t_env	*create_env_node(const char *env)
 {
-	t_env	*current;
-	t_env	**return_env;
+	t_env	*node;
+	char	*name;
+	char	*value;
 
-	current = env;
-	while (current != NULL && ft_strncmp(current->name, name, ft_strlen(name)
-			+ 1) != 0)
-		current = current->next;
-	if (current == NULL)
+	name = NULL;
+	value = NULL;
+	node = malloc(sizeof(t_env));
+	if (!node)
 		return (NULL);
-	return_env = &current;
-	return (*return_env);
-}
-
-char	*search_env_value(t_env *env, char *name)
-{
-	t_env	*var;
-
-	var = search_env_name(env, name);
-	if (!var || !var->value)
+	split_env(env, &name, &value);
+	if (!name || (ft_strchr(env, '=') && !value))
+	{
+		free(name);
+		free(value);
+		free(node);
 		return (NULL);
-	return (var->value);
+	}
+	node->name = name;
+	node->value = value;
+	node->next = NULL;
+	return (node);
 }
