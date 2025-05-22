@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:07:22 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 21:33:49 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:44:59 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,18 @@ void	handle_signals_and_input(t_data *data, char **input)
 				"\033[1;38;5;147m\u273F Minishell \u279C\033[0m ");
 	else
 		*input = NULL;
+}
+
+char	*get_user_input(t_data *data, const char *prompt)
+{
+	char	*line;
+
+	line = readline(prompt);
+	if (!line)
+	{
+		restore_terminal();
+		data->should_exit = YES;
+		return (NULL);
+	}
+	return (line);
 }

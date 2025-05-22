@@ -6,25 +6,11 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/22 14:02:33 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:51:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*get_user_input(t_data *data, const char *prompt)
-{
-	char	*line;
-
-	line = readline(prompt);
-	if (!line)
-	{
-		restore_terminal();
-		data->should_exit = YES;
-		return (NULL);
-	}
-	return (line);
-}
 
 t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 {
@@ -33,12 +19,36 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 	return (head);
 }
 
+static int	handle_exit_command(t_data *data, char *input)
+{
+	char	**splited_input;
+
+	if (ft_strnstr(input, "exit", ft_strlen(input)) != NULL)
+	{
+		splited_input = parse_input(data, input);
+		if (!splited_input)
+			return (1);
+		data->input = do_parsing(NULL, splited_input, data);
+		b_exit(data, data->input, 0);
+		if (data->should_exit == 1)
+		{
+			clean(data, splited_input, input);
+			return (1);
+		}
+		clean(data, splited_input, input);
+		return (1);
+	}
+	return (0);
+}
+
 void	process_input(t_data *data, char *input)
 {
 	char	**splited_input;
 
 	reset_signals_and_pipe(data, input);
 	add_history(input);
+	if (handle_exit_command(data, input))
+		return ;
 	splited_input = parse_input(data, input);
 	if (!splited_input)
 		return ;
