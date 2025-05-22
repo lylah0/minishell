@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:06:47 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/22 13:29:53 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:43:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,7 @@ char				**build_cmd_arg(t_input *token);
 t_input				*cat_token(t_input *token, char *value, int len);
 void				child(t_data *data, int prev_pipe, t_input *current,
 						int fd[2]);
-void				clean(t_data *data, char **splited_input, char *env_path,
-						char *input);
+void				clean(t_data *data, char **splited_input, char *input);
 int					compare_words(char *w1, char *w2);
 int					copy_substring(char *input, char **array_ptr, int start,
 						int len);

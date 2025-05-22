@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 13:59:26 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:47:06 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	exec(t_data *data, t_input *current, int in_pipe)
 		exit(0);
 	}
 	cmd = build_cmd_arg(current);
+	if (access(cmd[0], X_OK) == 0)
+		execve(cmd[0], cmd, NULL);
 	cmd_path = get_path(data->env_path, cmd[0]);
 	if (!cmd_path)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:16:10 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 21:40:15 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:43:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	free_token_list(t_input *head)
 	}
 }
 
-void	clean(t_data *data, char **splited_input, char *env_path, char *input)
+void	clean(t_data *data, char **splited_input, char *input)
 {
 	if (data->input)
 	{
@@ -50,8 +50,6 @@ void	clean(t_data *data, char **splited_input, char *env_path, char *input)
 	}
 	if (splited_input)
 		free_tab(splited_input);
-	if (env_path)
-		free(env_path);
 	if (input)
 		free(input);
 }
