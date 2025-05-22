@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 15:44:03 by moni              #+#    #+#             */
-/*   Updated: 2025/04/08 14:01:14 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 09:43:44 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 # include <stdbool.h>
+
+typedef struct s_list
+{
+	void	*content;
+	void	*next;
+}				t_list;
 
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t nb, size_t size);

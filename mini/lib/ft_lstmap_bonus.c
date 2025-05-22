@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:59:07 by monoguei           #+#    #+#             */
-/*   Updated: 2024/01/27 15:59:08 by monoguei          ###   ########.fr       */
+/*   Created: 2024/01/27 15:59:07 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/22 09:43:03 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

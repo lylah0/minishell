@@ -6,7 +6,7 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:06:47 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 21:52:56 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 09:54:41 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_env			*exist_already_in_env(t_env *env, char *name_var);
 char			*expand_token_part(char *input, int *i, t_data *data);
 char			*expand_token_string(const char *src, t_data *data);
 void			expand_env_var_into_array(t_data *data, char *input,
-					char **array_ptr, int *k, int *j);
+					char **array_ptr, int *k_j);
 char			*extract_name(char *env_var);
 char			*extract_plain_text(char *str, int *i);
 char			*extract_value(char *env_var);

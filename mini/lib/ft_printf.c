@@ -6,23 +6,23 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:29:49 by moni              #+#    #+#             */
-/*   Updated: 2025/05/21 09:29:26 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 09:53:30 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdio.h>
 
-void	ft_define_type(char s, va_list ap, int* count)
+void	ft_define_type(char s, va_list ap, int *count)
 {
 	if (s == 'c')
 		ft_putchar(va_arg(ap, int), count);
 	else if (s == 'i' || s == 'd')
 		ft_putnbr(va_arg(ap, int), count);
 	else if (s == 's')
-		ft_putstr(va_arg(ap, char*), count);
+		ft_putstr(va_arg(ap, char *), count);
 	else if (s == 'p')
-		ft_putptr(va_arg(ap, void*), count);
+		ft_putptr(va_arg(ap, void *), count);
 	else if (s == 'u')
 		ft_putnbr_u(va_arg(ap, unsigned int), count);
 	else if (s == 'x')
@@ -38,7 +38,7 @@ void	ft_define_type(char s, va_list ap, int* count)
 	}
 }
 
-int	ft_printf(const char* s, ...)
+int	ft_printf(const char *s, ...)
 {
 	int			i;
 	va_list		ap;

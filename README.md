@@ -1,5 +1,5 @@
 
-<h1 align="center">🌿 Minishell 🌿</h1>
+<h1 align="center">✿✿✿ Minishell ✿✿✿</h1>
 <p align="center"><i>Un mini Bash maison avec amour et patience</i></p>
 
 ---

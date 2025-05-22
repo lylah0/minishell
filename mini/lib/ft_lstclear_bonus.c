@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/27 15:57:46 by monoguei           #+#    #+#             */
-/*   Updated: 2024/01/27 15:57:47 by monoguei          ###   ########.fr       */
+/*   Created: 2024/01/27 15:57:46 by monoguei          #+#    #+#             */
+/*   Updated: 2025/05/22 09:45:06 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

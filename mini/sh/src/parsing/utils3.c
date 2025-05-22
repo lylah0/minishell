@@ -6,29 +6,29 @@
 /*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:34:03 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 09:54:27 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+static void	copy_expanded(char *dest, const char *src, int *j)
+{
+	int	l;
+
+	l = 0;
+	while (src[l])
+		dest[(*j)++] = src[l++];
+}
+
 void	expand_env_var_into_array(t_data *data, char *input, char **array_ptr,
-		int *k, int *j)
+			int *k_j)
 {
 	char	*expanded;
-	int		l;
 
-	expanded = handle_env_variable(data, input, k);
+	expanded = handle_env_variable(data, input, &k_j[0]);
 	if (expanded && expanded[0] != '\0')
-	{
-		l = 0;
-		while (expanded[l])
-		{
-			(*array_ptr)[*j] = expanded[l];
-			(*j)++;
-			l++;
-		}
-	}
+		copy_expanded(*array_ptr, expanded, &k_j[1]);
 	free(expanded);
 }
 

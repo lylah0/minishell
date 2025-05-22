@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 16:14:34 by monoguei          #+#    #+#             */
-/*   Updated: 2025/04/08 14:14:23 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 09:45:00 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_isdigit(int character);
 int	ft_iswhitespace(int c)
 {
 	if (c == 32 || c == 9 || c == 10 || c == 11 || c == 12 || c == 13)
-	return (1);
+		return (1);
 	return (0);
 }
 
