@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:36:38 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/22 13:47:06 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:08:42 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@ void	exec(t_data *data, t_input *current, int in_pipe)
 	if (access(cmd[0], X_OK) == 0)
 		execve(cmd[0], cmd, NULL);
 	cmd_path = get_path(data->env_path, cmd[0]);
-	if (!cmd_path)
+	if (!cmd_path && data->input->type != T_OP)
 	{
 		ft_printf_stderr("minishell: command not found: %s\n", cmd[0]);
 		exit(127);
 	}
 	execve(cmd_path, cmd, NULL);
-	printf("minishell: command not found: %s\n", cmd[0]);
+	if (data->input->type != T_OP)
+		printf("minishell: command not found: %s\n", cmd[0]);
 	exit(127);
 }
 
