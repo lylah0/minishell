@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/22 09:54:27 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:29:45 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	copy_expanded(char *dest, const char *src, int *j)
-{
-	int	l;
-
-	l = 0;
-	while (src[l])
-		dest[(*j)++] = src[l++];
-}
-
 void	expand_env_var_into_array(t_data *data, char *input, char **array_ptr,
-			int *k_j)
+		int *k_j)
 {
 	char	*expanded;
+	int		l;
 
 	expanded = handle_env_variable(data, input, &k_j[0]);
 	if (expanded && expanded[0] != '\0')
-		copy_expanded(*array_ptr, expanded, &k_j[1]);
+	{
+		l = 0;
+		while (expanded[l])
+		{
+			(*array_ptr)[k_j[1]] = expanded[l];
+			k_j[1]++;
+			l++;
+		}
+	}
 	free(expanded);
 }
 
@@ -82,4 +82,11 @@ void	print_token_list(t_input *head)
 		i++;
 	}
 	printf("\n");
+}
+
+void	copy_single_char(char *input, char **array, int *k_j, int i)
+{
+	array[i][k_j[1]] = input[k_j[0]];
+	k_j[1]++;
+	k_j[0]++;
 }

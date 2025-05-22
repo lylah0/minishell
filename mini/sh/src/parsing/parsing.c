@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:39:34 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:55:53 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:29:37 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,28 @@ void	if_operator(char *input, char **array, int *k, int i)
 
 void	if_n_op(t_data *data, char *input, int *k, int *i)
 {
-	int		j;
+	int		k_j[2];
 	int		in_quote;
 	char	quote_char;
 
-	j = 0;
+	k_j[0] = *k;
+	k_j[1] = 0;
 	in_quote = 0;
 	quote_char = 0;
-	while (input[*k] && !(input[*k] == ' ' && !in_quote) && !(input[*k] == '|'
-			&& !in_quote) && !(input[*k] == '<' && !in_quote)
-		&& !(input[*k] == '>' && !in_quote))
+	while (input[k_j[0]] && !(input[k_j[0]] == ' ' && !in_quote)
+		&& !(input[k_j[0]] == '|' && !in_quote)
+		&& !(input[k_j[0]] == '<' && !in_quote)
+		&& !(input[k_j[0]] == '>' && !in_quote))
 	{
-		if (input[*k] == '$')
-			expand_env_var_into_array(data, input, &data->array[*i], k, &j);
-		else if (quotes(input, k, &in_quote, &quote_char))
+		if (input[k_j[0]] == '$')
+			expand_env_var_into_array(data, input, &data->array[*i], k_j);
+		else if (quotes(input, &k_j[0], &in_quote, &quote_char))
 			continue ;
 		else
-		{
-			data->array[*i][j] = input[*k];
-			j++;
-			(*k)++;
-		}
+			copy_single_char(input, data->array, k_j, *i);
 	}
-	data->array[*i][j] = '\0';
+	data->array[*i][k_j[1]] = '\0';
+	*k = k_j[0];
 }
 
 char	**fill_tab(t_data *data, char *input)
