@@ -1,56 +1,3 @@
-
-<h1 align="center">🌿 Minishell 🌿</h1>
-<p align="center"><i>Un mini Bash maison avec amour et patience</i></p>
-
----
-
-## ✨ Aperçu
-
-Minishell est une version allégée du shell Bash, développée dans le cadre du cursus 42.  
-Il permet d'exécuter des commandes Unix avec redirections, pipes, variables d’environnement, et builtins.
-
----
-
-## 🛠️ Compilation
-
-```bash
-make
-```
-
-🧸 Cela génère un exécutable `./minishell`.
-
----
-
-## 🚀 Lancement
-
-```bash
-./minishell
-```
-
-⤷ Vous pouvez alors exécuter des commandes comme :
-
-```bash
-ls -l | grep ".c" > fichiers_c.txt
-```
-
----
-
-## 🌟 Fonctionnalités
-
-- 🎯 Commandes simples et multiples
-- 🔀 Redirections : `>`, `>>`, `<`, `<<`
-- 🔗 Pipes (`|`)
-- 🌱 Variables d’environnement (`$HOME`, `$PATH`, etc.)
-- 📦 Builtins :
-  - `echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`
-- 🧠 Gestion des signaux (`Ctrl+C`, `Ctrl+D`, `Ctrl+\`)
-- 🧹 Nettoyage mémoire (Valgrind friendly)
-	depuis /sh : ``make leaks`` (make ; valgrind... ./minishell)
-
----
-
-## Arborescence des dossiers et fichiers
-
 sh
 ├── Makefile
 ├── minishell.h
@@ -111,29 +58,4 @@ sh
         ├── utils3.c
         └── utils.c
 
----
-
-## 📦 Environnement
-
-- ✅ Norminette OK (norme 42)
-- 🐧 Linux (Ubuntu 22.04)
-- 🧼 Sans variables globales
-- 🔒 Comportement POSIX conforme
-
----
-
-## 👩‍💻 Auteurs
-
-✿ Monica Nogueira – [monoguei](https://github.com/MoniNog)
-✿ Lylah Randrianarijaona – [lylrandr](https://github.com/lylah0)
-
----
-
-## 📄 Licence
-
-Projet à usage pédagogique – École 42  
-🔒 Ne pas redistribuer sans autorisation.
-
----
-
-💗 Merci de votre attention & happy coding !
+8 directories, 50 files
