@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:38:25 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/21 21:52:41 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:57:37 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	redir(t_input *current, t_data *data)
 		if (current->type == T_OP)
 		{
 			if (!current->token || !current->next || !current->next->token)
-				break ;
+				{
+					ft_printf_stderr("Need something after redirection");
+					data->exit_code = 1;
+				}
 			if (!ft_strncmp(current->token, ">>", 3))
 				heredoc_append(current, data);
 			else if (!ft_strncmp(current->token, "<<", 3))

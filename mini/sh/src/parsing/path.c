@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: monoguei <monoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 18:11:17 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/22 14:11:09 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:56:51 by monoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,3 @@ char	*get_env_path(char **env)
 	}
 	return (NULL);
 }
-
-
