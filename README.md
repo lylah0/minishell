@@ -14,7 +14,7 @@ Il permet d'exécuter des commandes Unix avec redirections, pipes, variables d�
 ## 🛠️ Compilation
 
 ```bash
-make
+cd mini/sh ; make
 ```
 
 🧸 Cela génère un exécutable `./minishell`.
@@ -50,7 +50,7 @@ ls -l | grep ".c" > fichiers_c.txt
 ---
 
 ## Arborescence des dossiers et fichiers
-
+```bash
 sh
 ├── Makefile
 ├── minishell.h
@@ -110,7 +110,7 @@ sh
         ├── utils2.c
         ├── utils3.c
         └── utils.c
-
+```
 ---
 
 ## 📦 Environnement
