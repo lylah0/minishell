@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/22 14:49:25 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:48:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,3 @@ void	copy_single_char(char *input, char **array, int *k_j, int i)
 		k_j[1]++;
 	}
 }
-
