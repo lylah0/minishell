@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 18:29:52 by lylrandr          #+#    #+#             */
-/*   Updated: 2025/05/22 13:29:45 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:49:25 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,19 @@ void	print_token_list(t_input *head)
 
 void	copy_single_char(char *input, char **array, int *k_j, int i)
 {
-	array[i][k_j[1]] = input[k_j[0]];
-	k_j[1]++;
-	k_j[0]++;
+	if (input[k_j[0]] == '\\' && input[k_j[0] + 1] == '\\')
+	{
+		array[i][k_j[1]] = '\\';
+		k_j[0] += 2;
+		k_j[1]++;
+	}
+	else if (input[k_j[0]] == '\\')
+		k_j[0]++;
+	else
+	{
+		array[i][k_j[1]] = input[k_j[0]];
+		k_j[0]++;
+		k_j[1]++;
+	}
 }
+

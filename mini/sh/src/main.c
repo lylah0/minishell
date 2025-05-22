@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:05:13 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/22 13:50:38 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:02:33 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ t_input	*do_parsing(t_input *head, char **splited_input, t_data *data)
 void	process_input(t_data *data, char *input)
 {
 	char	**splited_input;
-	t_input	*tmp;
 
-	(void)tmp;
 	reset_signals_and_pipe(data, input);
 	add_history(input);
 	splited_input = parse_input(data, input);
@@ -49,7 +47,6 @@ void	process_input(t_data *data, char *input)
 		free_token_list(data->input);
 	data->input = do_parsing(NULL, splited_input, data);
 	exec_cmd(data, data->input);
-	tmp = data->input;
 	clean(data, splited_input, input);
 }
 

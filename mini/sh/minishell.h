@@ -6,7 +6,7 @@
 /*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:06:47 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/22 13:43:34 by lylrandr         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:19:34 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ char				**split_path(char *fullpath);
 int					str_isdigit(char *str);
 char				*strjoin_name_equal_value(char *name, char *value);
 t_input				*tokenize(char **input, t_data *data);
+char				translate_whitespace(char c);
 t_token_type		get_token_type(t_input *token, char *input, t_data *data);
 int					quotes(char *input, int *k, int *in_quote,
 						char *quote_char);
@@ -244,6 +245,7 @@ t_env				*update_env_value(t_data *data, char *env_to_update,
 						char *new_value);
 void				validate_redirections(t_data *data, t_input *current);
 int					while_quotes(const char *input, int i);
+void				white_space(const char *src, int *i, char **result);
 int					word_len(char *input);
 
 #endif
