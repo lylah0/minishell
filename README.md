@@ -123,10 +123,11 @@ sh
 ---
 
 ## 👩‍💻 Auteurs
-
+```bash
 ✿ Monica Nogueira – [monoguei](https://github.com/MoniNog)
-✿ Lylah Randrianarijaona – [lylrandr](https://github.com/lylah0)
 
+✿ Lylah Randrianarijaona – [lylrandr](https://github.com/lylah0)
+```
 ---
 
 ## 📄 Licence
