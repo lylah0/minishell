@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: monoguei <monoguei@student.lausanne42.c    +#+  +:+       +#+        */
+/*   By: lylrandr <lylrandr@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:33:51 by monoguei          #+#    #+#             */
-/*   Updated: 2025/05/21 21:39:33 by monoguei         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:16:50 by lylrandr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_env	*create_lle(t_data *data, char **envp)
 void	init_env(t_data *data, char **envp)
 {
 	data->env = create_lle(data, envp);
-	if (!data->env)
+	if (!envp)
 	{
 		data->env = malloc(sizeof * data->env);
 		data->env->name = NULL;
